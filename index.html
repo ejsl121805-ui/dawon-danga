@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>다원트레이드 통합 단가 대시보드 v5 · 다원 기준</title>
+  <title>다원트레이드 통합 단가 대시보드 v5 · 단가 우위 · 다원 상단</title>
   <style>
     *{box-sizing:border-box} :root{--ink:#14202e;--paper:#f7f5f0;--line:#ded8cc;--sub:#6b6558;--gold:#c8892a;--up:#c0392b;--down:#1f6e5a}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif}
@@ -100,15 +100,15 @@
         var snap=latest(comp.id);if(!snap)return;
         snap.rows.forEach(function(r){
           var br=baseSnap.rows.find(function(x){return key(x.model)===key(r.model)});if(!br)return;
-          var cells={},diffs=[];
+          var cells={},advantage=[],dawonAdvantage=[],comparable=0;
           GRADES.forEach(function(target){
             var bg=base.grades.find(function(g){return gkey(g)===gkey(target)});
             var cg=comp.grades.find(function(g){return gkey(g)===gkey(target)});
             var b=bg?price(br[bg]):null,c=cg?price(r[cg]):null,d=b!==null&&c!==null?c-b:null;
-            cells[target]={base:b,comp:c,diff:d};if(d!==null)diffs.push(d)
+            cells[target]={base:b,comp:c,diff:d};
+            if(d!==null){comparable++;if(d<0)advantage.push(target);if(d>0)dawonAdvantage.push(target)}
           });
-          var avg=diffs.length?diffs.reduce(function(a,b){return a+b},0)/diffs.length:null;
-          rows.push({vendor:comp.name,model:r.model,cells:cells,average:avg,recommend:avg===null?"비교 불가":avg<0?"🟢 매입 검토":avg>0?"🔴 다원보다 비쌈":"동일"})
+          rows.push({vendor:comp.name,model:r.model,cells:cells,advantage:advantage,dawonAdvantage:dawonAdvantage,comparable:comparable})
         })
       });
       return rows.sort(function(a,b){return a.model.localeCompare(b.model,"ko",{numeric:true})||a.vendor.localeCompare(b.vendor,"ko")})
@@ -116,14 +116,14 @@
     function dawonComparePage(){
       var base=dawonVendor(),rows=dawonCompareRows();
       if(!latest(base.id))return title("DAWON GAP","다원 기준 비교","경쟁업체 단가 - 다원 단가")+'<div class="empty">먼저 '+esc(base.name)+' 단가를 저장해 주세요.</div>';
-      var cheap=rows.filter(function(r){return r.average!==null&&r.average<0}).length;
-      var expensive=rows.filter(function(r){return r.average!==null&&r.average>0}).length;
+      var cheap=rows.reduce(function(sum,r){return sum+r.advantage.length},0);
+      var expensive=rows.reduce(function(sum,r){return sum+r.dawonAdvantage.length},0);
       return title("DAWON GAP","다원 기준 비교","각 셀은 경쟁업체 단가와 다원 대비 차이를 함께 보여줍니다.")+
-      '<div class="metrics">'+metric("기준 업체",esc(base.name),"var(--ink)")+metric("비교 행",rows.length+"개","var(--gold)")+metric("매입 검토",cheap+"개","var(--down)")+metric("다원보다 비쌈",expensive+"개","var(--up)")+metric("금액 단위","만원","var(--ink)")+'</div>'+
-      (rows.length?'<div class="tablewrap"><table><thead><tr><th class="sticky-v">경쟁업체</th><th class="sticky-m">모델</th>'+GRADES.map(function(g){return"<th>"+g+"</th>"}).join("")+'<th>평균 GAP</th><th>추천</th></tr></thead><tbody>'+
+      '<div class="metrics">'+metric("기준 업체",esc(base.name),"var(--ink)")+metric("비교 행",rows.length+"개","var(--gold)")+metric("경쟁업체 우위 등급",cheap+"개","var(--down)")+metric("다원 우위 등급",expensive+"개","var(--up)")+metric("금액 단위","만원","var(--ink)")+'</div>'+
+      (rows.length?'<div class="tablewrap"><table><thead><tr><th class="sticky-v">경쟁업체</th><th class="sticky-m">모델</th>'+GRADES.map(function(g){return"<th>"+g+"</th>"}).join("")+'<th>단가 우위</th></tr></thead><tbody>'+
       rows.map(function(r){return'<tr><td class="left vendor sticky-v">'+esc(r.vendor)+'</td><td class="left bold sticky-m">'+esc(r.model)+'</td>'+
-      GRADES.map(function(g){var c=r.cells[g];if(c.diff===null)return'<td>-</td>';var cl=c.diff<0?"down":c.diff>0?"up":"";return'<td><b>'+won(c.comp)+'</b><div class="'+cl+'">'+signed(c.diff)+'</div><div class="muted">다원 '+won(c.base)+'</div></td>'}).join("")+
-      '<td class="'+(r.average<0?"down":r.average>0?"up":"")+' bold">'+(r.average===null?"-":signed(r.average))+'</td><td class="center bold">'+esc(r.recommend)+'</td></tr>'}).join("")+'</tbody></table></div>':'<div class="empty">동일한 모델로 비교할 경쟁업체 자료가 없습니다.</div>')
+      GRADES.map(function(g){var c=r.cells[g];if(c.diff===null)return'<td>-</td>';var cl=c.diff<0?"down":c.diff>0?"up":"";return'<td><div class="bold">다원 '+won(c.base)+'</div><div class="muted">'+esc(r.vendor)+' '+won(c.comp)+'</div><div class="'+cl+' bold">차이 '+signed(c.diff)+'</div></td>'}).join("")+
+      '<td class="center bold">'+(r.comparable===0?"비교 불가":r.advantage.length?esc(r.vendor)+": "+esc(r.advantage.join(", ")):r.dawonAdvantage.length?"다원 우위":"동일")+'</td></tr>'}).join("")+'</tbody></table></div>':'<div class="empty">동일한 모델로 비교할 경쟁업체 자료가 없습니다.</div>')
     }
     function allDashboard(){
       var piv=pivotRows(),all=[];S.vendors.forEach(function(v){all=all.concat(movers(v))});
@@ -165,7 +165,7 @@
     }
     function render(){
       var v=vendor(),show=S.tab!=="all"&&S.tab!=="compare";
-      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v5 · 다원 기준 · 만원 단위</span></h1></div><div class="tabs">'+
+      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v5 · 단가 우위 · 다원 상단 · 만원 단위</span></h1></div><div class="tabs">'+
       [["all","통합 대시보드"],["compare","다원 기준 비교"],["vendor","업체별 대시보드"],["input","단가 입력"],["report","주간 보고서"],["vendors","거래처 양식"]].map(function(x){return'<button class="tab '+(S.tab===x[0]?"on":"")+'" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join("")+'<button id="backupBtn" class="tab">백업</button><button id="restoreBtn" class="tab">복원</button><input id="restoreFile" type="file" accept=".json" hidden></div></header>'+
       (show?'<div class="vendorbar"><span class="muted">거래처</span>'+S.vendors.map(function(x){return'<button class="chip '+(x.id===S.active?"on":"")+'" data-v="'+x.id+'">'+esc(x.name)+'</button>'}).join("")+'</div>':"")+
       '<main>'+(S.tab==="all"?allDashboard():S.tab==="compare"?dawonComparePage():S.tab==="vendor"?vendorDashboard(v):S.tab==="input"?inputPage(v):S.tab==="report"?reportPage(v):vendorsPage())+'</main>';
