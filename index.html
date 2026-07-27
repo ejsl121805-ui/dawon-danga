@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>다원트레이드 통합 단가 대시보드 v3</title>
+  <title>다원트레이드 통합 단가 대시보드 v4 · 만원 단위</title>
   <style>
     *{box-sizing:border-box} :root{--ink:#14202e;--paper:#f7f5f0;--line:#ded8cc;--sub:#6b6558;--gold:#c8892a;--up:#c0392b;--down:#1f6e5a}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif}
@@ -21,7 +21,7 @@
     .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.rank{display:grid;grid-template-columns:32px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #eee}.rank:last-child{border:0}.num{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#efebe2;font-weight:800}.up{color:var(--up)}.down{color:var(--down)}
     .tablewrap{overflow:auto;max-height:68vh;border:1px solid var(--line);border-radius:10px;background:white}table{width:100%;min-width:1050px;border-collapse:separate;border-spacing:0;background:white;font-size:12px}th{position:sticky;top:0;z-index:5;padding:11px 9px;background:var(--ink);color:white;white-space:nowrap}td{height:48px;padding:8px;border-right:1px solid #eee;border-bottom:1px solid #eee;text-align:right;white-space:nowrap}tbody tr:hover td{background:#faf8f3}.left{text-align:left}.center{text-align:center}.bold{font-weight:800}
     .sticky-v{position:sticky;left:0;z-index:8;width:145px;min-width:145px}.sticky-m{position:sticky;left:145px;z-index:8;width:210px;min-width:210px}td.sticky-v,td.sticky-m{z-index:3;background:white}.vendor{color:#1e3a8a;font-weight:800}.high{background:#fff7ed!important;color:#c2410c;font-weight:900}.low{background:#eff6ff!important;color:#1d4ed8;font-weight:900}.gap{background:#fef2f2!important;color:#dc2626;font-weight:900}.empty{padding:35px;text-align:center;color:var(--sub);border:1px dashed var(--line);border-radius:10px;background:white}
-    .field{padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:white}.price,.model{width:100%;border:1px solid transparent;border-radius:4px;background:transparent;padding:6px}.price:focus,.model:focus{outline:none;border-color:var(--gold);background:#fffdf7}.formgrid{display:grid;grid-template-columns:1fr 2fr auto;gap:12px;align-items:end}
+    .field{padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:white}.price,.model{width:100%;border:1px solid transparent;border-radius:4px;background:transparent;padding:6px}.price:focus,.model:focus{outline:none;border-color:var(--gold);background:#fffdf7}.money-input{display:flex;align-items:center;gap:3px}.money-input .price{min-width:55px;text-align:right}.money-input b{color:var(--gold);font-size:12px}.formgrid{display:grid;grid-template-columns:1fr 2fr auto;gap:12px;align-items:end}
     textarea{width:100%;min-height:110px;padding:10px;border:1px solid var(--line);border-radius:8px}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:50;padding:12px 20px;border-radius:10px;background:var(--ink);color:white}
     @media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}}@media(max-width:600px){main{padding:14px}.metrics{grid-template-columns:1fr 1fr}.metric strong{font-size:21px}}
   </style>
@@ -143,7 +143,7 @@
       '<div class="notice"><b>모든 금액은 만원 단위입니다.</b> 35를 입력하면 35만, 14를 입력하면 14만으로 계산됩니다. 과거 원 단위 자료 350000도 자동으로 35만으로 변환합니다. 엑셀 업로드는 인터넷 연결이 필요합니다.</div>'+
       '<div class="actions" style="margin-bottom:12px"><label class="muted">기준일</label><input id="saveDate" class="field" type="date" value="'+esc(S.date[v.id])+'"><button id="excelBtn" class="btn">엑셀 업로드</button><input id="excelFile" type="file" accept=".xlsx,.xls" hidden><button id="pasteBtn" class="btn">붙여넣기</button><button id="addRow" class="btn">+ 행 추가</button><button id="clear" class="btn danger">전체 지우기</button></div>'+
       '<div id="pasteBox" class="card" style="display:none;margin-bottom:12px"><textarea id="pasteText" placeholder="모델명 [탭] A급 [탭] A-급 [탭] B+ [탭] B [탭] 액파 [탭] LCD"></textarea><div class="actions" style="margin-top:8px"><button id="pasteLoad" class="btn primary">불러오기</button><button id="pasteCancel" class="btn">취소</button></div></div>'+
-      '<div class="tablewrap"><table><thead><tr><th class="left">모델명</th>'+v.grades.map(function(g){return"<th>"+esc(g)+"</th>"}).join("")+'<th></th></tr></thead><tbody>'+rows.map(function(r,i){return'<tr><td><input class="model" data-i="'+i+'" value="'+esc(r.model)+'"></td>'+v.grades.map(function(g){return'<td><input class="price" data-i="'+i+'" data-g="'+esc(g)+'" value="'+esc(r[g])+'" inputmode="numeric"></td>'}).join("")+'<td class="center"><button class="del btn danger" data-i="'+i+'">×</button></td></tr>'}).join("")+'</tbody></table></div><button id="savePrices" class="btn primary" style="margin-top:14px">단가 저장</button>'
+      '<div class="tablewrap"><table><thead><tr><th class="left">모델명</th>'+v.grades.map(function(g){return"<th>"+esc(g)+" (만원)</th>"}).join("")+'<th></th></tr></thead><tbody>'+rows.map(function(r,i){return'<tr><td><input class="model" data-i="'+i+'" value="'+esc(r.model)+'"></td>'+v.grades.map(function(g){return'<td><div class="money-input"><input class="price" data-i="'+i+'" data-g="'+esc(g)+'" value="'+esc(r[g])+'" inputmode="decimal"><b>만</b></div></td>'}).join("")+'<td class="center"><button class="del btn danger" data-i="'+i+'">×</button></td></tr>'}).join("")+'</tbody></table></div><button id="savePrices" class="btn primary" style="margin-top:14px">단가 저장</button>'
     }
     function reportPage(v){
       var list=S.snaps[v.id]||[];if(!list.length)return'<div class="empty" style="margin-top:30px">저장된 단가가 없습니다.</div>';if(S.reportIndex===null||S.reportIndex>=list.length)S.reportIndex=list.length-1;
@@ -159,7 +159,7 @@
     }
     function render(){
       var v=vendor(),show=S.tab!=="all"&&S.tab!=="compare";
-      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서</h1></div><div class="tabs">'+
+      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v4 · 금액 단위: 만원</span></h1></div><div class="tabs">'+
       [["all","통합 대시보드"],["compare","다원 기준 비교"],["vendor","업체별 대시보드"],["input","단가 입력"],["report","주간 보고서"],["vendors","거래처 양식"]].map(function(x){return'<button class="tab '+(S.tab===x[0]?"on":"")+'" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join("")+'<button id="backupBtn" class="tab">백업</button><button id="restoreBtn" class="tab">복원</button><input id="restoreFile" type="file" accept=".json" hidden></div></header>'+
       (show?'<div class="vendorbar"><span class="muted">거래처</span>'+S.vendors.map(function(x){return'<button class="chip '+(x.id===S.active?"on":"")+'" data-v="'+x.id+'">'+esc(x.name)+'</button>'}).join("")+'</div>':"")+
       '<main>'+(S.tab==="all"?allDashboard():S.tab==="compare"?dawonComparePage():S.tab==="vendor"?vendorDashboard(v):S.tab==="input"?inputPage(v):S.tab==="report"?reportPage(v):vendorsPage())+'</main>';
