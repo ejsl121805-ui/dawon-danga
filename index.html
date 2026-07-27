@@ -3,371 +3,2946 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>다원트레이드 단가 보고서</title>
+
+<title>다원트레이드 단가 대시보드</title>
+
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  :root{--ink:#14202e;--paper:#f7f5f0;--line:#dcd6ca;--sub:#6b6558;--up:#c0392b;--down:#1f6e5a;--flat:#8a8375;--accent:#c8892a}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;background:var(--paper);color:var(--ink);line-height:1.5}
-  header{background:var(--ink);color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px}
-  .eyebrow{font-size:11px;letter-spacing:3px;color:var(--accent);font-weight:700}
-  header h1{font-size:22px;margin-top:2px}
-  .tabs{display:flex;gap:6px}
-  .tb{padding:8px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.25);font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:var(--paper)}
-  .tb.on{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .vbar{display:flex;gap:6px;align-items:center;padding:12px 20px;background:#efece4;border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .chip{padding:6px 12px;border-radius:20px;border:1px solid var(--line);font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:var(--ink)}
-  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-  .wrap{padding:0 20px 60px;max-width:1000px;margin:0 auto}
-  .st{margin:22px 0 18px}
-  .st .ey{font-size:11px;letter-spacing:2px;color:var(--accent);font-weight:700}
-  .st h2{font-size:22px;margin:4px 0 6px}
-  .st p{font-size:13px;color:var(--sub)}
-  button{font-family:inherit}
-  .bp{background:var(--accent);color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
-  .bg{background:#fff;color:var(--ink);border:1px solid var(--line);padding:9px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
-  .bgs{background:#fff;color:var(--ink);border:1px solid var(--line);padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}
-  table{border-collapse:collapse;width:100%;background:#fff;font-size:13px}
-  th{background:var(--ink);color:#fff;padding:10px 8px;font-weight:600;font-size:12px;text-align:center}
-  td{border-bottom:1px solid var(--line);border-right:1px solid #f0ece3;padding:4px 6px}
-  input,textarea,select{font-family:inherit;color:var(--ink)}
-  .ci{width:100%;border:1px solid transparent;background:transparent;padding:6px 4px;font-size:13px;outline:none;border-radius:4px}
-  .ci:focus{border-color:var(--accent);background:#fffdf8}
-  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
-  .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:10px;font-size:13.5px;font-weight:600;z-index:100;max-width:90%}
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --ink: #14202e;
+    --paper: #f7f5f0;
+    --line: #dcd6ca;
+    --sub: #6b6558;
+    --up: #c0392b;
+    --down: #1f6e5a;
+    --flat: #8a8375;
+    --accent: #c8892a;
+    --soft: #efece4;
+    --white: #ffffff;
+  }
+
+  body {
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "Malgun Gothic",
+      sans-serif;
+
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 18px 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  header h1 {
+    font-size: 22px;
+    margin-top: 2px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tb {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    background: transparent;
+    color: var(--paper);
+  }
+
+  .tb.on {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .vbar {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 12px 20px;
+
+    background: var(--soft);
+    border-bottom: 1px solid var(--line);
+
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    background: #fff;
+    color: var(--ink);
+  }
+
+  .chip.on {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+
+  .wrap {
+    padding: 0 20px 60px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  .st {
+    margin: 22px 0 18px;
+  }
+
+  .st .ey {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .st h2 {
+    font-size: 22px;
+    margin: 4px 0 6px;
+  }
+
+  .st p {
+    font-size: 13px;
+    color: var(--sub);
+  }
+
+  .bp {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+
+    padding: 10px 18px;
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .bg {
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--line);
+
+    padding: 9px 14px;
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .bgs {
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--line);
+
+    padding: 6px 12px;
+    border-radius: 6px;
+
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .metric-label {
+    font-size: 12px;
+    color: var(--sub);
+    margin-bottom: 5px;
+  }
+
+  .metric-value {
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+
+  .metric-sub {
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--sub);
+  }
+
+  .section {
+    margin-top: 22px;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .section-desc {
+    font-size: 12px;
+    color: var(--sub);
+    margin-top: 3px;
+  }
+
+  .two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .ranking-list {
+    display: grid;
+    gap: 6px;
+  }
+
+  .ranking-item {
+    display: grid;
+    grid-template-columns: 34px minmax(120px, 1fr) auto;
+
+    align-items: center;
+    gap: 8px;
+
+    border-bottom: 1px solid #eee9df;
+    padding: 9px 2px;
+  }
+
+  .ranking-item:last-child {
+    border-bottom: none;
+  }
+
+  .ranking-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--soft);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .ranking-model {
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .ranking-grade {
+    margin-top: 2px;
+    font-size: 11px;
+    color: var(--sub);
+  }
+
+  .ranking-amount {
+    text-align: right;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .ranking-pct {
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  .up {
+    color: var(--up);
+  }
+
+  .down {
+    color: var(--down);
+  }
+
+  .flat {
+    color: var(--flat);
+  }
+
+  .empty {
+    padding: 35px 20px;
+    text-align: center;
+    color: var(--sub);
+    font-size: 13px;
+
+    background: #fff;
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+  }
+
+  .control-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .control-row label {
+    font-size: 12px;
+    color: var(--sub);
+    font-weight: 600;
+  }
+
+  .control-row select,
+  .control-row input[type="date"] {
+    padding: 8px 11px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+
+    font-size: 13px;
+    background: #fff;
+    color: var(--ink);
+  }
+
+  .chart-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .chart-wrap {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .comment-box {
+    background: var(--ink);
+    color: #f7f5f0;
+
+    border-radius: 12px;
+    padding: 18px;
+  }
+
+  .comment-box h3 {
+    font-size: 15px;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .comment-box ul {
+    padding-left: 19px;
+  }
+
+  .comment-box li {
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .comment-box li:last-child {
+    margin-bottom: 0;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    background: #fff;
+    font-size: 13px;
+  }
+
+  th {
+    background: var(--ink);
+    color: #fff;
+
+    padding: 10px 8px;
+
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  td {
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid #f0ece3;
+    padding: 7px 8px;
+  }
+
+  .tblwrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+
+  .ci {
+    width: 100%;
+    border: 1px solid transparent;
+    background: transparent;
+
+    padding: 6px 4px;
+    font-size: 13px;
+
+    outline: none;
+    border-radius: 4px;
+  }
+
+  .ci:focus {
+    border-color: var(--accent);
+    background: #fffdf8;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background: var(--ink);
+    color: #fff;
+
+    padding: 12px 22px;
+    border-radius: 10px;
+
+    font-size: 13.5px;
+    font-weight: 600;
+
+    z-index: 100;
+    max-width: 90%;
+  }
+
+  .gap-positive {
+    color: var(--up);
+    font-weight: 800;
+  }
+
+  .gap-negative {
+    color: var(--down);
+    font-weight: 800;
+  }
+
+  .gap-zero {
+    color: var(--flat);
+    font-weight: 800;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    background: var(--soft);
+  }
+
+  @media (max-width: 920px) {
+    .dashboard-grid {
+      grid-template-columns: repeat(2, minmax(130px, 1fr));
+    }
+
+    .two-column {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    header {
+      align-items: flex-start;
+    }
+
+    .wrap {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    .dashboard-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .metric-value {
+      font-size: 23px;
+    }
+
+    .tb {
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
+    .ranking-item {
+      grid-template-columns: 30px minmax(100px, 1fr) auto;
+    }
+  }
 </style>
 </head>
+
 <body>
+
 <div id="app"></div>
+
 <script>
-(function(){
-  var A=document.getElementById('app');
-  var LS={get:function(k){try{return JSON.parse(localStorage.getItem('dw_'+k))}catch(e){return null}},set:function(k,v){try{localStorage.setItem('dw_'+k,JSON.stringify(v))}catch(e){}}};
-  function won(n){return(n===''||n==null||isNaN(n))?'-':Number(n).toLocaleString('ko-KR')}
-  function todayISO(){return new Date().toISOString().slice(0,10)}
-  function weekLabel(ds){var d=new Date(ds);var oj=new Date(d.getFullYear(),0,1);var w=Math.ceil(((d-oj)/86400000+oj.getDay()+1)/7);return d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+w+'주차'}
-  function emptyRow(cols){var r={model:''};cols.forEach(function(g){r[g]=''});return r}
-  function defVendors(){return[{id:'dawon',name:'다원(자체)',grades:['A급','A-급','B+급','B급','액파','LCD']},{id:'jinwoo',name:'진우아이엔씨',grades:['A급','A-급','B+급','B급','액정파손','LCD']}]}
-  function esc(s){s=String(s==null?'':s);return s.split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;')}
-  var S={tab:'dash',vendors:LS.get('vendors')||defVendors(),active:'dawon',snaps:LS.get('snaps')||{},draft:{},curIdx:null,editing:null,baseVendor:LS.get('baseVendor')||'dawon'};
-  if(!S.vendors.find(function(x){return x.id===S.active}))S.active=S.vendors[0].id;
-  function countMoves(rows,t){var n=0;rows.forEach(function(r){r.grades.forEach(function(c){if(c.diff==null)return;if(t==='up'&&c.diff>0)n++;if(t==='down'&&c.diff<0)n++;if(t==='flat'&&c.diff===0)n++})});return n}
-  function avgPctN(rows){var a=[];rows.forEach(function(r){r.grades.forEach(function(c){if(c.pct!=null)a.push(c.pct)})});return a.length?a.reduce(function(x,y){return x+y},0)/a.length:0}
-  function avgPct(rows){var v=avgPctN(rows);return(v>0?'+':'')+v.toFixed(1)}
-  function save(){LS.set('vendors',S.vendors);LS.set('snaps',S.snaps)}
-  function toast(m){var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove()},3000)}
-  function stTitle(e,t,d){return '<div class="st"><div class="ey">'+esc(e)+'</div><h2>'+esc(t)+'</h2><p>'+esc(d)+'</p></div>'}
-  function inputTab(v){
-    var cols=v.grades,snaps=S.snaps[v.id]||[],last=snaps[snaps.length-1];
-    if(!S.draft[v.id])S.draft[v.id]=last?last.rows.map(function(r){return Object.assign({},r)}):[emptyRow(cols)];
-    var rows=S.draft[v.id];
-    var html=stTitle(weekLabel(todayISO()),v.name+' 단가 입력','단가표 사진은 클로드(채팅)에서 표로 받아 붙여넣거나, 직접 입력하세요. 저장하면 다음주 비교 기준이 됩니다.');
-    html+='<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"><button class="bg" id="pasteBtn">📋 붙여넣기로 채우기</button><button class="bg" id="addRow">+ 행 추가</button><button class="bg" id="clearRows">전체 지우기</button>'+(last?'<span style="font-size:12px;color:var(--sub);align-self:center">직전 저장: '+last.date+'</span>':'')+'</div>';
-    html+='<div id="pastePanel" style="display:none;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px"><div style="font-size:12px;color:var(--sub);margin-bottom:6px">모델명 · '+cols.join(' · ')+' 순서로 붙여넣으세요</div><textarea id="pasteTxt" placeholder="갤럭시S25 630000 610000 570000 540000" style="width:100%;min-height:110px;border:1px solid var(--line);border-radius:8px;padding:10px;font-size:13px;font-family:monospace;resize:vertical"></textarea><div style="display:flex;gap:8px;margin-top:8px"><button class="bp" id="pasteGo">불러오기</button><button class="bg" id="pasteCancel">취소</button></div></div>';
-    html+='<div class="tblwrap"><table><thead><tr><th style="min-width:150px;text-align:left">모델명</th>';
-    cols.forEach(function(g){html+='<th style="min-width:90px">'+esc(g)+'</th>'});
-    html+='<th style="width:40px"></th></tr></thead><tbody>';
-    rows.forEach(function(r,ri){
-      html+='<tr><td style="text-align:left;background:#fbfaf7"><input class="ci mdl" data-ri="'+ri+'" value="'+esc(r.model)+'" placeholder="모델명"></td>';
-      cols.forEach(function(g){html+='<td><input class="ci num" data-ri="'+ri+'" data-g="'+esc(g)+'" value="'+(r[g]===''?'':r[g])+'" placeholder="0" style="text-align:right"></td>'});
-      html+='<td style="text-align:center"><button class="delRow" data-ri="'+ri+'" style="border:none;background:transparent;color:#c0392b;font-size:18px;cursor:pointer">×</button></td></tr>';
+(function () {
+  "use strict";
+
+  var A = document.getElementById("app");
+
+  var LS = {
+    get: function (key) {
+      try {
+        return JSON.parse(localStorage.getItem("dw_" + key));
+      } catch (error) {
+        return null;
+      }
+    },
+
+    set: function (key, value) {
+      try {
+        localStorage.setItem(
+          "dw_" + key,
+          JSON.stringify(value)
+        );
+      } catch (error) {
+        console.error("저장 실패:", error);
+      }
+    }
+  };
+
+  function won(value) {
+    if (
+      value === "" ||
+      value === null ||
+      value === undefined ||
+      isNaN(value)
+    ) {
+      return "-";
+    }
+
+    return Number(value).toLocaleString("ko-KR");
+  }
+
+  function signedWon(value) {
+    if (value === null || value === undefined || isNaN(value)) {
+      return "-";
+    }
+
+    if (value > 0) {
+      return "+" + won(value) + "원";
+    }
+
+    if (value < 0) {
+      return "-" + won(Math.abs(value)) + "원";
+    }
+
+    return "0원";
+  }
+
+  function todayISO() {
+    var date = new Date();
+
+    var year = date.getFullYear();
+    var month = String(date.getMonth() + 1).padStart(2, "0");
+    var day = String(date.getDate()).padStart(2, "0");
+
+    return year + "-" + month + "-" + day;
+  }
+
+  function weekLabel(dateString) {
+    if (!dateString) {
+      return "";
+    }
+
+    var date = new Date(dateString + "T00:00:00");
+    var firstDay = new Date(date.getFullYear(), 0, 1);
+
+    var week = Math.ceil(
+      (
+        (date - firstDay) / 86400000 +
+        firstDay.getDay() +
+        1
+      ) / 7
+    );
+
+    return (
+      date.getFullYear() +
+      "년 " +
+      (date.getMonth() + 1) +
+      "월 " +
+      week +
+      "주차"
+    );
+  }
+
+  function emptyRow(columns) {
+    var row = {
+      model: ""
+    };
+
+    columns.forEach(function (grade) {
+      row[grade] = "";
     });
-    html+='</tbody></table></div>';
-    html+='<div style="display:flex;gap:8px;margin-top:16px"><button class="bp" id="saveBtn">💾 이번주 단가 저장</button></div>';
+
+    return row;
+  }
+
+  function defVendors() {
+    return [
+      {
+        id: "dawon",
+        name: "다원(자체)",
+        grades: [
+          "A급",
+          "A-급",
+          "B+급",
+          "B급",
+          "액파",
+          "LCD"
+        ]
+      },
+      {
+        id: "jinwoo",
+        name: "진우아이엔씨",
+        grades: [
+          "A급",
+          "A-급",
+          "B+급",
+          "B급",
+          "액정파손",
+          "LCD"
+        ]
+      }
+    ];
+  }
+
+  function esc(value) {
+    return String(
+      value === null || value === undefined
+        ? ""
+        : value
+    ).replace(
+      /[&<>"]/g,
+      function (character) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;"
+        }[character];
+      }
+    );
+  }
+
+  function modelKey(model) {
+    return String(model || "")
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/[_-]/g, "");
+  }
+
+  function gradeKey(grade) {
+    var key = String(grade || "")
+      .toUpperCase()
+      .replace(/\s+/g, "")
+      .replace(/급/g, "");
+
+    if (
+      key === "액정파손" ||
+      key === "액정파손품" ||
+      key === "액파"
+    ) {
+      return "액파";
+    }
+
+    return key;
+  }
+
+  function numberValue(value) {
+    if (
+      value === "" ||
+      value === null ||
+      value === undefined
+    ) {
+      return null;
+    }
+
+    var number = Number(value);
+
+    return isNaN(number)
+      ? null
+      : number;
+  }
+
+  var savedVendors = LS.get("vendors");
+  var savedSnaps = LS.get("snaps");
+
+  if (
+    !Array.isArray(savedVendors) ||
+    savedVendors.length === 0
+  ) {
+    savedVendors = defVendors();
+  }
+
+  if (
+    !savedSnaps ||
+    typeof savedSnaps !== "object" ||
+    Array.isArray(savedSnaps)
+  ) {
+    savedSnaps = {};
+  }
+
+  var S = {
+    tab: "dashboard",
+    vendors: savedVendors,
+    active: "dawon",
+    snaps: savedSnaps,
+    draft: {},
+    draftDate: {},
+    curIdx: null,
+    dashModel: "",
+    dashGrade: ""
+  };
+
+  if (
+    !S.vendors.some(function (vendor) {
+      return vendor.id === S.active;
+    })
+  ) {
+    S.active = S.vendors[0].id;
+  }
+
+  function save() {
+    LS.set("vendors", S.vendors);
+    LS.set("snaps", S.snaps);
+  }
+
+  function toast(message) {
+    var oldToast = document.querySelector(".toast");
+
+    if (oldToast) {
+      oldToast.remove();
+    }
+
+    var element = document.createElement("div");
+
+    element.className = "toast";
+    element.textContent = message;
+
+    document.body.appendChild(element);
+
+    setTimeout(function () {
+      element.remove();
+    }, 3000);
+  }
+
+  function latestSnap(vendorId) {
+    var list = S.snaps[vendorId] || [];
+
+    if (!list.length) {
+      return null;
+    }
+
+    return list[list.length - 1];
+  }
+
+  function previousSnap(vendorId) {
+    var list = S.snaps[vendorId] || [];
+
+    if (list.length < 2) {
+      return null;
+    }
+
+    return list[list.length - 2];
+  }
+
+  function compareSnapshotRows(vendor, currentIndex) {
+    var list = S.snaps[vendor.id] || [];
+
+    if (!list.length) {
+      return [];
+    }
+
+    var index =
+      typeof currentIndex === "number"
+        ? currentIndex
+        : list.length - 1;
+
+    var current = list[index];
+    var previous = list[index - 1];
+
+    if (!current) {
+      return [];
+    }
+
+    return current.rows.map(function (row) {
+      var previousRow = null;
+
+      if (previous) {
+        previousRow = previous.rows.find(function (candidate) {
+          return modelKey(candidate.model) === modelKey(row.model);
+        });
+      }
+
+      var grades = vendor.grades.map(function (grade) {
+        var now = numberValue(row[grade]);
+
+        var before =
+          previousRow
+            ? numberValue(previousRow[grade])
+            : null;
+
+        var diff =
+          now !== null && before !== null
+            ? now - before
+            : null;
+
+        var pct =
+          diff !== null && before
+            ? diff / before * 100
+            : null;
+
+        return {
+          grade: grade,
+          now: now,
+          before: before,
+          diff: diff,
+          pct: pct
+        };
+      });
+
+      return {
+        model: row.model,
+        grades: grades
+      };
+    });
+  }
+
+  function countMoves(rows, type) {
+    var count = 0;
+
+    rows.forEach(function (row) {
+      row.grades.forEach(function (cell) {
+        if (cell.diff === null) {
+          return;
+        }
+
+        if (type === "up" && cell.diff > 0) {
+          count++;
+        }
+
+        if (type === "down" && cell.diff < 0) {
+          count++;
+        }
+
+        if (type === "flat" && cell.diff === 0) {
+          count++;
+        }
+      });
+    });
+
+    return count;
+  }
+
+  function averagePctNumber(rows) {
+    var values = [];
+
+    rows.forEach(function (row) {
+      row.grades.forEach(function (cell) {
+        if (cell.pct !== null) {
+          values.push(cell.pct);
+        }
+      });
+    });
+
+    if (!values.length) {
+      return 0;
+    }
+
+    return values.reduce(function (sum, value) {
+      return sum + value;
+    }, 0) / values.length;
+  }
+
+  function averagePctText(rows) {
+    var value = averagePctNumber(rows);
+
+    return (
+      (value > 0 ? "+" : "") +
+      value.toFixed(1)
+    );
+  }
+
+  function collectMovers(rows) {
+    var movers = [];
+
+    rows.forEach(function (row) {
+      row.grades.forEach(function (cell) {
+        if (
+          cell.diff === null ||
+          cell.diff === 0
+        ) {
+          return;
+        }
+
+        movers.push({
+          model: row.model,
+          grade: cell.grade,
+          now: cell.now,
+          before: cell.before,
+          diff: cell.diff,
+          pct: cell.pct
+        });
+      });
+    });
+
+    return movers;
+  }
+
+  function buildGapRows() {
+    var dawonVendor = S.vendors.find(function (vendor) {
+      return vendor.id === "dawon";
+    });
+
+    var jinwooVendor = S.vendors.find(function (vendor) {
+      return vendor.id === "jinwoo";
+    });
+
+    if (!dawonVendor || !jinwooVendor) {
+      return [];
+    }
+
+    var dawonSnap = latestSnap("dawon");
+    var jinwooSnap = latestSnap("jinwoo");
+
+    if (!dawonSnap || !jinwooSnap) {
+      return [];
+    }
+
+    var rows = [];
+
+    dawonSnap.rows.forEach(function (dawonRow) {
+      var jinwooRow = jinwooSnap.rows.find(function (row) {
+        return modelKey(row.model) === modelKey(dawonRow.model);
+      });
+
+      if (!jinwooRow) {
+        return;
+      }
+
+      dawonVendor.grades.forEach(function (dawonGrade) {
+        var normalizedGrade = gradeKey(dawonGrade);
+
+        var jinwooGrade = jinwooVendor.grades.find(function (grade) {
+          return gradeKey(grade) === normalizedGrade;
+        });
+
+        if (!jinwooGrade) {
+          return;
+        }
+
+        var dawonPrice = numberValue(
+          dawonRow[dawonGrade]
+        );
+
+        var jinwooPrice = numberValue(
+          jinwooRow[jinwooGrade]
+        );
+
+        if (
+          dawonPrice === null ||
+          jinwooPrice === null
+        ) {
+          return;
+        }
+
+        var gap = dawonPrice - jinwooPrice;
+
+        rows.push({
+          model: dawonRow.model,
+          grade: dawonGrade,
+          dawonPrice: dawonPrice,
+          jinwooPrice: jinwooPrice,
+          gap: gap,
+          winner:
+            gap > 0
+              ? "다원"
+              : gap < 0
+                ? "진우"
+                : "동일"
+        });
+      });
+    });
+
+    rows.sort(function (a, b) {
+      return Math.abs(b.gap) - Math.abs(a.gap);
+    });
+
+    return rows;
+  }
+
+  function availableModels(vendor) {
+    var list = S.snaps[vendor.id] || [];
+    var map = {};
+
+    list.forEach(function (snap) {
+      snap.rows.forEach(function (row) {
+        var key = modelKey(row.model);
+
+        if (key && !map[key]) {
+          map[key] = row.model;
+        }
+      });
+    });
+
+    return Object.keys(map)
+      .map(function (key) {
+        return map[key];
+      })
+      .sort(function (a, b) {
+        return a.localeCompare(b, "ko");
+      });
+  }
+
+  function trendData(vendor, model, grade) {
+    var list = S.snaps[vendor.id] || [];
+    var data = [];
+
+    list.forEach(function (snap) {
+      var row = snap.rows.find(function (candidate) {
+        return modelKey(candidate.model) === modelKey(model);
+      });
+
+      if (!row) {
+        return;
+      }
+
+      var value = numberValue(row[grade]);
+
+      if (value === null) {
+        return;
+      }
+
+      data.push({
+        date: snap.date,
+        value: value
+      });
+    });
+
+    return data;
+  }
+
+  function trendSvg(data) {
+    if (!data.length) {
+      return (
+        '<div class="empty">' +
+        "선택한 모델과 등급의 저장 이력이 없습니다." +
+        "</div>"
+      );
+    }
+
+    var width = 820;
+    var height = 270;
+
+    var left = 58;
+    var right = 26;
+    var top = 24;
+    var bottom = 48;
+
+    var values = data.map(function (item) {
+      return item.value;
+    });
+
+    var minimum = Math.min.apply(null, values);
+    var maximum = Math.max.apply(null, values);
+
+    if (minimum === maximum) {
+      minimum = minimum - 1000;
+      maximum = maximum + 1000;
+    }
+
+    var usableWidth = width - left - right;
+    var usableHeight = height - top - bottom;
+
+    function x(index) {
+      if (data.length === 1) {
+        return left + usableWidth / 2;
+      }
+
+      return (
+        left +
+        index * usableWidth / (data.length - 1)
+      );
+    }
+
+    function y(value) {
+      return (
+        top +
+        (maximum - value) /
+        (maximum - minimum) *
+        usableHeight
+      );
+    }
+
+    var points = data.map(function (item, index) {
+      return x(index) + "," + y(item.value);
+    }).join(" ");
+
+    var circles = data.map(function (item, index) {
+      return (
+        '<circle cx="' + x(index) +
+        '" cy="' + y(item.value) +
+        '" r="5" fill="#c8892a"></circle>' +
+
+        '<text x="' + x(index) +
+        '" y="' + (y(item.value) - 11) +
+        '" text-anchor="middle" font-size="11" font-weight="700" fill="#14202e">' +
+        won(item.value) +
+        "</text>"
+      );
+    }).join("");
+
+    var labels = data.map(function (item, index) {
+      var show =
+        data.length <= 8 ||
+        index === 0 ||
+        index === data.length - 1 ||
+        index % Math.ceil(data.length / 6) === 0;
+
+      if (!show) {
+        return "";
+      }
+
+      return (
+        '<text x="' + x(index) +
+        '" y="' + (height - 18) +
+        '" text-anchor="middle" font-size="10" fill="#6b6558">' +
+        esc(item.date.slice(5)) +
+        "</text>"
+      );
+    }).join("");
+
+    return (
+      '<div class="chart-wrap">' +
+      '<svg viewBox="0 0 ' + width + " " + height + '" ' +
+      'style="min-width:700px;width:100%;height:auto">' +
+
+      '<line x1="' + left +
+      '" y1="' + top +
+      '" x2="' + left +
+      '" y2="' + (height - bottom) +
+      '" stroke="#dcd6ca"></line>' +
+
+      '<line x1="' + left +
+      '" y1="' + (height - bottom) +
+      '" x2="' + (width - right) +
+      '" y2="' + (height - bottom) +
+      '" stroke="#dcd6ca"></line>' +
+
+      '<line x1="' + left +
+      '" y1="' + (top + usableHeight / 2) +
+      '" x2="' + (width - right) +
+      '" y2="' + (top + usableHeight / 2) +
+      '" stroke="#efece4" stroke-dasharray="5 5"></line>' +
+
+      '<text x="8" y="' + (top + 4) +
+      '" font-size="10" fill="#6b6558">' +
+      won(maximum) +
+      "</text>" +
+
+      '<text x="8" y="' + (height - bottom + 4) +
+      '" font-size="10" fill="#6b6558">' +
+      won(minimum) +
+      "</text>" +
+
+      '<polyline points="' + points +
+      '" fill="none" stroke="#c8892a" ' +
+      'stroke-width="4" stroke-linecap="round" ' +
+      'stroke-linejoin="round"></polyline>' +
+
+      circles +
+      labels +
+
+      "</svg>" +
+      "</div>"
+    );
+  }
+
+  function stTitle(eyebrow, title, description) {
+    return (
+      '<div class="st">' +
+        '<div class="ey">' +
+          esc(eyebrow) +
+        "</div>" +
+
+        "<h2>" +
+          esc(title) +
+        "</h2>" +
+
+        "<p>" +
+          esc(description) +
+        "</p>" +
+      "</div>"
+    );
+  }
+
+  function metricCard(label, value, color, subText) {
+    return (
+      '<div class="card">' +
+        '<div class="metric-label">' +
+          esc(label) +
+        "</div>" +
+
+        '<div class="metric-value" style="color:' +
+          color +
+        '">' +
+          value +
+        "</div>" +
+
+        '<div class="metric-sub">' +
+          esc(subText || "") +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  function rankingHtml(items, type) {
+    if (!items.length) {
+      return (
+        '<div class="empty">' +
+        "비교할 변동 데이터가 없습니다." +
+        "</div>"
+      );
+    }
+
+    return (
+      '<div class="ranking-list">' +
+      items.map(function (item, index) {
+        var className =
+          type === "up"
+            ? "up"
+            : "down";
+
+        var arrow =
+          type === "up"
+            ? "▲"
+            : "▼";
+
+        return (
+          '<div class="ranking-item">' +
+            '<div class="ranking-number">' +
+              (index + 1) +
+            "</div>" +
+
+            "<div>" +
+              '<div class="ranking-model">' +
+                esc(item.model) +
+              "</div>" +
+
+              '<div class="ranking-grade">' +
+                esc(item.grade) +
+              "</div>" +
+            "</div>" +
+
+            '<div class="ranking-amount ' +
+              className +
+            '">' +
+
+              arrow + " " +
+              won(Math.abs(item.diff)) +
+              "원" +
+
+              '<div class="ranking-pct">' +
+                (
+                  item.pct === null
+                    ? ""
+                    : (
+                      item.pct > 0
+                        ? "+"
+                        : ""
+                    ) +
+                    item.pct.toFixed(1) +
+                    "%"
+                ) +
+              "</div>" +
+            "</div>" +
+          "</div>"
+        );
+      }).join("") +
+      "</div>"
+    );
+  }
+
+  function dashboardComments(
+    vendor,
+    current,
+    previous,
+    rows,
+    movers,
+    gapRows
+  ) {
+    var comments = [];
+
+    if (!current) {
+      comments.push(
+        "아직 저장된 단가가 없습니다. 단가 입력 메뉴에서 첫 단가표를 저장해 주세요."
+      );
+
+      return comments;
+    }
+
+    if (!previous) {
+      comments.push(
+        "현재 저장된 단가표는 1회입니다. 서로 다른 기준일로 2회 이상 저장하면 상승·하락 분석이 시작됩니다."
+      );
+    } else {
+      var avg = averagePctNumber(rows);
+
+      if (avg > 0) {
+        comments.push(
+          "이번 " +
+          vendor.name +
+          " 단가는 직전 저장일 대비 평균 " +
+          avg.toFixed(1) +
+          "% 상승했습니다."
+        );
+      } else if (avg < 0) {
+        comments.push(
+          "이번 " +
+          vendor.name +
+          " 단가는 직전 저장일 대비 평균 " +
+          Math.abs(avg).toFixed(1) +
+          "% 하락했습니다."
+        );
+      } else {
+        comments.push(
+          "이번 " +
+          vendor.name +
+          " 전체 평균 단가는 직전 저장일과 동일한 수준입니다."
+        );
+      }
+
+      var biggestDown = movers
+        .filter(function (item) {
+          return item.diff < 0;
+        })
+        .sort(function (a, b) {
+          return a.diff - b.diff;
+        })[0];
+
+      var biggestUp = movers
+        .filter(function (item) {
+          return item.diff > 0;
+        })
+        .sort(function (a, b) {
+          return b.diff - a.diff;
+        })[0];
+
+      if (biggestDown) {
+        comments.push(
+          "가장 큰 하락은 " +
+          biggestDown.model +
+          " " +
+          biggestDown.grade +
+          "으로, 직전 대비 " +
+          won(Math.abs(biggestDown.diff)) +
+          "원 하락했습니다."
+        );
+      }
+
+      if (biggestUp) {
+        comments.push(
+          "가장 큰 상승은 " +
+          biggestUp.model +
+          " " +
+          biggestUp.grade +
+          "으로, 직전 대비 " +
+          won(biggestUp.diff) +
+          "원 상승했습니다."
+        );
+      }
+
+      comments.push(
+        "상승 " +
+        countMoves(rows, "up") +
+        "건, 하락 " +
+        countMoves(rows, "down") +
+        "건, 보합 " +
+        countMoves(rows, "flat") +
+        "건으로 집계되었습니다."
+      );
+    }
+
+    if (gapRows.length) {
+      var dawonHigh = gapRows.filter(function (row) {
+        return row.gap > 0;
+      }).length;
+
+      var jinwooHigh = gapRows.filter(function (row) {
+        return row.gap < 0;
+      }).length;
+
+      var same = gapRows.filter(function (row) {
+        return row.gap === 0;
+      }).length;
+
+      comments.push(
+        "진우아이엔씨와 비교 가능한 항목은 총 " +
+        gapRows.length +
+        "건이며, 다원이 높은 항목 " +
+        dawonHigh +
+        "건, 진우가 높은 항목 " +
+        jinwooHigh +
+        "건, 동일 " +
+        same +
+        "건입니다."
+      );
+    } else {
+      comments.push(
+        "다원과 진우아이엔씨의 동일 모델·동일 등급 데이터가 저장되면 거래처 GAP 분석이 표시됩니다."
+      );
+    }
+
+    return comments;
+  }
+
+  function dashboardTab(vendor) {
+    var current = latestSnap(vendor.id);
+    var previous = previousSnap(vendor.id);
+
+    if (!current) {
+      return (
+        stTitle(
+          "DASHBOARD",
+          vendor.name + " 단가 대시보드",
+          "저장된 단가 데이터를 기준으로 주간 변동과 거래처 GAP을 분석합니다."
+        ) +
+
+        '<div class="empty">' +
+          "<strong>대시보드 준비 중</strong><br><br>" +
+          "단가 입력 메뉴에서 첫 단가표를 저장해 주세요." +
+        "</div>"
+      );
+    }
+
+    var rows = compareSnapshotRows(vendor);
+    var movers = collectMovers(rows);
+
+    var upMovers = movers
+      .filter(function (item) {
+        return item.diff > 0;
+      })
+      .sort(function (a, b) {
+        return b.diff - a.diff;
+      })
+      .slice(0, 10);
+
+    var downMovers = movers
+      .filter(function (item) {
+        return item.diff < 0;
+      })
+      .sort(function (a, b) {
+        return a.diff - b.diff;
+      })
+      .slice(0, 10);
+
+    var gapRows = buildGapRows();
+
+    var models = availableModels(vendor);
+
+    if (
+      !S.dashModel ||
+      models.indexOf(S.dashModel) === -1
+    ) {
+      S.dashModel = models[0] || "";
+    }
+
+    if (
+      !S.dashGrade ||
+      vendor.grades.indexOf(S.dashGrade) === -1
+    ) {
+      S.dashGrade = vendor.grades[0] || "";
+    }
+
+    var trend = trendData(
+      vendor,
+      S.dashModel,
+      S.dashGrade
+    );
+
+    var comments = dashboardComments(
+      vendor,
+      current,
+      previous,
+      rows,
+      movers,
+      gapRows
+    );
+
+    var avgNumber = averagePctNumber(rows);
+
+    var comparisonText = previous
+      ? previous.date + " → " + current.date
+      : "비교용 저장 데이터가 1회뿐입니다.";
+
+    var html = stTitle(
+      "DASHBOARD",
+      vendor.name + " 단가 대시보드",
+      comparisonText
+    );
+
+    html +=
+      '<div class="dashboard-grid">' +
+
+        metricCard(
+          "등록 모델",
+          current.rows.length + "개",
+          "var(--ink)",
+          "최근 저장 기준"
+        ) +
+
+        metricCard(
+          "상승",
+          countMoves(rows, "up") + "건",
+          "var(--up)",
+          "등급별 비교"
+        ) +
+
+        metricCard(
+          "하락",
+          countMoves(rows, "down") + "건",
+          "var(--down)",
+          "등급별 비교"
+        ) +
+
+        metricCard(
+          "보합",
+          countMoves(rows, "flat") + "건",
+          "var(--flat)",
+          "변동 없음"
+        ) +
+
+        metricCard(
+          "평균 변동률",
+          averagePctText(rows) + "%",
+          avgNumber > 0
+            ? "var(--up)"
+            : avgNumber < 0
+              ? "var(--down)"
+              : "var(--flat)",
+          previous
+            ? "직전 저장일 대비"
+            : "비교 데이터 필요"
+        ) +
+
+      "</div>";
+
+    html +=
+      '<div class="section">' +
+
+        '<div class="section-head">' +
+          "<div>" +
+            '<div class="section-title">' +
+              "주요 단가 변동 TOP 10" +
+            "</div>" +
+
+            '<div class="section-desc">' +
+              "직전 저장 단가와 비교한 등급별 변동 금액입니다." +
+            "</div>" +
+          "</div>" +
+        "</div>" +
+
+        '<div class="two-column">' +
+
+          '<div class="card">' +
+            '<div class="section-title down" style="margin-bottom:8px">' +
+              "▼ 하락 TOP 10" +
+            "</div>" +
+
+            rankingHtml(
+              downMovers,
+              "down"
+            ) +
+          "</div>" +
+
+          '<div class="card">' +
+            '<div class="section-title up" style="margin-bottom:8px">' +
+              "▲ 상승 TOP 10" +
+            "</div>" +
+
+            rankingHtml(
+              upMovers,
+              "up"
+            ) +
+          "</div>" +
+
+        "</div>" +
+      "</div>";
+
+    html +=
+      '<div class="section">' +
+
+        '<div class="section-head">' +
+          "<div>" +
+            '<div class="section-title">' +
+              "다원 · 진우아이엔씨 단가 GAP" +
+            "</div>" +
+
+            '<div class="section-desc">' +
+              "양쪽의 가장 최근 저장 자료에서 동일 모델과 동일 등급을 비교합니다." +
+            "</div>" +
+          "</div>" +
+        "</div>";
+
+    if (!gapRows.length) {
+      html +=
+        '<div class="empty">' +
+          "비교 가능한 동일 모델·동일 등급 데이터가 없습니다.<br>" +
+          "다원과 진우아이엔씨 단가표를 각각 저장해 주세요." +
+        "</div>";
+    } else {
+      html +=
+        '<div class="tblwrap">' +
+          "<table>" +
+            "<thead>" +
+              "<tr>" +
+                '<th style="text-align:left;min-width:150px">모델</th>' +
+                '<th style="min-width:85px">등급</th>' +
+                '<th style="min-width:110px">다원</th>' +
+                '<th style="min-width:110px">진우</th>' +
+                '<th style="min-width:110px">GAP</th>' +
+                '<th style="min-width:80px">높은 곳</th>' +
+              "</tr>" +
+            "</thead>" +
+
+            "<tbody>" +
+
+              gapRows.slice(0, 30).map(function (row) {
+                var gapClass =
+                  row.gap > 0
+                    ? "gap-positive"
+                    : row.gap < 0
+                      ? "gap-negative"
+                      : "gap-zero";
+
+                return (
+                  "<tr>" +
+                    '<td style="text-align:left;font-weight:700">' +
+                      esc(row.model) +
+                    "</td>" +
+
+                    '<td style="text-align:center">' +
+                      esc(row.grade) +
+                    "</td>" +
+
+                    '<td style="text-align:right">' +
+                      won(row.dawonPrice) +
+                    "</td>" +
+
+                    '<td style="text-align:right">' +
+                      won(row.jinwooPrice) +
+                    "</td>" +
+
+                    '<td class="' + gapClass + '" style="text-align:right">' +
+                      signedWon(row.gap) +
+                    "</td>" +
+
+                    '<td style="text-align:center">' +
+                      '<span class="status-badge">' +
+                        esc(row.winner) +
+                      "</span>" +
+                    "</td>" +
+                  "</tr>"
+                );
+              }).join("") +
+
+            "</tbody>" +
+          "</table>" +
+        "</div>";
+    }
+
+    html += "</div>";
+
+    html +=
+      '<div class="section">' +
+
+        '<div class="section-head">' +
+          "<div>" +
+            '<div class="section-title">' +
+              "모델별 가격 추세" +
+            "</div>" +
+
+            '<div class="section-desc">' +
+              "저장된 기준일별 단가 흐름을 확인합니다." +
+            "</div>" +
+          "</div>" +
+
+          '<div class="control-row">' +
+
+            "<label>모델</label>" +
+
+            '<select id="dashModelSel">' +
+              models.map(function (model) {
+                return (
+                  '<option value="' +
+                    esc(model) +
+                  '"' +
+                  (
+                    model === S.dashModel
+                      ? " selected"
+                      : ""
+                  ) +
+                  ">" +
+                    esc(model) +
+                  "</option>"
+                );
+              }).join("") +
+            "</select>" +
+
+            "<label>등급</label>" +
+
+            '<select id="dashGradeSel">' +
+              vendor.grades.map(function (grade) {
+                return (
+                  '<option value="' +
+                    esc(grade) +
+                  '"' +
+                  (
+                    grade === S.dashGrade
+                      ? " selected"
+                      : ""
+                  ) +
+                  ">" +
+                    esc(grade) +
+                  "</option>"
+                );
+              }).join("") +
+            "</select>" +
+
+          "</div>" +
+        "</div>" +
+
+        '<div class="chart-card">' +
+          trendSvg(trend) +
+        "</div>" +
+
+      "</div>";
+
+    html +=
+      '<div class="section">' +
+
+        '<div class="comment-box">' +
+          "<h3>자동 분석 코멘트</h3>" +
+
+          "<ul>" +
+            comments.map(function (comment) {
+              return (
+                "<li>" +
+                  esc(comment) +
+                "</li>"
+              );
+            }).join("") +
+          "</ul>" +
+        "</div>" +
+
+      "</div>";
+
     return html;
   }
-  function reportTab(v){
-    var cols=v.grades,snaps=S.snaps[v.id]||[];
-    if(!snaps.length)return '<div style="padding:60px;text-align:center;color:var(--sub);font-size:14px">아직 저장된 단가가 없습니다. 단가 입력에서 먼저 저장하세요.</div>';
-    if(S.curIdx==null||S.curIdx>=snaps.length)S.curIdx=snaps.length-1;
-    var cur=snaps[S.curIdx],prev=snaps[S.curIdx-1];
-    var rows=cur.rows.map(function(r){
-      var pr=prev&&prev.rows.find(function(x){return x.model===r.model});
-      var grades=cols.map(function(g){
-        var now=r[g]===''?null:Number(r[g]);
-        var before=(pr&&pr[g]!=='')?Number(pr[g]):null;
-        var diff=(now!=null&&before!=null)?now-before:null;
-        var pct=(diff!=null&&before)?diff/before*100:null;
-        return {g:g,now:now,before:before,diff:diff,pct:pct};
-      });
-      return {model:r.model,grades:grades};
-    });
-    var movers=[];
-    rows.forEach(function(r){r.grades.forEach(function(c){if(c.pct!=null&&Math.abs(c.pct)>=3)movers.push({model:r.model,grade:c.g,diff:c.diff,pct:c.pct})})});
-    movers.sort(function(a,b){return a.diff-b.diff});
-    var h=stTitle(weekLabel(cur.date),v.name+' 주간 보고서',prev?prev.date+' → '+cur.date+' 비교':'비교할 지난주 데이터가 없어 현재 단가만 표시합니다.');
-    h+='<div style="display:flex;gap:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap"><span style="font-size:12px;color:var(--sub)">기준 주차</span><select id="weekSel" style="padding:8px 12px;border-radius:8px;border:1px solid var(--line);font-size:13px;background:#fff">';
-    snaps.forEach(function(s,i){h+='<option value="'+i+'" '+(i===S.curIdx?'selected':'')+'>'+s.date+' ('+weekLabel(s.date)+')</option>'});
-    h+='</select></div>';
-    if(prev){
-      var card=function(l,val,col,sfx){return '<div class="card"><div style="font-size:12px;color:var(--sub)">'+l+'</div><div style="font-size:26px;font-weight:800;color:'+col+'">'+val+'<span style="font-size:14px;margin-left:2px">'+sfx+'</span></div></div>'};
-      h+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px">'+card('상승',countMoves(rows,'up'),'var(--up)','건')+card('하락',countMoves(rows,'down'),'var(--down)','건')+card('변동없음',countMoves(rows,'flat'),'var(--flat)','건')+card('평균 변동률',avgPct(rows),avgPctN(rows)>0?'var(--up)':'var(--down)','%')+'</div>';
+
+  function inputTab(vendor) {
+    var columns = vendor.grades;
+    var snaps = S.snaps[vendor.id] || [];
+    var last = snaps[snaps.length - 1];
+
+    if (!S.draft[vendor.id]) {
+      S.draft[vendor.id] = last
+        ? last.rows.map(function (row) {
+            return Object.assign({}, row);
+          })
+        : [emptyRow(columns)];
     }
-    if(prev&&movers.length){
-      h+='<div style="margin-bottom:20px"><div style="font-size:14px;font-weight:700;margin-bottom:10px">📌 특이사항 — 3% 이상 변동</div><div style="display:flex;flex-wrap:wrap;gap:8px">';
-      movers.slice(0,12).forEach(function(m){h+='<div style="border:1.5px solid '+(m.diff<0?'var(--down)':'var(--up)')+';color:'+(m.diff<0?'var(--down)':'var(--up)')+';border-radius:8px;padding:6px 10px;font-size:12.5px;background:#fff"><b>'+esc(m.model)+'</b> '+esc(m.grade)+' '+(m.diff>0?'▲':'▼')+' '+won(Math.abs(m.diff))+' ('+(m.pct>0?'+':'')+m.pct.toFixed(1)+'%)</div>'});
-      h+='</div></div>';
+
+    if (!S.draftDate[vendor.id]) {
+      S.draftDate[vendor.id] = todayISO();
     }
-    h+='<div class="tblwrap"><table><thead><tr><th style="text-align:left;min-width:140px">모델명</th>';
-    cols.forEach(function(g){h+='<th style="min-width:110px">'+esc(g)+'</th>'});
-    h+='</tr></thead><tbody>';
-    rows.forEach(function(r){
-      h+='<tr><td style="text-align:left;background:#fbfaf7;font-weight:600">'+esc(r.model)+'</td>';
-      r.grades.forEach(function(c){
-        h+='<td style="text-align:right"><div style="font-weight:600">'+(c.now==null?'-':won(c.now))+'</div>';
-        if(c.diff!=null&&c.diff!==0){h+='<div style="font-size:11px;color:'+(c.diff<0?'var(--down)':'var(--up)')+'">'+(c.diff<0?'▼':'▲')+' '+won(Math.abs(c.diff))+(c.pct!=null?' ('+(c.pct>0?'+':'')+c.pct.toFixed(1)+'%)':'')+'</div>'}
-        else if(c.diff===0){h+='<div style="font-size:11px;color:var(--flat)">―</div>'}
-        h+='</td>';
-      });
-      h+='</tr>';
-    });
-    h+='</tbody></table></div>';
-    if(prev){
-      var L=[];
-      L.push('['+v.name+' 주간 단가 보고] '+weekLabel(cur.date));
-      L.push('기준: '+prev.date+' → '+cur.date);
-      L.push('상승 '+countMoves(rows,'up')+'건 / 하락 '+countMoves(rows,'down')+'건 / 평균 '+avgPct(rows)+'%');
-      if(movers.length){
-        L.push('');
-        L.push('주요 변동:');
-        movers.slice(0,8).forEach(function(m){L.push(' - '+m.model+' '+m.grade+': '+(m.diff<0?'▼':'▲')+won(Math.abs(m.diff))+' ('+(m.pct>0?'+':'')+m.pct.toFixed(1)+'%)')});
-      }
-      h+='<div style="margin-top:20px"><div style="font-size:14px;font-weight:700;margin-bottom:10px">📝 보고 문구 (복사해서 사용)</div><pre id="repText" style="background:var(--ink);color:#e8e6e0;padding:16px;border-radius:10px;font-size:13px;white-space:pre-wrap;font-family:monospace;line-height:1.7;margin:0">'+esc(L.join(String.fromCharCode(10)))+'</pre><button class="bg" id="copyRep" style="margin-top:8px">📋 문구 복사</button></div>';
-    }
-    return h;
+
+    var rows = S.draft[vendor.id];
+
+    return (
+      stTitle(
+        weekLabel(S.draftDate[vendor.id]),
+        vendor.name + " 단가 입력",
+        "기준일을 선택하고 단가를 저장하세요. 서로 다른 기준일 데이터가 쌓이면 대시보드에서 자동 비교됩니다."
+      ) +
+
+      '<div class="control-row" style="margin-bottom:12px">' +
+        "<label>저장 기준일</label>" +
+
+        '<input type="date" id="saveDate" value="' +
+          esc(S.draftDate[vendor.id]) +
+        '">' +
+
+        '<button class="bg" id="pasteBtn">' +
+          "📋 붙여넣기로 채우기" +
+        "</button>" +
+
+        '<button class="bg" id="addRow">' +
+          "+ 행 추가" +
+        "</button>" +
+
+        '<button class="bg" id="clearRows">' +
+          "전체 지우기" +
+        "</button>" +
+
+        (
+          last
+            ? '<span style="font-size:12px;color:var(--sub)">' +
+                "최근 저장: " +
+                esc(last.date) +
+              "</span>"
+            : ""
+        ) +
+      "</div>" +
+
+      '<div id="pastePanel" ' +
+      'style="display:none;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px">' +
+
+        '<div style="font-size:12px;color:var(--sub);margin-bottom:6px">' +
+          "모델명 · " +
+          columns.join(" · ") +
+          " 순서로 붙여넣으세요. 탭·쉼표·넓은 공백으로 구분할 수 있습니다." +
+        "</div>" +
+
+        '<textarea id="pasteTxt" ' +
+        'placeholder="갤럭시S25    630000    610000    570000    540000" ' +
+        'style="width:100%;min-height:110px;border:1px solid var(--line);border-radius:8px;padding:10px;font-size:13px;font-family:monospace;resize:vertical"></textarea>' +
+
+        '<div style="display:flex;gap:8px;margin-top:8px">' +
+          '<button class="bp" id="pasteGo">' +
+            "불러오기" +
+          "</button>" +
+
+          '<button class="bg" id="pasteCancel">' +
+            "취소" +
+          "</button>" +
+        "</div>" +
+
+      "</div>" +
+
+      '<div class="tblwrap">' +
+        "<table>" +
+          "<thead>" +
+            "<tr>" +
+              '<th style="min-width:150px;text-align:left">' +
+                "모델명" +
+              "</th>" +
+
+              columns.map(function (grade) {
+                return (
+                  '<th style="min-width:100px">' +
+                    esc(grade) +
+                  "</th>"
+                );
+              }).join("") +
+
+              '<th style="width:40px"></th>' +
+            "</tr>" +
+          "</thead>" +
+
+          "<tbody>" +
+
+            rows.map(function (row, rowIndex) {
+              return (
+                "<tr>" +
+
+                  '<td style="text-align:left;background:#fbfaf7">' +
+                    '<input class="ci mdl" ' +
+                    'data-ri="' + rowIndex + '" ' +
+                    'value="' + esc(row.model) + '" ' +
+                    'placeholder="모델명">' +
+                  "</td>" +
+
+                  columns.map(function (grade) {
+                    return (
+                      "<td>" +
+                        '<input class="ci num" ' +
+                        'data-ri="' + rowIndex + '" ' +
+                        'data-g="' + esc(grade) + '" ' +
+                        'value="' +
+                          (
+                            row[grade] === ""
+                              ? ""
+                              : row[grade]
+                          ) +
+                        '" placeholder="0" ' +
+                        'style="text-align:right">' +
+                      "</td>"
+                    );
+                  }).join("") +
+
+                  '<td style="text-align:center">' +
+                    '<button class="delRow" ' +
+                    'data-ri="' + rowIndex + '" ' +
+                    'style="border:none;background:transparent;color:#c0392b;font-size:18px">' +
+                      "×" +
+                    "</button>" +
+                  "</td>" +
+
+                "</tr>"
+              );
+            }).join("") +
+
+          "</tbody>" +
+        "</table>" +
+      "</div>" +
+
+      '<div style="display:flex;gap:8px;margin-top:16px">' +
+        '<button class="bp" id="saveBtn">' +
+          "💾 단가 저장" +
+        "</button>" +
+      "</div>"
+    );
   }
-  function vendorTab(){
-    var h=stTitle('VENDOR TEMPLATES','거래처 양식 관리','거래처마다 등급 칸이 다릅니다. 한 번 등록해두면 입력할 때 그 양식이 그대로 뜹니다. 이름과 등급은 언제든 수정할 수 있습니다.');
-    h+='<div style="display:flex;gap:12px;flex-wrap:wrap;background:#fff;padding:16px;border-radius:10px;border:1px solid var(--line)"><div style="flex:1;min-width:180px"><label style="display:block;font-size:12px;color:var(--sub);margin-bottom:5px;font-weight:600">거래처 이름</label><input id="vName" placeholder="예: 진우아이엔씨" style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px"></div><div style="flex:2;min-width:240px"><label style="display:block;font-size:12px;color:var(--sub);margin-bottom:5px;font-weight:600">등급 칸 (쉼표로 구분)</label><input id="vGrades" value="A급, A-급, B+급, B급, 액파, LCD" style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px"></div><button class="bp" id="vAdd" style="align-self:flex-end;height:40px">+ 추가</button></div>';
-    h+='<div style="display:grid;gap:10px;margin-top:20px">';
-    S.vendors.forEach(function(v){
-      if(S.editing===v.id){
-        h+='<div style="background:#fffdf8;border:1.5px solid var(--accent);border-radius:10px;padding:14px 16px"><div style="display:flex;gap:12px;flex-wrap:wrap"><div style="flex:1;min-width:160px"><label style="display:block;font-size:12px;color:var(--sub);margin-bottom:5px;font-weight:600">거래처 이름</label><input class="editName" value="'+esc(v.name)+'" style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px"></div><div style="flex:2;min-width:220px"><label style="display:block;font-size:12px;color:var(--sub);margin-bottom:5px;font-weight:600">등급 칸 (쉼표로 구분)</label><input class="editGrades" value="'+esc(v.grades.join(', '))+'" style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px"></div></div><div style="display:flex;gap:6px;margin-top:10px"><button class="bp editSave" data-v="'+v.id+'" style="padding:8px 16px">저장</button><button class="bg editCancel" style="padding:8px 16px">취소</button></div><div style="font-size:11px;color:var(--sub);margin-top:6px">※ 등급 칸을 바꾸면 이 거래처의 기존 저장 데이터와 칸이 달라질 수 있습니다.</div></div>';
-      }else{
-        h+='<div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;gap:12px;flex-wrap:wrap"><div><div style="font-weight:700;font-size:15px">'+esc(v.name)+'</div><div style="font-size:12px;color:var(--sub);margin-top:4px">';
-        v.grades.forEach(function(g){h+='<span style="display:inline-block;background:#efece4;border-radius:5px;padding:2px 8px;margin-right:5px;margin-top:4px;font-size:11.5px">'+esc(g)+'</span>'});
-        h+='</div></div><div style="display:flex;gap:6px"><button class="bgs vPick" data-v="'+v.id+'">입력하기</button><button class="bgs vEdit" data-v="'+v.id+'">수정</button><button class="bgs vDel" data-v="'+v.id+'" style="color:#c0392b;border-color:#e5c4c0">삭제</button></div></div>';
-      }
-    });
-    h+='</div>';
-    return h;
-  }
-  function buildDashboard(){
-    var base=S.vendors.find(function(v){return v.id===S.baseVendor});
-    if(!base)base=S.vendors[0];
-    var others=S.vendors.filter(function(v){return v.id!==base.id});
-    function latest(vid){var s=S.snaps[vid]||[];return {cur:s[s.length-1]||null,prev:s[s.length-2]||null}}
-    var baseSnap=latest(base.id);
-    if(!baseSnap.cur)return {error:'기준 거래처('+base.name+') 단가가 아직 없습니다. 단가 입력에서 먼저 저장하세요.',base:base};
-    var rows=[];
-    baseSnap.cur.rows.forEach(function(br){
-      base.grades.forEach(function(g){
-        var bp=br[g]===''?null:Number(br[g]);
-        if(bp==null)return;
-        var vend=[];
-        others.forEach(function(ov){
-          var os=latest(ov.id).cur;
-          if(!os)return;
-          if(ov.grades.indexOf(g)<0)return;
-          var or=os.rows.find(function(x){return x.model===br.model});
-          if(!or)return;
-          var op=or[g]===''?null:Number(or[g]);
-          if(op==null)return;
-          vend.push({name:ov.name,price:op,diff:op-bp});
+
+  function reportTab(vendor) {
+    var columns = vendor.grades;
+    var snaps = S.snaps[vendor.id] || [];
+
+    if (!snaps.length) {
+      return (
+        '<div class="empty" style="margin-top:40px">' +
+          "아직 저장된 단가가 없습니다.<br>" +
+          "단가 입력 메뉴에서 먼저 저장하세요." +
+        "</div>"
+      );
+    }
+
+    if (
+      S.curIdx === null ||
+      S.curIdx >= snaps.length
+    ) {
+      S.curIdx = snaps.length - 1;
+    }
+
+    var current = snaps[S.curIdx];
+    var previous = snaps[S.curIdx - 1];
+    var rows = compareSnapshotRows(
+      vendor,
+      S.curIdx
+    );
+
+    var movers = collectMovers(rows)
+      .filter(function (item) {
+        return (
+          item.pct !== null &&
+          Math.abs(item.pct) >= 3
+        );
+      })
+      .sort(function (a, b) {
+        return Math.abs(b.pct) - Math.abs(a.pct);
+      });
+
+    var html = stTitle(
+      weekLabel(current.date),
+      vendor.name + " 주간 보고서",
+      previous
+        ? previous.date + " → " + current.date + " 비교"
+        : "비교할 지난 데이터가 없어 현재 단가만 표시합니다."
+    );
+
+    html +=
+      '<div class="control-row" style="margin-bottom:16px">' +
+        "<label>기준 저장일</label>" +
+
+        '<select id="weekSel">' +
+          snaps.map(function (snap, index) {
+            return (
+              '<option value="' + index + '"' +
+              (
+                index === S.curIdx
+                  ? " selected"
+                  : ""
+              ) +
+              ">" +
+                snap.date +
+                " (" +
+                weekLabel(snap.date) +
+                ")" +
+              "</option>"
+            );
+          }).join("") +
+        "</select>" +
+      "</div>";
+
+    if (previous) {
+      var avg = averagePctNumber(rows);
+
+      html +=
+        '<div class="dashboard-grid">' +
+
+          metricCard(
+            "상승",
+            countMoves(rows, "up") + "건",
+            "var(--up)",
+            ""
+          ) +
+
+          metricCard(
+            "하락",
+            countMoves(rows, "down") + "건",
+            "var(--down)",
+            ""
+          ) +
+
+          metricCard(
+            "보합",
+            countMoves(rows, "flat") + "건",
+            "var(--flat)",
+            ""
+          ) +
+
+          metricCard(
+            "평균 변동률",
+            averagePctText(rows) + "%",
+            avg > 0
+              ? "var(--up)"
+              : avg < 0
+                ? "var(--down)"
+                : "var(--flat)",
+            ""
+          ) +
+
+        "</div>";
+    }
+
+    if (previous && movers.length) {
+      html +=
+        '<div class="section">' +
+          '<div class="section-title" style="margin-bottom:10px">' +
+            "📌 3% 이상 주요 변동" +
+          "</div>" +
+
+          '<div style="display:flex;flex-wrap:wrap;gap:8px">' +
+
+            movers.slice(0, 15).map(function (item) {
+              var color =
+                item.diff < 0
+                  ? "var(--down)"
+                  : "var(--up)";
+
+              return (
+                '<div style="' +
+                  "border:1.5px solid " + color + ";" +
+                  "color:" + color + ";" +
+                  "border-radius:8px;" +
+                  "padding:6px 10px;" +
+                  "font-size:12.5px;" +
+                  "background:#fff" +
+                '">' +
+
+                  "<b>" +
+                    esc(item.model) +
+                  "</b> " +
+
+                  esc(item.grade) +
+                  " " +
+
+                  (
+                    item.diff > 0
+                      ? "▲"
+                      : "▼"
+                  ) +
+
+                  " " +
+                  won(Math.abs(item.diff)) +
+                  "원 (" +
+
+                  (
+                    item.pct > 0
+                      ? "+"
+                      : ""
+                  ) +
+
+                  item.pct.toFixed(1) +
+                  "%)" +
+                "</div>"
+              );
+            }).join("") +
+
+          "</div>" +
+        "</div>";
+    }
+
+    html +=
+      '<div class="tblwrap" style="margin-top:20px">' +
+        "<table>" +
+          "<thead>" +
+            "<tr>" +
+
+              '<th style="text-align:left;min-width:140px">' +
+                "모델명" +
+              "</th>" +
+
+              columns.map(function (grade) {
+                return (
+                  '<th style="min-width:120px">' +
+                    esc(grade) +
+                  "</th>"
+                );
+              }).join("") +
+
+            "</tr>" +
+          "</thead>" +
+
+          "<tbody>" +
+
+            rows.map(function (row) {
+              return (
+                "<tr>" +
+
+                  '<td style="text-align:left;background:#fbfaf7;font-weight:700">' +
+                    esc(row.model) +
+                  "</td>" +
+
+                  row.grades.map(function (cell) {
+                    var detail = "";
+
+                    if (
+                      cell.diff !== null &&
+                      cell.diff !== 0
+                    ) {
+                      detail =
+                        '<div style="font-size:11px;color:' +
+                        (
+                          cell.diff < 0
+                            ? "var(--down)"
+                            : "var(--up)"
+                        ) +
+                        '">' +
+
+                        (
+                          cell.diff < 0
+                            ? "▼"
+                            : "▲"
+                        ) +
+
+                        " " +
+                        won(Math.abs(cell.diff)) +
+
+                        (
+                          cell.pct !== null
+                            ? " (" +
+                              (
+                                cell.pct > 0
+                                  ? "+"
+                                  : ""
+                              ) +
+                              cell.pct.toFixed(1) +
+                              "%)"
+                            : ""
+                        ) +
+
+                        "</div>";
+                    } else if (cell.diff === 0) {
+                      detail =
+                        '<div style="font-size:11px;color:var(--flat)">' +
+                          "―" +
+                        "</div>";
+                    }
+
+                    return (
+                      '<td style="text-align:right">' +
+                        '<div style="font-weight:700">' +
+                          (
+                            cell.now === null
+                              ? "-"
+                              : won(cell.now)
+                          ) +
+                        "</div>" +
+
+                        detail +
+                      "</td>"
+                    );
+                  }).join("") +
+
+                "</tr>"
+              );
+            }).join("") +
+
+          "</tbody>" +
+        "</table>" +
+      "</div>";
+
+    if (previous) {
+      var reportLines = [
+        "[" + vendor.name + " 주간 단가 보고] " +
+          weekLabel(current.date),
+
+        "기준: " +
+          previous.date +
+          " → " +
+          current.date,
+
+        "상승 " +
+          countMoves(rows, "up") +
+          "건 / 하락 " +
+          countMoves(rows, "down") +
+          "건 / 보합 " +
+          countMoves(rows, "flat") +
+          "건",
+
+        "평균 변동률 " +
+          averagePctText(rows) +
+          "%"
+      ];
+
+      if (movers.length) {
+        reportLines.push("");
+        reportLines.push("주요 변동:");
+
+        movers.slice(0, 8).forEach(function (item) {
+          reportLines.push(
+            " - " +
+            item.model +
+            " " +
+            item.grade +
+            ": " +
+            (
+              item.diff < 0
+                ? "▼"
+                : "▲"
+            ) +
+            won(Math.abs(item.diff)) +
+            "원 (" +
+            (
+              item.pct > 0
+                ? "+"
+                : ""
+            ) +
+            item.pct.toFixed(1) +
+            "%)"
+          );
         });
-        if(vend.length)rows.push({model:br.model,grade:g,baseP:bp,vendors:vend});
-      });
-    });
-    var vendorMoves=[];
-    S.vendors.forEach(function(v){
-      var l=latest(v.id);
-      if(!l.cur||!l.prev)return;
-      var pcts=[];
-      l.cur.rows.forEach(function(cr){
-        v.grades.forEach(function(g){
-          var now=cr[g]===''?null:Number(cr[g]);
-          var pr=l.prev.rows.find(function(x){return x.model===cr.model});
-          var before=(pr&&pr[g]!=='')?Number(pr[g]):null;
-          if(now!=null&&before!=null&&before)pcts.push((now-before)/before*100);
-        });
-      });
-      if(pcts.length){var avg=pcts.reduce(function(a,b){return a+b},0)/pcts.length;vendorMoves.push({name:v.name,avg:avg})}
-    });
-    vendorMoves.sort(function(a,b){return b.avg-a.avg});
-    var cheaper=0,pricier=0;
-    rows.forEach(function(r){r.vendors.forEach(function(vd){if(vd.diff<0)cheaper++;else if(vd.diff>0)pricier++})});
-    return {base:base,baseDate:baseSnap.cur.date,rows:rows,vendorMoves:vendorMoves,cheaper:cheaper,pricier:pricier};
-  }
-  function dashTab(){
-    var d=buildDashboard();
-    var h=stTitle(weekLabel(todayISO()),'매입 비교 대시보드','우리(기준 거래처) 단가와 다른 거래처를 비교합니다. 초록=우리보다 싼 곳(매입 유리), 빨강=우리보다 비싼 곳.');
-    h+='<div style="display:flex;gap:8px;margin-bottom:18px;align-items:center;flex-wrap:wrap"><span style="font-size:12px;color:var(--sub)">기준 거래처(우리)</span><select id="baseSel" style="padding:8px 12px;border-radius:8px;border:1px solid var(--line);font-size:13px;background:#fff">';
-    S.vendors.forEach(function(v){h+='<option value="'+v.id+'" '+(v.id===d.base.id?'selected':'')+'>'+esc(v.name)+'</option>'});
-    h+='</select></div>';
-    if(d.error){h+='<div style="padding:50px;text-align:center;color:var(--sub);font-size:14px;background:#fff;border:1px solid var(--line);border-radius:10px">'+esc(d.error)+'</div>';return h}
-    if(!d.rows.length){h+='<div style="padding:50px;text-align:center;color:var(--sub);font-size:14px;background:#fff;border:1px solid var(--line);border-radius:10px">비교할 다른 거래처 단가가 없습니다.<br>같은 모델명으로 2개 이상 거래처에 단가를 저장하면 비교가 나타납니다.</div>';return h}
-    var card=function(l,val,col,sfx){return '<div class="card"><div style="font-size:12px;color:var(--sub)">'+l+'</div><div style="font-size:26px;font-weight:800;color:'+col+'">'+val+'<span style="font-size:13px;margin-left:2px;color:var(--sub)">'+sfx+'</span></div></div>'};
-    h+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:22px">';
-    h+=card('우리보다 싼 항목',d.cheaper,'var(--down)','건 (매입 유리)');
-    h+=card('우리보다 비싼 항목',d.pricier,'var(--up)','건');
-    var topDown=d.vendorMoves.length?d.vendorMoves[d.vendorMoves.length-1]:null;
-    var topUp=d.vendorMoves.length?d.vendorMoves[0]:null;
-    h+=card('가장 많이 내린 곳',topDown?esc(topDown.name):'-',topDown&&topDown.avg<0?'var(--down)':'var(--flat)',topDown?(topDown.avg>0?'+':'')+topDown.avg.toFixed(1)+'%':'');
-    h+=card('가장 많이 오른 곳',topUp?esc(topUp.name):'-',topUp&&topUp.avg>0?'var(--up)':'var(--flat)',topUp?(topUp.avg>0?'+':'')+topUp.avg.toFixed(1)+'%':'');
-    h+='</div>';
-    h+='<div style="font-size:15px;font-weight:700;margin:8px 0 10px">모델·등급별 거래처 비교</div>';
-    var allVendorNames={};
-    d.rows.forEach(function(r){r.vendors.forEach(function(v){allVendorNames[v.name]=1})});
-    var names=Object.keys(allVendorNames);
-    h+='<div class="tblwrap"><table><thead><tr><th style="text-align:left;min-width:130px">모델</th><th>등급</th><th style="background:#2a3a4d">우리(기준)</th>';
-    names.forEach(function(n){h+='<th>'+esc(n)+'</th>'});
-    h+='</tr></thead><tbody>';
-    d.rows.forEach(function(r){
-      h+='<tr><td style="text-align:left;background:#fbfaf7;font-weight:600">'+esc(r.model)+'</td><td style="text-align:center">'+esc(r.grade)+'</td><td style="text-align:right;font-weight:700;background:#f0f4f8">'+won(r.baseP)+'</td>';
-      names.forEach(function(n){
-        var vd=r.vendors.find(function(x){return x.name===n});
-        if(!vd){h+='<td style="text-align:center;color:#ccc">-</td>';return}
-        var col=vd.diff<0?'var(--down)':(vd.diff>0?'var(--up)':'var(--flat)');
-        var bg=vd.diff<0?'#eaf5f0':(vd.diff>0?'#fbeceb':'#fff');
-        var mark=vd.diff<0?'🟢':(vd.diff>0?'🔴':'=');
-        h+='<td style="text-align:right;background:'+bg+'"><div style="font-weight:600">'+won(vd.price)+'</div><div style="font-size:11px;color:'+col+'">'+mark+' '+(vd.diff>0?'+':'')+won(vd.diff)+'</div></td>';
-      });
-      h+='</tr>';
-    });
-    h+='</tbody></table></div>';
-    if(d.vendorMoves.length){
-      h+='<div style="font-size:15px;font-weight:700;margin:22px 0 10px">거래처별 이번주 변동폭</div><div class="tblwrap"><table><thead><tr><th style="text-align:left">거래처</th><th>이번주 평균 변동</th></tr></thead><tbody>';
-      d.vendorMoves.forEach(function(v){
-        var col=v.avg<0?'var(--down)':(v.avg>0?'var(--up)':'var(--flat)');
-        h+='<tr><td style="text-align:left;font-weight:600">'+esc(v.name)+'</td><td style="text-align:center;color:'+col+';font-weight:600">'+(v.avg<0?'▼':(v.avg>0?'▲':'―'))+' '+(v.avg>0?'+':'')+v.avg.toFixed(1)+'%</td></tr>';
-      });
-      h+='</tbody></table></div>';
+      }
+
+      html +=
+        '<div class="section">' +
+          '<div class="section-title" style="margin-bottom:10px">' +
+            "📝 보고 문구" +
+          "</div>" +
+
+          '<pre id="repText" style="' +
+            "background:var(--ink);" +
+            "color:#e8e6e0;" +
+            "padding:16px;" +
+            "border-radius:10px;" +
+            "font-size:13px;" +
+            "white-space:pre-wrap;" +
+            "font-family:monospace;" +
+            "line-height:1.7;" +
+            "margin:0" +
+          '">' +
+            esc(reportLines.join("\n")) +
+          "</pre>" +
+
+          '<button class="bg" id="copyRep" style="margin-top:8px">' +
+            "📋 문구 복사" +
+          "</button>" +
+        "</div>";
     }
-    var best=[];
-    d.rows.forEach(function(r){
-      var cheapest=null;
-      r.vendors.forEach(function(v){if(v.diff<0&&(!cheapest||v.price<cheapest.price))cheapest=v});
-      if(cheapest)best.push({model:r.model,grade:r.grade,name:cheapest.name,diff:cheapest.diff});
-    });
-    if(best.length){
-      best.sort(function(a,b){return a.diff-b.diff});
-      h+='<div style="font-size:15px;font-weight:700;margin:22px 0 10px">💰 매입 추천 (우리보다 싼 곳)</div><div style="display:flex;flex-direction:column;gap:8px">';
-      best.slice(0,8).forEach(function(b){
-        h+='<div style="background:#eaf5f0;border:1px solid #bfe0d4;border-radius:8px;padding:10px 14px;font-size:13px"><b>'+esc(b.model)+' '+esc(b.grade)+'</b> → <b style="color:var(--down)">'+esc(b.name)+'</b>이(가) 우리보다 '+won(Math.abs(b.diff))+'원 저렴 (매입 유리)</div>';
-      });
-      h+='</div>';
-    }
-    return h;
+
+    return html;
   }
-  function render(){
-    var v=S.vendors.find(function(x){return x.id===S.active});
-    var html='<header><div><div class="eyebrow">DAWON TRADE · WEEKLY PRICE</div><h1>주간 단가 보고서</h1></div><div class="tabs">';
-    html+='<button class="tb '+(S.tab==='dash'?'on':'')+'" data-tab="dash">대시보드</button>';
-    html+='<button class="tb '+(S.tab==='input'?'on':'')+'" data-tab="input">단가 입력</button>';
-    html+='<button class="tb '+(S.tab==='report'?'on':'')+'" data-tab="report">주간 보고서</button>';
-    html+='<button class="tb '+(S.tab==='vendors'?'on':'')+'" data-tab="vendors">거래처 양식</button>';
-    html+='</div></header><div class="vbar"><span style="font-size:12px;color:var(--sub);margin-right:4px">거래처</span>';
-    S.vendors.forEach(function(x){html+='<button class="chip '+(S.active===x.id?'on':'')+'" data-v="'+x.id+'">'+esc(x.name)+'</button>'});
-    html+='</div><div class="wrap">';
-    if(S.tab==='dash')html+=dashTab();
-    else if(S.tab==='input')html+=inputTab(v);
-    else if(S.tab==='report')html+=reportTab(v);
-    else html+=vendorTab();
-    html+='</div>';
-    A.innerHTML=html;
+
+  function vendorTab() {
+    return (
+      stTitle(
+        "VENDOR TEMPLATES",
+        "거래처 양식 관리",
+        "거래처마다 사용하는 등급 칸을 등록할 수 있습니다."
+      ) +
+
+      '<div style="display:flex;gap:12px;flex-wrap:wrap;background:#fff;padding:16px;border-radius:10px;border:1px solid var(--line)">' +
+
+        '<div style="flex:1;min-width:180px">' +
+          '<label style="display:block;font-size:12px;color:var(--sub);margin-bottom:5px;font-weight:600">' +
+            "거래처 이름" +
+          "</label>" +
+
+          '<input id="vName" placeholder="예: 새 거래처" ' +
+          'style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px">' +
+        "</div>" +
+
+        '<div style="flex:2;min-width:240px">' +
+          '<label style="display:block;font-size:12px;color:var(--sub);margin-bottom:5px;font-weight:600">' +
+            "등급 칸, 쉼표로 구분" +
+          "</label>" +
+
+          '<input id="vGrades" ' +
+          'value="A급, A-급, B+급, B급, 액파, LCD" ' +
+          'style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px">' +
+        "</div>" +
+
+        '<button class="bp" id="vAdd" style="align-self:flex-end;height:40px">' +
+          "+ 추가" +
+        "</button>" +
+
+      "</div>" +
+
+      '<div style="display:grid;gap:10px;margin-top:20px">' +
+
+        S.vendors.map(function (vendor) {
+          return (
+            '<div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;gap:12px;flex-wrap:wrap">' +
+
+              "<div>" +
+                '<div style="font-weight:700;font-size:15px">' +
+                  esc(vendor.name) +
+                "</div>" +
+
+                '<div style="font-size:12px;color:var(--sub);margin-top:4px">' +
+
+                  vendor.grades.map(function (grade) {
+                    return (
+                      '<span style="display:inline-block;background:#efece4;border-radius:5px;padding:2px 8px;margin-right:5px;margin-top:4px;font-size:11.5px">' +
+                        esc(grade) +
+                      "</span>"
+                    );
+                  }).join("") +
+
+                "</div>" +
+              "</div>" +
+
+              '<div style="display:flex;gap:6px">' +
+                '<button class="bgs vPick" data-v="' +
+                  vendor.id +
+                '">' +
+                  "입력하기" +
+                "</button>" +
+
+                '<button class="bgs vDel" data-v="' +
+                  vendor.id +
+                '" style="color:#c0392b;border-color:#e5c4c0">' +
+                  "삭제" +
+                "</button>" +
+              "</div>" +
+
+            "</div>"
+          );
+        }).join("") +
+
+      "</div>"
+    );
+  }
+
+  function render() {
+    var vendor = S.vendors.find(function (item) {
+      return item.id === S.active;
+    });
+
+    if (!vendor) {
+      S.active = S.vendors[0].id;
+      vendor = S.vendors[0];
+    }
+
+    A.innerHTML =
+      '<header>' +
+
+        "<div>" +
+          '<div class="eyebrow">' +
+            "DAWON TRADE · WEEKLY PRICE" +
+          "</div>" +
+
+          "<h1>주간 단가 보고서</h1>" +
+        "</div>" +
+
+        '<div class="tabs">' +
+
+          '<button class="tb ' +
+          (
+            S.tab === "dashboard"
+              ? "on"
+              : ""
+          ) +
+          '" data-tab="dashboard">' +
+            "대시보드" +
+          "</button>" +
+
+          '<button class="tb ' +
+          (
+            S.tab === "input"
+              ? "on"
+              : ""
+          ) +
+          '" data-tab="input">' +
+            "단가 입력" +
+          "</button>" +
+
+          '<button class="tb ' +
+          (
+            S.tab === "report"
+              ? "on"
+              : ""
+          ) +
+          '" data-tab="report">' +
+            "주간 보고서" +
+          "</button>" +
+
+          '<button class="tb ' +
+          (
+            S.tab === "vendors"
+              ? "on"
+              : ""
+          ) +
+          '" data-tab="vendors">' +
+            "거래처 양식" +
+          "</button>" +
+
+        "</div>" +
+
+      "</header>" +
+
+      '<div class="vbar">' +
+
+        '<span style="font-size:12px;color:var(--sub);margin-right:4px">' +
+          "거래처" +
+        "</span>" +
+
+        S.vendors.map(function (item) {
+          return (
+            '<button class="chip ' +
+            (
+              S.active === item.id
+                ? "on"
+                : ""
+            ) +
+            '" data-v="' +
+              item.id +
+            '">' +
+              esc(item.name) +
+            "</button>"
+          );
+        }).join("") +
+
+      "</div>" +
+
+      '<div class="wrap">' +
+
+        (
+          S.tab === "dashboard"
+            ? dashboardTab(vendor)
+            : S.tab === "input"
+              ? inputTab(vendor)
+              : S.tab === "report"
+                ? reportTab(vendor)
+                : vendorTab()
+        ) +
+
+      "</div>";
+
     bind();
   }
-  function bind(){
-    A.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){S.tab=b.getAttribute('data-tab');render()}});
-    var bsel=A.querySelector('#baseSel');if(bsel)bsel.onchange=function(){S.baseVendor=bsel.value;LS.set('baseVendor',S.baseVendor);render()};
-    A.querySelectorAll('.chip[data-v]').forEach(function(b){b.onclick=function(){S.active=b.getAttribute('data-v');render()}});
-    var v=S.vendors.find(function(x){return x.id===S.active});
-    if(S.tab==='input'){
-      var rows=S.draft[v.id];
-      A.querySelectorAll('.mdl').forEach(function(inp){inp.oninput=function(){rows[+inp.getAttribute('data-ri')].model=inp.value}});
-      A.querySelectorAll('.num').forEach(function(inp){inp.oninput=function(){var val=inp.value.replace(/[^0-9]/g,'');inp.value=val;rows[+inp.getAttribute('data-ri')][inp.getAttribute('data-g')]=(val===''?'':Number(val))}});
-      A.querySelectorAll('.delRow').forEach(function(b){b.onclick=function(){rows.splice(+b.getAttribute('data-ri'),1);if(!rows.length)rows.push(emptyRow(v.grades));render()}});
-      var pb=A.querySelector('#pasteBtn'),pp=A.querySelector('#pastePanel');
-      if(pb)pb.onclick=function(){pp.style.display=(pp.style.display==='none'?'block':'none')};
-      var pc=A.querySelector('#pasteCancel');if(pc)pc.onclick=function(){pp.style.display='none'};
-      var pg=A.querySelector('#pasteGo');
-      if(pg)pg.onclick=function(){
-        var txt=A.querySelector('#pasteTxt').value.trim();
-        var lines=txt.split(String.fromCharCode(10)).filter(function(l){return l.trim()});
-        var cols=v.grades;
-        var parsed=lines.map(function(line){
-          var parts=line.split(/\t|,/).map(function(s){return s.trim()}).filter(Boolean);
-          if(parts.length<2)parts=line.split(/\s+/);
-          var r=emptyRow(cols);
-          r.model=parts[0]||'';
-          cols.forEach(function(g,gi){var raw=(parts[gi+1]||'').replace(/[^0-9]/g,'');r[g]=raw?Number(raw):''});
-          return r;
+
+  function copyText(text) {
+    if (
+      navigator.clipboard &&
+      window.isSecureContext
+    ) {
+      navigator.clipboard.writeText(text)
+        .then(function () {
+          toast("복사했습니다.");
+        })
+        .catch(function () {
+          fallbackCopy(text);
         });
-        if(parsed.length){S.draft[v.id]=parsed;toast(parsed.length+'행 불러왔습니다. 숫자를 확인·수정하세요.');render()}
-      };
-      var ar=A.querySelector('#addRow');if(ar)ar.onclick=function(){rows.push(emptyRow(v.grades));render()};
-      var cr=A.querySelector('#clearRows');if(cr)cr.onclick=function(){S.draft[v.id]=[emptyRow(v.grades)];render()};
-      var sb=A.querySelector('#saveBtn');
-      if(sb)sb.onclick=function(){
-        var clean=rows.filter(function(r){return r.model.trim()});
-        if(!clean.length){toast('저장할 데이터가 없습니다.');return}
-        var snap={date:todayISO(),rows:clean.map(function(r){return Object.assign({},r)})};
-        var list=(S.snaps[v.id]||[]).slice();
-        var idx=list.findIndex(function(s){return s.date===snap.date});
-        if(idx>=0)list[idx]=snap;else list.push(snap);
-        list.sort(function(a,b){return a.date.localeCompare(b.date)});
-        S.snaps[v.id]=list;
-        save();
-        toast('저장 완료! 다음주엔 지난주로 비교됩니다.');
-      };
+
+      return;
     }
-    if(S.tab==='report'){
-      var ws=A.querySelector('#weekSel');if(ws)ws.onchange=function(){S.curIdx=Number(ws.value);render()};
-      var cp=A.querySelector('#copyRep');if(cp)cp.onclick=function(){var t=A.querySelector('#repText').textContent;if(navigator.clipboard)navigator.clipboard.writeText(t);toast('복사했습니다.')};
+
+    fallbackCopy(text);
+  }
+
+  function fallbackCopy(text) {
+    var textarea = document.createElement("textarea");
+
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+
+    document.body.appendChild(textarea);
+
+    textarea.focus();
+    textarea.select();
+
+    try {
+      document.execCommand("copy");
+      toast("복사했습니다.");
+    } catch (error) {
+      toast("복사하지 못했습니다.");
     }
-    if(S.tab==='vendors'){
-      var va=A.querySelector('#vAdd');
-      if(va)va.onclick=function(){
-        var name=A.querySelector('#vName').value.trim();
-        var gt=A.querySelector('#vGrades').value;
-        if(!name){toast('거래처 이름을 입력하세요.');return}
-        var grades=gt.split(',').map(function(s){return s.trim()}).filter(Boolean);
-        if(!grades.length){toast('등급을 입력하세요.');return}
-        S.vendors.push({id:'v'+Date.now(),name:name,grades:grades});
-        save();
-        toast(name+' 추가됨');
-        render();
-      };
-      A.querySelectorAll('.vPick').forEach(function(b){b.onclick=function(){S.active=b.getAttribute('data-v');S.tab='input';render()}});
-      A.querySelectorAll('.vEdit').forEach(function(b){b.onclick=function(){S.editing=b.getAttribute('data-v');render()}});
-      A.querySelectorAll('.editCancel').forEach(function(b){b.onclick=function(){S.editing=null;render()}});
-      A.querySelectorAll('.editSave').forEach(function(b){b.onclick=function(){
-        var id=b.getAttribute('data-v');
-        var card=b.parentNode.parentNode;
-        var newName=card.querySelector('.editName').value.trim();
-        var newGradesRaw=card.querySelector('.editGrades').value;
-        if(!newName){toast('거래처 이름을 입력하세요.');return}
-        var newGrades=newGradesRaw.split(',').map(function(s){return s.trim()}).filter(Boolean);
-        if(!newGrades.length){toast('등급을 1개 이상 입력하세요.');return}
-        S.vendors=S.vendors.map(function(x){return x.id===id?{id:x.id,name:newName,grades:newGrades}:x});
-        S.editing=null;
-        save();
-        toast('수정되었습니다.');
-        render();
-      }});
-      A.querySelectorAll('.vDel').forEach(function(b){b.onclick=function(){
-        if(S.vendors.length<=1){toast('최소 1개는 있어야 합니다.');return}
-        var id=b.getAttribute('data-v');
-        S.vendors=S.vendors.filter(function(x){return x.id!==id});
-        if(S.active===id)S.active=S.vendors[0].id;
-        save();
-        render();
-      }});
+
+    textarea.remove();
+  }
+
+  function bind() {
+    A.querySelectorAll("[data-tab]")
+      .forEach(function (button) {
+        button.onclick = function () {
+          S.tab = button.getAttribute("data-tab");
+          S.curIdx = null;
+          render();
+        };
+      });
+
+    A.querySelectorAll(".chip[data-v]")
+      .forEach(function (button) {
+        button.onclick = function () {
+          S.active = button.getAttribute("data-v");
+          S.curIdx = null;
+          S.dashModel = "";
+          S.dashGrade = "";
+          render();
+        };
+      });
+
+    var vendor = S.vendors.find(function (item) {
+      return item.id === S.active;
+    });
+
+    if (S.tab === "dashboard") {
+      var modelSelect = A.querySelector("#dashModelSel");
+      var gradeSelect = A.querySelector("#dashGradeSel");
+
+      if (modelSelect) {
+        modelSelect.onchange = function () {
+          S.dashModel = modelSelect.value;
+          render();
+        };
+      }
+
+      if (gradeSelect) {
+        gradeSelect.onchange = function () {
+          S.dashGrade = gradeSelect.value;
+          render();
+        };
+      }
+    }
+
+    if (S.tab === "input") {
+      var rows = S.draft[vendor.id];
+
+      A.querySelectorAll(".mdl")
+        .forEach(function (input) {
+          input.oninput = function () {
+            var rowIndex = Number(
+              input.getAttribute("data-ri")
+            );
+
+            rows[rowIndex].model = input.value;
+          };
+        });
+
+      A.querySelectorAll(".num")
+        .forEach(function (input) {
+          input.oninput = function () {
+            var rowIndex = Number(
+              input.getAttribute("data-ri")
+            );
+
+            var grade = input.getAttribute("data-g");
+
+            var value = input.value.replace(
+              /[^0-9]/g,
+              ""
+            );
+
+            input.value = value;
+
+            rows[rowIndex][grade] =
+              value === ""
+                ? ""
+                : Number(value);
+          };
+        });
+
+      A.querySelectorAll(".delRow")
+        .forEach(function (button) {
+          button.onclick = function () {
+            rows.splice(
+              Number(button.getAttribute("data-ri")),
+              1
+            );
+
+            if (!rows.length) {
+              rows.push(emptyRow(vendor.grades));
+            }
+
+            render();
+          };
+        });
+
+      var dateInput = A.querySelector("#saveDate");
+
+      if (dateInput) {
+        dateInput.onchange = function () {
+          S.draftDate[vendor.id] =
+            dateInput.value || todayISO();
+        };
+      }
+
+      var pasteButton = A.querySelector("#pasteBtn");
+      var pastePanel = A.querySelector("#pastePanel");
+
+      if (pasteButton && pastePanel) {
+        pasteButton.onclick = function () {
+          pastePanel.style.display =
+            pastePanel.style.display === "none"
+              ? "block"
+              : "none";
+        };
+      }
+
+      var pasteCancel = A.querySelector("#pasteCancel");
+
+      if (pasteCancel) {
+        pasteCancel.onclick = function () {
+          pastePanel.style.display = "none";
+        };
+      }
+
+      var pasteGo = A.querySelector("#pasteGo");
+
+      if (pasteGo) {
+        pasteGo.onclick = function () {
+          var text = A.querySelector("#pasteTxt")
+            .value
+            .trim();
+
+          if (!text) {
+            toast("붙여넣을 내용을 입력해 주세요.");
+            return;
+          }
+
+          var lines = text
+            .split("\n")
+            .filter(function (line) {
+              return line.trim();
+            });
+
+          var parsed = lines.map(function (line) {
+            var parts = line
+              .split(/\t|,|\s{2,}/)
+              .map(function (part) {
+                return part.trim();
+              })
+              .filter(Boolean);
+
+            if (parts.length < 2) {
+              parts = line.split(/\s+/);
+            }
+
+            var row = emptyRow(vendor.grades);
+
+            row.model = parts[0] || "";
+
+            vendor.grades.forEach(function (grade, index) {
+              var raw = String(
+                parts[index + 1] || ""
+              ).replace(/[^0-9]/g, "");
+
+              row[grade] =
+                raw
+                  ? Number(raw)
+                  : "";
+            });
+
+            return row;
+          });
+
+          if (parsed.length) {
+            S.draft[vendor.id] = parsed;
+
+            toast(
+              parsed.length +
+              "행을 불러왔습니다. 숫자를 확인해 주세요."
+            );
+
+            render();
+          }
+        };
+      }
+
+      var addRowButton = A.querySelector("#addRow");
+
+      if (addRowButton) {
+        addRowButton.onclick = function () {
+          rows.push(emptyRow(vendor.grades));
+          render();
+        };
+      }
+
+      var clearButton = A.querySelector("#clearRows");
+
+      if (clearButton) {
+        clearButton.onclick = function () {
+          var confirmed = confirm(
+            "현재 입력된 내용을 모두 지울까요?"
+          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          S.draft[vendor.id] = [
+            emptyRow(vendor.grades)
+          ];
+
+          render();
+        };
+      }
+
+      var saveButton = A.querySelector("#saveBtn");
+
+      if (saveButton) {
+        saveButton.onclick = function () {
+          var cleanRows = rows.filter(function (row) {
+            return String(row.model || "").trim();
+          });
+
+          if (!cleanRows.length) {
+            toast("저장할 데이터가 없습니다.");
+            return;
+          }
+
+          var selectedDate =
+            S.draftDate[vendor.id] ||
+            todayISO();
+
+          var snapshot = {
+            date: selectedDate,
+
+            rows: cleanRows.map(function (row) {
+              return Object.assign({}, row);
+            })
+          };
+
+          var list = (
+            S.snaps[vendor.id] || []
+          ).slice();
+
+          var existingIndex = list.findIndex(function (snap) {
+            return snap.date === snapshot.date;
+          });
+
+          if (existingIndex >= 0) {
+            var overwrite = confirm(
+              selectedDate +
+              " 자료가 이미 있습니다.\n기존 자료를 덮어쓸까요?"
+            );
+
+            if (!overwrite) {
+              return;
+            }
+
+            list[existingIndex] = snapshot;
+          } else {
+            list.push(snapshot);
+          }
+
+          list.sort(function (a, b) {
+            return a.date.localeCompare(b.date);
+          });
+
+          S.snaps[vendor.id] = list;
+
+          save();
+
+          toast(
+            selectedDate +
+            " 단가 저장 완료!"
+          );
+        };
+      }
+    }
+
+    if (S.tab === "report") {
+      var weekSelect = A.querySelector("#weekSel");
+
+      if (weekSelect) {
+        weekSelect.onchange = function () {
+          S.curIdx = Number(weekSelect.value);
+          render();
+        };
+      }
+
+      var copyButton = A.querySelector("#copyRep");
+
+      if (copyButton) {
+        copyButton.onclick = function () {
+          var reportText = A.querySelector("#repText");
+
+          if (reportText) {
+            copyText(reportText.textContent);
+          }
+        };
+      }
+    }
+
+    if (S.tab === "vendors") {
+      var vendorAdd = A.querySelector("#vAdd");
+
+      if (vendorAdd) {
+        vendorAdd.onclick = function () {
+          var name = A.querySelector("#vName")
+            .value
+            .trim();
+
+          var gradeText = A.querySelector("#vGrades")
+            .value;
+
+          if (!name) {
+            toast("거래처 이름을 입력하세요.");
+            return;
+          }
+
+          var grades = gradeText
+            .split(",")
+            .map(function (grade) {
+              return grade.trim();
+            })
+            .filter(Boolean);
+
+          if (!grades.length) {
+            toast("등급을 입력하세요.");
+            return;
+          }
+
+          S.vendors.push({
+            id: "v" + Date.now(),
+            name: name,
+            grades: grades
+          });
+
+          save();
+
+          toast(
+            "'" +
+            name +
+            "' 거래처를 추가했습니다."
+          );
+
+          render();
+        };
+      }
+
+      A.querySelectorAll(".vPick")
+        .forEach(function (button) {
+          button.onclick = function () {
+            S.active = button.getAttribute("data-v");
+            S.tab = "input";
+            render();
+          };
+        });
+
+      A.querySelectorAll(".vDel")
+        .forEach(function (button) {
+          button.onclick = function () {
+            if (S.vendors.length <= 1) {
+              toast("최소 1개의 거래처가 필요합니다.");
+              return;
+            }
+
+            var id = button.getAttribute("data-v");
+
+            var target = S.vendors.find(function (item) {
+              return item.id === id;
+            });
+
+            var confirmed = confirm(
+              "'" +
+              (
+                target
+                  ? target.name
+                  : "선택 거래처"
+              ) +
+              "' 양식을 삭제할까요?\n저장된 단가 데이터는 남아 있습니다."
+            );
+
+            if (!confirmed) {
+              return;
+            }
+
+            S.vendors = S.vendors.filter(function (item) {
+              return item.id !== id;
+            });
+
+            if (S.active === id) {
+              S.active = S.vendors[0].id;
+            }
+
+            save();
+            render();
+          };
+        });
     }
   }
+
   render();
 })();
-
 </script>
+
 </body>
 </html>
