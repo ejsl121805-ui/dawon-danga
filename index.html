@@ -1,968 +1,242 @@
-<!-- 통합 전체 업체 단가 GAP -->
-<div class="integrated-gap-card" id="integratedVendorGapSection">
-
-  <div class="integrated-gap-header">
-    <div>
-      <h3>전체 업체 단가 GAP</h3>
-      <p>업체·모델별 등급 단가와 최고단가·최저단가·GAP 비교</p>
-    </div>
-
-    <div class="integrated-gap-count" id="integratedVendorGapCount">
-      0개
-    </div>
-  </div>
-
-  <div class="integrated-gap-table-wrap">
-    <table class="integrated-gap-table">
-
-      <thead>
-        <tr>
-          <th class="sticky-vendor">업체명</th>
-          <th class="sticky-model">모델</th>
-          <th>A급</th>
-          <th>A-급</th>
-          <th>B+</th>
-          <th>B</th>
-          <th>액파</th>
-          <th>LCD</th>
-          <th>최고단가</th>
-          <th>최저단가</th>
-          <th>GAP</th>
-        </tr>
-      </thead>
-
-      <tbody id="integratedVendorGapBody">
-      </tbody>
-
-    </table>
-  </div>
-
-</div>
-/* =========================================
-   통합 전체 업체 단가 GAP
-========================================= */
-
-.integrated-gap-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 20px;
-  margin-top: 20px;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
-}
-
-.integrated-gap-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.integrated-gap-header h3 {
-  margin: 0 0 5px;
-  font-size: 18px;
-  font-weight: 800;
-  color: #111827;
-}
-
-.integrated-gap-header p {
-  margin: 0;
-  font-size: 13px;
-  color: #6b7280;
-}
-
-.integrated-gap-count {
-  flex-shrink: 0;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: #eef2ff;
-  color: #3730a3;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.integrated-gap-table-wrap {
-  width: 100%;
-  overflow-x: auto;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-}
-
-.integrated-gap-table {
-  width: 100%;
-  min-width: 1280px;
-  border-collapse: separate;
-  border-spacing: 0;
-  table-layout: fixed;
-  background: #ffffff;
-}
-
-.integrated-gap-table th {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  padding: 13px 10px;
-  background: #111c2b;
-  color: #ffffff;
-  border-right: 1px solid rgba(255, 255, 255, 0.09);
-  font-size: 12px;
-  font-weight: 800;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.integrated-gap-table th:first-child {
-  border-top-left-radius: 10px;
-}
-
-.integrated-gap-table th:last-child {
-  border-top-right-radius: 10px;
-}
-
-.integrated-gap-table td {
-  height: 54px;
-  padding: 10px;
-  border-right: 1px solid #edf0f4;
-  border-bottom: 1px solid #edf0f4;
-  color: #1f2937;
-  font-size: 12px;
-  text-align: right;
-  white-space: nowrap;
-  background: #ffffff;
-}
-
-.integrated-gap-table tbody tr:hover td {
-  background: #f8fafc;
-}
-
-.integrated-gap-table .vendor-cell {
-  text-align: left;
-  font-weight: 800;
-  color: #1e3a8a;
-}
-
-.integrated-gap-table .model-cell {
-  text-align: left;
-  font-weight: 800;
-  color: #111827;
-}
-
-.integrated-gap-table .price-cell {
-  font-variant-numeric: tabular-nums;
-}
-
-.integrated-gap-table .empty-price {
-  text-align: center;
-  color: #c0c6d0;
-}
-
-.integrated-gap-table .highest-grade {
-  background: #fff7ed;
-  color: #c2410c;
-  font-weight: 900;
-}
-
-.integrated-gap-table .lowest-grade {
-  background: #eff6ff;
-  color: #1d4ed8;
-  font-weight: 900;
-}
-
-.integrated-gap-table .highest-summary {
-  background: #fff7ed;
-  color: #c2410c;
-  font-weight: 900;
-}
-
-.integrated-gap-table .lowest-summary {
-  background: #eff6ff;
-  color: #1d4ed8;
-  font-weight: 900;
-}
-
-.integrated-gap-table .gap-summary {
-  background: #fef2f2;
-  color: #dc2626;
-  font-weight: 900;
-}
-
-.integrated-gap-table .no-gap {
-  background: #f0fdf4;
-  color: #15803d;
-}
-
-/* 업체명과 모델 열 고정 */
-.integrated-gap-table .sticky-vendor {
-  position: sticky;
-  left: 0;
-  z-index: 8;
-  width: 145px;
-  min-width: 145px;
-}
-
-.integrated-gap-table .sticky-model {
-  position: sticky;
-  left: 145px;
-  z-index: 8;
-  width: 210px;
-  min-width: 210px;
-}
-
-.integrated-gap-table td.sticky-vendor {
-  z-index: 3;
-  background: #ffffff;
-}
-
-.integrated-gap-table td.sticky-model {
-  z-index: 3;
-  background: #ffffff;
-}
-
-.integrated-gap-table tbody tr:hover td.sticky-vendor,
-.integrated-gap-table tbody tr:hover td.sticky-model {
-  background: #f8fafc;
-}
-
-.integrated-gap-empty {
-  padding: 45px !important;
-  text-align: center !important;
-  color: #94a3b8 !important;
-  font-size: 13px !important;
-}
-
-@media (max-width: 768px) {
-  .integrated-gap-card {
-    padding: 14px;
-  }
-
-  .integrated-gap-header {
-    align-items: flex-start;
-  }
-}
-buildAllVendorGapRows()
-renderAllVendorGapTable()
-/* =====================================================
-   통합 전체 업체 단가 GAP
-   한 줄 기준: 업체명 + 모델
-===================================================== */
-
-var INTEGRATED_GAP_GRADES = [
-  "A",
-  "A-",
-  "B+",
-  "B",
-  "액파",
-  "LCD"
-];
-
-/* 객체 안에서 여러 후보 필드 중 첫 번째 값을 찾음 */
-function integratedPick(obj, keys) {
-  if (!obj || typeof obj !== "object") return null;
-
-  for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
-
-    if (
-      Object.prototype.hasOwnProperty.call(obj, key) &&
-      obj[key] !== undefined &&
-      obj[key] !== null &&
-      obj[key] !== ""
-    ) {
-      return obj[key];
-    }
-  }
-
-  return null;
-}
-
-/* 등급명 통일 */
-function normalizeIntegratedGrade(value) {
-  if (value === undefined || value === null) return null;
-
-  var original = String(value).trim();
-  var grade = original
-    .toUpperCase()
-    .replace(/\s+/g, "")
-    .replace(/등급/g, "")
-    .replace(/급/g, "");
-
-  if (grade === "A") return "A";
-
-  if (
-    grade === "A-" ||
-    grade === "A－" ||
-    grade === "A마이너스" ||
-    grade === "AMINUS"
-  ) {
-    return "A-";
-  }
-
-  if (
-    grade === "B+" ||
-    grade === "B＋" ||
-    grade === "B플러스" ||
-    grade === "BPLUS"
-  ) {
-    return "B+";
-  }
-
-  if (grade === "B") return "B";
-
-  if (
-    grade === "액파" ||
-    grade === "액정파손" ||
-    grade === "파손" ||
-    grade === "액정깨짐"
-  ) {
-    return "액파";
-  }
-
-  if (
-    grade === "LCD" ||
-    grade === "LCD불량" ||
-    grade === "LCD파손" ||
-    grade === "엘씨디"
-  ) {
-    return "LCD";
-  }
-
-  return null;
-}
-
-/* 문자열 금액을 숫자로 변환 */
-function parseIntegratedMoney(value) {
-  if (value === undefined || value === null || value === "") {
-    return null;
-  }
-
-  if (typeof value === "number") {
-    return Number.isFinite(value) && value > 0 ? value : null;
-  }
-
-  var cleaned = String(value)
-    .replace(/,/g, "")
-    .replace(/원/g, "")
-    .replace(/₩/g, "")
-    .replace(/\s/g, "")
-    .replace(/[^\d.-]/g, "");
-
-  if (
-    cleaned === "" ||
-    cleaned === "-" ||
-    cleaned === "." ||
-    cleaned === "-."
-  ) {
-    return null;
-  }
-
-  var number = Number(cleaned);
-
-  if (!Number.isFinite(number) || number <= 0) {
-    return null;
-  }
-
-  return number;
-}
-
-/* 원화 표시 */
-function formatIntegratedWon(value) {
-  if (value === undefined || value === null || !Number.isFinite(value)) {
-    return "-";
-  }
-
-  return Math.round(value).toLocaleString("ko-KR") + "원";
-}
-
-/* HTML 특수문자 처리 */
-function escapeIntegratedHtml(value) {
-  return String(value === undefined || value === null ? "" : value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-/* 업체 ID를 실제 업체명으로 변환 */
-function getIntegratedVendorName(value) {
-  if (value === undefined || value === null || value === "") {
-    return "업체 미지정";
-  }
-
-  var vendorValue = String(value).trim();
-
-  if (
-    typeof S !== "undefined" &&
-    Array.isArray(S.vendors)
-  ) {
-    var vendor = S.vendors.find(function (item) {
-      if (!item) return false;
-
-      var id = integratedPick(item, [
-        "id",
-        "vendorId",
-        "key",
-        "code"
-      ]);
-
-      var name = integratedPick(item, [
-        "name",
-        "vendorName",
-        "companyName",
-        "업체명"
-      ]);
-
-      return (
-        String(id || "") === vendorValue ||
-        String(name || "") === vendorValue
-      );
-    });
-
-    if (vendor) {
-      return String(
-        integratedPick(vendor, [
-          "name",
-          "vendorName",
-          "companyName",
-          "업체명"
-        ]) || vendorValue
-      );
-    }
-  }
-
-  return vendorValue;
-}
-
-/* 최신 데이터 판단용 날짜 */
-function getIntegratedRowTime(row, index) {
-  var value = integratedPick(row, [
-    "updatedAt",
-    "createdAt",
-    "timestamp",
-    "date",
-    "pricingDate",
-    "priceDate",
-    "applyDate",
-    "적용일",
-    "날짜",
-    "등록일"
-  ]);
-
-  if (value === null) {
-    return index;
-  }
-
-  if (typeof value === "number") {
-    return value;
-  }
-
-  var normalized = String(value)
-    .trim()
-    .replace(/\./g, "-")
-    .replace(/\//g, "-");
-
-  var time = new Date(normalized).getTime();
-
-  return Number.isFinite(time) ? time : index;
-}
-
-/* 현재 프로그램 안에 저장된 단가 배열 찾기 */
-function getIntegratedPriceSourceRows() {
-  if (typeof S === "undefined" || !S) {
-    return [];
-  }
-
-  var sourceKeys = [
-    "prices",
-    "priceRows",
-    "rows",
-    "records",
-    "priceData",
-    "entries",
-    "items",
-    "data"
-  ];
-
-  var result = [];
-
-  sourceKeys.forEach(function (key) {
-    var source = S[key];
-
-    if (!source) return;
-
-    if (Array.isArray(source)) {
-      source.forEach(function (row) {
-        if (row && typeof row === "object") {
-          result.push(row);
-        }
-      });
-
-      return;
-    }
-
-    if (typeof source === "object") {
-      Object.keys(source).forEach(function (childKey) {
-        var child = source[childKey];
-
-        if (Array.isArray(child)) {
-          child.forEach(function (row) {
-            if (row && typeof row === "object") {
-              result.push(row);
-            }
-          });
-        }
-      });
-    }
-  });
-
-  return result;
-}
-
-/* 가로형 데이터에 사용되는 등급별 필드 후보 */
-var INTEGRATED_GRADE_FIELD_KEYS = {
-  "A": [
-    "A",
-    "a",
-    "A급",
-    "A등급",
-    "gradeA",
-    "priceA"
-  ],
-
-  "A-": [
-    "A-",
-    "A－",
-    "a-",
-    "A-급",
-    "A-등급",
-    "aMinus",
-    "a_minus",
-    "gradeAMinus",
-    "priceAMinus"
-  ],
-
-  "B+": [
-    "B+",
-    "B＋",
-    "b+",
-    "B+급",
-    "B+등급",
-    "bPlus",
-    "b_plus",
-    "gradeBPlus",
-    "priceBPlus"
-  ],
-
-  "B": [
-    "B",
-    "b",
-    "B급",
-    "B등급",
-    "gradeB",
-    "priceB"
-  ],
-
-  "액파": [
-    "액파",
-    "액정파손",
-    "파손",
-    "broken",
-    "crack",
-    "cracked",
-    "priceBroken"
-  ],
-
-  "LCD": [
-    "LCD",
-    "lcd",
-    "LCD불량",
-    "LCD파손",
-    "lcdBroken",
-    "lcdPrice",
-    "priceLCD"
-  ]
-};
-
-/* 저장 데이터 한 행을 표준 행으로 펼침 */
-function expandIntegratedPriceRow(row, index) {
-  var result = [];
-
-  if (!row || typeof row !== "object") {
-    return result;
-  }
-
-  var vendorRaw = integratedPick(row, [
-    "vendorName",
-    "vendor",
-    "vendorId",
-    "companyName",
-    "company",
-    "업체명",
-    "업체",
-    "거래처명",
-    "거래처"
-  ]);
-
-  var modelRaw = integratedPick(row, [
-    "modelName",
-    "model",
-    "deviceName",
-    "device",
-    "productName",
-    "기종",
-    "모델명",
-    "모델"
-  ]);
-
-  if (vendorRaw === null || modelRaw === null) {
-    return result;
-  }
-
-  var vendor = getIntegratedVendorName(vendorRaw);
-  var model = String(modelRaw).trim();
-  var rowTime = getIntegratedRowTime(row, index);
-
-  if (!model) {
-    return result;
-  }
-
-  /*
-    1. 세로형 데이터 처리
-
-    예:
-    {
-      vendorId: "dawon",
-      model: "갤럭시S25울트라",
-      grade: "A",
-      price: 920000
-    }
-  */
-
-  var singleGrade = normalizeIntegratedGrade(
-    integratedPick(row, [
-      "grade",
-      "gradeName",
-      "level",
-      "condition",
-      "등급",
-      "항목"
-    ])
-  );
-
-  var singlePrice = parseIntegratedMoney(
-    integratedPick(row, [
-      "price",
-      "amount",
-      "unitPrice",
-      "purchasePrice",
-      "value",
-      "단가",
-      "금액",
-      "가격"
-    ])
-  );
-
-  if (singleGrade && singlePrice !== null) {
-    result.push({
-      vendor: vendor,
-      model: model,
-      grade: singleGrade,
-      price: singlePrice,
-      time: rowTime,
-      index: index
-    });
-  }
-
-  /*
-    2. 이미 가로형으로 저장된 데이터 처리
-
-    예:
-    {
-      vendor: "다원",
-      model: "갤럭시S25울트라",
-      A: 920000,
-      "A-": 880000,
-      "B+": 850000
-    }
-  */
-
-  var nestedPriceObject =
-    row.prices ||
-    row.gradePrices ||
-    row.priceMap ||
-    row.grades ||
-    row;
-
-  INTEGRATED_GAP_GRADES.forEach(function (grade) {
-    var fieldKeys = INTEGRATED_GRADE_FIELD_KEYS[grade];
-
-    var value = integratedPick(
-      nestedPriceObject,
-      fieldKeys
-    );
-
-    var price = parseIntegratedMoney(value);
-
-    if (price !== null) {
-      var duplicate = result.some(function (item) {
-        return item.grade === grade && item.price === price;
-      });
-
-      if (!duplicate) {
-        result.push({
-          vendor: vendor,
-          model: model,
-          grade: grade,
-          price: price,
-          time: rowTime,
-          index: index
-        });
-      }
-    }
-  });
-
-  return result;
-}
-
-/* 업체+모델별 가로형 데이터 생성 */
-function buildIntegratedVendorGapRows() {
-  var sourceRows = getIntegratedPriceSourceRows();
-  var latestGradeMap = new Map();
-
-  sourceRows.forEach(function (row, index) {
-    var expandedRows = expandIntegratedPriceRow(row, index);
-
-    expandedRows.forEach(function (item) {
-      var key = [
-        item.vendor,
-        item.model,
-        item.grade
-      ].join("|||");
-
-      var previous = latestGradeMap.get(key);
-
-      if (
-        !previous ||
-        item.time > previous.time ||
-        (
-          item.time === previous.time &&
-          item.index >= previous.index
-        )
-      ) {
-        latestGradeMap.set(key, item);
-      }
-    });
-  });
-
-  var pivotMap = new Map();
-
-  latestGradeMap.forEach(function (item) {
-    var pivotKey = [
-      item.vendor,
-      item.model
-    ].join("|||");
-
-    if (!pivotMap.has(pivotKey)) {
-      pivotMap.set(pivotKey, {
-        vendor: item.vendor,
-        model: item.model,
-        prices: {
-          "A": null,
-          "A-": null,
-          "B+": null,
-          "B": null,
-          "액파": null,
-          "LCD": null
-        }
-      });
-    }
-
-    pivotMap.get(pivotKey).prices[item.grade] = item.price;
-  });
-
-  var result = Array.from(pivotMap.values());
-
-  result.forEach(function (row) {
-    var validPrices = INTEGRATED_GAP_GRADES
-      .map(function (grade) {
-        return row.prices[grade];
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>다원트레이드 통합 단가 대시보드</title>
+  <style>
+    *{box-sizing:border-box} :root{--ink:#14202e;--paper:#f7f5f0;--line:#ded8cc;--sub:#6b6558;--gold:#c8892a;--up:#c0392b;--down:#1f6e5a}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif}
+    button,input,select,textarea{font:inherit} button{cursor:pointer}
+    header{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;padding:18px 22px;background:var(--ink);color:white}
+    header small{color:var(--gold);font-weight:800;letter-spacing:2px} h1{margin:3px 0 0;font-size:22px}
+    .tabs,.vendorbar,.actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+    .tab,.chip,.btn{border:1px solid var(--line);border-radius:8px;background:white;color:var(--ink);padding:9px 13px;font-weight:700}
+    .tab{border-color:#ffffff42;background:transparent;color:white}.tab.on{background:var(--gold);border-color:var(--gold)}
+    .vendorbar{padding:11px 22px;background:#efebe2;border-bottom:1px solid var(--line)}.chip{border-radius:20px;padding:6px 12px}.chip.on{background:var(--ink);color:white}
+    .primary{background:var(--gold);border-color:var(--gold);color:white}.danger{color:#b42318}
+    main{max-width:1450px;margin:auto;padding:20px 22px 60px}.title{margin:5px 0 18px}.title small{color:var(--gold);font-weight:800;letter-spacing:2px}.title h2{margin:3px 0;font-size:22px}.title p,.muted{color:var(--sub);font-size:13px}
+    .notice{margin-bottom:14px;padding:11px 13px;border:1px solid #ead4a2;border-radius:9px;background:#fff8e8;color:#785100;font-size:12px;line-height:1.6}
+    .metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}.card{padding:16px;border:1px solid var(--line);border-radius:12px;background:white}.metric span{color:var(--sub);font-size:12px}.metric strong{display:block;margin-top:4px;font-size:25px}.section{margin-top:20px}.section h3{margin:0 0 4px}.section-head{display:flex;justify-content:space-between;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:10px}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.rank{display:grid;grid-template-columns:32px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #eee}.rank:last-child{border:0}.num{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#efebe2;font-weight:800}.up{color:var(--up)}.down{color:var(--down)}
+    .tablewrap{overflow:auto;max-height:68vh;border:1px solid var(--line);border-radius:10px;background:white}table{width:100%;min-width:1050px;border-collapse:separate;border-spacing:0;background:white;font-size:12px}th{position:sticky;top:0;z-index:5;padding:11px 9px;background:var(--ink);color:white;white-space:nowrap}td{height:48px;padding:8px;border-right:1px solid #eee;border-bottom:1px solid #eee;text-align:right;white-space:nowrap}tbody tr:hover td{background:#faf8f3}.left{text-align:left}.center{text-align:center}.bold{font-weight:800}
+    .sticky-v{position:sticky;left:0;z-index:8;width:145px;min-width:145px}.sticky-m{position:sticky;left:145px;z-index:8;width:210px;min-width:210px}td.sticky-v,td.sticky-m{z-index:3;background:white}.vendor{color:#1e3a8a;font-weight:800}.high{background:#fff7ed!important;color:#c2410c;font-weight:900}.low{background:#eff6ff!important;color:#1d4ed8;font-weight:900}.gap{background:#fef2f2!important;color:#dc2626;font-weight:900}.empty{padding:35px;text-align:center;color:var(--sub);border:1px dashed var(--line);border-radius:10px;background:white}
+    .field{padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:white}.price,.model{width:100%;border:1px solid transparent;border-radius:4px;background:transparent;padding:6px}.price:focus,.model:focus{outline:none;border-color:var(--gold);background:#fffdf7}.formgrid{display:grid;grid-template-columns:1fr 2fr auto;gap:12px;align-items:end}
+    textarea{width:100%;min-height:110px;padding:10px;border:1px solid var(--line);border-radius:8px}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:50;padding:12px 20px;border-radius:10px;background:var(--ink);color:white}
+    @media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}}@media(max-width:600px){main{padding:14px}.metrics{grid-template-columns:1fr 1fr}.metric strong{font-size:21px}}
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+  (function(){
+    "use strict";
+    var app=document.getElementById("app");
+    var GRADES=["A급","A-급","B+","B","액파","LCD"];
+    var KEYS={vendors:"dw_vendors",snaps:"dw_snaps"};
+    function read(k,f){try{var v=JSON.parse(localStorage.getItem(k));return v==null?f:v}catch(e){return f}}
+    function write(){localStorage.setItem(KEYS.vendors,JSON.stringify(S.vendors));localStorage.setItem(KEYS.snaps,JSON.stringify(S.snaps))}
+    function defaults(){return[{id:"dawon",name:"다원(자체)",grades:GRADES.slice()},{id:"jinwoo",name:"진우아이엔씨",grades:GRADES.slice()}]}
+    var S={tab:"all",active:"dawon",vendors:read(KEYS.vendors,defaults()),snaps:read(KEYS.snaps,{}),draft:{},date:{},reportIndex:null};
+    if(!Array.isArray(S.vendors)||!S.vendors.length)S.vendors=defaults();
+    if(!S.vendors.some(function(v){return v.id===S.active}))S.active=S.vendors[0].id;
+    function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]})}
+    function won(v){return Number.isFinite(Number(v))&&v!==""?Number(v).toLocaleString("ko-KR")+"원":"-"}
+    function num(v){if(v==null||v==="")return null;var n=Number(String(v).replace(/[^0-9.-]/g,""));return Number.isFinite(n)?n:null}
+    function key(v){return String(v||"").toLowerCase().replace(/[\s_-]/g,"")}
+    function gkey(v){var x=String(v||"").toUpperCase().replace(/\s|급|등급/g,"");if(["액정파손","파손","액파"].indexOf(x)>=0)return"액파";return x}
+    function today(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+    function latest(id){var a=S.snaps[id]||[];return a.length?a[a.length-1]:null}
+    function previous(id){var a=S.snaps[id]||[];return a.length>1?a[a.length-2]:null}
+    function emptyRow(v){var r={model:""};v.grades.forEach(function(g){r[g]=""});return r}
+    function toast(t){var x=document.createElement("div");x.className="toast";x.textContent=t;document.body.appendChild(x);setTimeout(function(){x.remove()},2600)}
+    function title(a,b,c){return'<div class="title"><small>'+esc(a)+'</small><h2>'+esc(b)+'</h2><p>'+esc(c)+'</p></div>'}
+    function metric(a,b,c){return'<div class="card metric"><span>'+esc(a)+'</span><strong style="color:'+c+'">'+b+'</strong></div>'}
+    function vendor(){return S.vendors.find(function(v){return v.id===S.active})||S.vendors[0]}
+    function comparisons(v,idx){
+      var list=S.snaps[v.id]||[],i=typeof idx==="number"?idx:list.length-1,now=list[i],before=list[i-1];if(!now)return[];
+      return now.rows.map(function(r){var old=before&&before.rows.find(function(q){return key(q.model)===key(r.model)});
+        return{model:r.model,cells:v.grades.map(function(g){var n=num(r[g]),o=old?num(old[g]):null,d=n!==null&&o!==null?n-o:null;return{grade:g,now:n,before:o,diff:d,pct:d!==null&&o?d/o*100:null}})}
       })
-      .filter(function (price) {
-        return Number.isFinite(price) && price > 0;
+    }
+    function movers(v){var a=[];comparisons(v).forEach(function(r){r.cells.forEach(function(c){if(c.diff)a.push({vendor:v.name,model:r.model,grade:c.grade,diff:c.diff,pct:c.pct})})});return a}
+    function rank(items,type){if(!items.length)return'<div class="empty">비교할 변동 자료가 없습니다.</div>';return items.map(function(x,i){return'<div class="rank"><div class="num">'+(i+1)+'</div><div><b>'+esc(x.model)+'</b><div class="muted">'+esc(x.vendor)+" · "+esc(x.grade)+'</div></div><div class="'+type+' bold">'+(type==="up"?"▲ ":"▼ ")+won(Math.abs(x.diff))+'<div class="muted">'+(x.pct?(x.pct>0?"+":"")+x.pct.toFixed(1)+"%":"")+'</div></div></div>'}).join("")}
+    function pivotRows(){
+      var out=[];
+      S.vendors.forEach(function(v){var s=latest(v.id);if(!s)return;s.rows.forEach(function(r){
+        var prices={};GRADES.forEach(function(target){var source=v.grades.find(function(g){return gkey(g)===gkey(target)});prices[target]=source?num(r[source]):null});
+        var valid=GRADES.map(function(g){return prices[g]}).filter(function(n){return n!==null&&n>0});
+        out.push({vendor:v.name,model:r.model,prices:prices,high:valid.length?Math.max.apply(null,valid):null,low:valid.length?Math.min.apply(null,valid):null});
+      })});
+      out.forEach(function(r){r.gap=r.high!==null?r.high-r.low:null});
+      return out.sort(function(a,b){return a.model.localeCompare(b.model,"ko",{numeric:true})||a.vendor.localeCompare(b.vendor,"ko")})
+    }
+    function gapTable(rows){
+      if(!rows.length)return'<div class="empty">저장된 업체 단가가 없습니다. ‘단가 입력’에서 먼저 저장해 주세요.</div>';
+      return'<div class="tablewrap"><table><thead><tr><th class="sticky-v">업체명</th><th class="sticky-m">모델</th>'+GRADES.map(function(g){return"<th>"+g+"</th>"}).join("")+'<th>최고단가</th><th>최저단가</th><th>GAP</th></tr></thead><tbody>'+
+      rows.map(function(r){return'<tr><td class="left vendor sticky-v">'+esc(r.vendor)+'</td><td class="left bold sticky-m">'+esc(r.model)+'</td>'+
+        GRADES.map(function(g){var p=r.prices[g],cl=p===null?"":p===r.high&&r.high!==r.low?"high":p===r.low&&r.high!==r.low?"low":"";return'<td class="'+cl+'">'+won(p)+'</td>'}).join("")+
+        '<td class="high">'+won(r.high)+'</td><td class="low">'+won(r.low)+'</td><td class="gap">'+won(r.gap)+'</td></tr>'}).join("")+'</tbody></table></div>'
+    }
+    function baseVendorId(){
+      var d=S.vendors.find(function(v){return v.id==="dawon"||/다원/.test(v.name)});
+      return d?d.id:(S.vendors[0]?S.vendors[0].id:null);
+    }
+    function compareRows(){
+      var baseId=baseVendorId();if(!baseId)return{err:"기준(다원) 거래처가 없습니다.",rows:[]};
+      var base=S.vendors.find(function(v){return v.id===baseId});
+      var baseSnap=latest(baseId);
+      if(!baseSnap)return{err:"기준 거래처("+base.name+")의 단가가 아직 없습니다. ‘단가 입력’에서 먼저 저장하세요.",rows:[],base:base};
+      var others=S.vendors.filter(function(v){return v.id!==baseId});
+      var out=[];
+      baseSnap.rows.forEach(function(br){
+        GRADES.forEach(function(g){
+          var bsrc=base.grades.find(function(x){return gkey(x)===gkey(g)});
+          var bp=bsrc?num(br[bsrc]):null;
+          if(bp===null||bp<=0)return;
+          var cells=others.map(function(ov){
+            var os=latest(ov.id);if(!os)return{name:ov.name,price:null,diff:null};
+            var or=os.rows.find(function(x){return key(x.model)===key(br.model)});
+            if(!or)return{name:ov.name,price:null,diff:null};
+            var osrc=ov.grades.find(function(x){return gkey(x)===gkey(g)});
+            var op=osrc?num(or[osrc]):null;
+            if(op===null||op<=0)return{name:ov.name,price:null,diff:null};
+            return{name:ov.name,price:op,diff:op-bp};
+          });
+          if(cells.some(function(c){return c.price!==null}))out.push({model:br.model,grade:g,baseP:bp,cells:cells});
+        });
       });
-
-    if (validPrices.length === 0) {
-      row.highestPrice = null;
-      row.lowestPrice = null;
-      row.gap = null;
-      return;
+      return{base:base,baseDate:baseSnap.date,others:others,rows:out};
     }
-
-    row.highestPrice = Math.max.apply(null, validPrices);
-    row.lowestPrice = Math.min.apply(null, validPrices);
-    row.gap = row.highestPrice - row.lowestPrice;
-  });
-
-  /*
-    같은 모델끼리 모아서 업체별 비교가 쉽도록 정렬
-
-    모델 → 업체 순서로 정렬하지만
-    화면 열 순서는 업체명 → 모델 순서
-  */
-
-  result.sort(function (a, b) {
-    var modelCompare = a.model.localeCompare(
-      b.model,
-      "ko-KR",
-      {
-        numeric: true,
-        sensitivity: "base"
+    function comparePage(){
+      var d=compareRows();
+      var head=title("DAWON BASELINE","다원 기준 비교","다원 단가를 기준으로 각 거래처가 우리보다 싼지(🟢 매입 유리) 비싼지(🔴) 한눈에 봅니다.");
+      if(d.err)return head+'<div class="empty">'+esc(d.err)+'</div>';
+      if(!d.rows.length)return head+'<div class="empty">비교할 다른 거래처 단가가 없습니다. 같은 모델명으로 2개 이상 거래처에 단가를 저장하세요.</div>';
+      var cheaper=0,pricier=0;
+      d.rows.forEach(function(r){r.cells.forEach(function(c){if(c.diff===null)return;if(c.diff<0)cheaper++;else if(c.diff>0)pricier++})});
+      // 거래처별 평균 차이(다원 대비)
+      var vsum={};d.rows.forEach(function(r){r.cells.forEach(function(c){if(c.diff===null)return;if(!vsum[c.name])vsum[c.name]={s:0,n:0};vsum[c.name].s+=c.diff;vsum[c.name].n++})});
+      var vavg=Object.keys(vsum).map(function(n){return{name:n,avg:vsum[n].s/vsum[n].n}}).sort(function(a,b){return a.avg-b.avg});
+      var html=head;
+      html+='<div class="metrics">'+
+        metric("기준 거래처",esc(d.base.name),"var(--ink)")+
+        metric("우리보다 싼 항목",cheaper+"건","var(--down)")+
+        metric("우리보다 비싼 항목",pricier+"건","var(--up)")+
+        metric("비교 거래처",d.others.length+"개","var(--gold)")+
+        metric("기준일",esc(d.baseDate),"var(--sub)")+'</div>';
+      // 거래처별 평균 (다원 대비)
+      if(vavg.length){
+        html+='<div class="section"><h3>거래처별 평균 단가차 (다원 대비)</h3><div class="two" style="grid-template-columns:1fr">';
+        html+='<div class="card">'+vavg.map(function(v){var cl=v.avg<0?"down":"up";var mark=v.avg<0?"🟢 평균적으로 우리보다 쌈":"🔴 평균적으로 우리보다 비쌈";return'<div class="rank"><div class="num">'+(v.avg<0?"🟢":"🔴")+'</div><div><b>'+esc(v.name)+'</b><div class="muted">'+mark+'</div></div><div class="'+cl+' bold">'+(v.avg>0?"+":"")+won(Math.round(v.avg))+'</div></div>'}).join("")+'</div></div></div>';
       }
-    );
-
-    if (modelCompare !== 0) {
-      return modelCompare;
+      // 매입 추천: 우리보다 싼 곳
+      var best=[];
+      d.rows.forEach(function(r){var ch=null;r.cells.forEach(function(c){if(c.diff!==null&&c.diff<0&&(!ch||c.price<ch.price))ch={name:c.name,price:c.price,diff:c.diff}});if(ch)best.push({model:r.model,grade:r.grade,name:ch.name,diff:ch.diff})});
+      best.sort(function(a,b){return a.diff-b.diff});
+      if(best.length){
+        html+='<div class="section"><h3>💰 매입 추천 (우리보다 싼 거래처)</h3><div class="card">'+best.slice(0,10).map(function(b){return'<div style="padding:8px 0;border-bottom:1px solid #eee;font-size:13px"><b>'+esc(b.model)+' '+esc(b.grade)+'</b> → <b class="down">'+esc(b.name)+'</b> 이(가) 우리보다 <b class="down">'+won(Math.abs(b.diff))+'</b> 저렴</div>'}).join("")+'</div></div>';
+      }
+      // 상세 비교표
+      html+='<div class="section"><h3>모델·등급별 상세 비교</h3><div class="tablewrap"><table><thead><tr><th class="left sticky-v">모델</th><th class="center">등급</th><th style="background:#2a3a4d">다원(기준)</th>';
+      d.others.forEach(function(o){html+='<th>'+esc(o.name)+'</th>'});
+      html+='</tr></thead><tbody>';
+      d.rows.forEach(function(r){
+        html+='<tr><td class="left bold sticky-v">'+esc(r.model)+'</td><td class="center">'+esc(r.grade)+'</td><td class="bold" style="background:#f0f4f8">'+won(r.baseP)+'</td>';
+        r.cells.forEach(function(c){
+          if(c.price===null){html+='<td class="muted center">-</td>';return}
+          var cl=c.diff<0?"low":(c.diff>0?"high":"");
+          var mk=c.diff<0?"🟢":(c.diff>0?"🔴":"=");
+          html+='<td class="'+cl+'"><div class="bold">'+won(c.price)+'</div><div style="font-size:11px">'+mk+' '+(c.diff>0?"+":"")+won(c.diff)+'</div></td>';
+        });
+        html+='</tr>';
+      });
+      html+='</tbody></table></div></div>';
+      return html;
     }
-
-    return a.vendor.localeCompare(
-      b.vendor,
-      "ko-KR",
-      {
-        numeric: true,
-        sensitivity: "base"
+    function allDashboard(){
+      var piv=pivotRows(),all=[];S.vendors.forEach(function(v){all=all.concat(movers(v))});
+      var ups=all.filter(function(x){return x.diff>0}).sort(function(a,b){return b.diff-a.diff}).slice(0,10);
+      var downs=all.filter(function(x){return x.diff<0}).sort(function(a,b){return a.diff-b.diff}).slice(0,10);
+      var dataV=S.vendors.filter(function(v){return latest(v.id)}),models={};piv.forEach(function(r){models[key(r.model)]=1});
+      return title("ALL VENDORS","통합 대시보드","등록한 모든 업체의 최신 단가와 변동을 한 화면에서 확인합니다.")+
+      '<div class="metrics">'+metric("등록 업체",S.vendors.length+"개","var(--ink)")+metric("자료 보유 업체",dataV.length+"개","var(--down)")+metric("통합 모델",Object.keys(models).length+"개","var(--ink)")+metric("가로형 비교 행",piv.length+"개","var(--gold)")+metric("최대 등급 GAP",won(piv.reduce(function(m,r){return Math.max(m,r.gap||0)},0)),"var(--up)")+'</div>'+
+      '<div class="section"><div class="section-head"><div><h3>전체 업체 변동 TOP 10</h3><div class="muted">업체별 직전 저장 단가 대비</div></div></div><div class="two"><div class="card"><h3 class="down">▼ 하락 TOP 10</h3>'+rank(downs,"down")+'</div><div class="card"><h3 class="up">▲ 상승 TOP 10</h3>'+rank(ups,"up")+'</div></div></div>'+
+      '<div class="section"><div class="section-head"><div><h3>전체 업체 단가 GAP</h3><div class="muted">한 줄 기준: 업체명 + 모델</div></div><b>'+piv.length+'개</b></div>'+gapTable(piv)+'</div>'
+    }
+    function vendorDashboard(v){
+      var s=latest(v.id);if(!s)return title("VENDOR","업체별 대시보드","선택 업체의 흐름을 확인합니다.")+'<div class="empty">이 업체의 단가표가 아직 없습니다.</div>';
+      var rows=comparisons(v),up=0,down=0,flat=0,total=0,cnt=0;rows.forEach(function(r){r.cells.forEach(function(c){if(c.diff===null)return;if(c.diff>0)up++;else if(c.diff<0)down++;else flat++;if(c.pct!==null){total+=c.pct;cnt++}})});
+      var mine=pivotRows().filter(function(r){return r.vendor===v.name});
+      return title("VENDOR",v.name+" 업체별 대시보드",(previous(v.id)?previous(v.id).date+" → ":"")+s.date)+
+      '<div class="metrics">'+metric("등록 모델",s.rows.length+"개","var(--ink)")+metric("상승",up+"건","var(--up)")+metric("하락",down+"건","var(--down)")+metric("보합",flat+"건","var(--sub)")+metric("평균 변동률",(cnt?(total/cnt).toFixed(1):"0.0")+"%","var(--gold)")+'</div>'+
+      '<div class="section"><h3>선택 업체 등급별 단가</h3>'+gapTable(mine)+'</div>'
+    }
+    function inputPage(v){
+      var last=latest(v.id);if(!S.draft[v.id])S.draft[v.id]=last?last.rows.map(function(r){return Object.assign({},r)}):[emptyRow(v)];if(!S.date[v.id])S.date[v.id]=today();var rows=S.draft[v.id];
+      return title("PRICE INPUT",v.name+" 단가 입력","엑셀이나 붙여넣기로 불러온 뒤 저장하세요.")+
+      '<div class="notice">엑셀 업로드는 인터넷 연결이 필요합니다. 파일에서 모델명과 등급 열을 자동으로 찾습니다.</div>'+
+      '<div class="actions" style="margin-bottom:12px"><label class="muted">기준일</label><input id="saveDate" class="field" type="date" value="'+esc(S.date[v.id])+'"><button id="excelBtn" class="btn">엑셀 업로드</button><input id="excelFile" type="file" accept=".xlsx,.xls" hidden><button id="pasteBtn" class="btn">붙여넣기</button><button id="addRow" class="btn">+ 행 추가</button><button id="clear" class="btn danger">전체 지우기</button></div>'+
+      '<div id="pasteBox" class="card" style="display:none;margin-bottom:12px"><textarea id="pasteText" placeholder="모델명 [탭] A급 [탭] A-급 [탭] B+ [탭] B [탭] 액파 [탭] LCD"></textarea><div class="actions" style="margin-top:8px"><button id="pasteLoad" class="btn primary">불러오기</button><button id="pasteCancel" class="btn">취소</button></div></div>'+
+      '<div class="tablewrap"><table><thead><tr><th class="left">모델명</th>'+v.grades.map(function(g){return"<th>"+esc(g)+"</th>"}).join("")+'<th></th></tr></thead><tbody>'+rows.map(function(r,i){return'<tr><td><input class="model" data-i="'+i+'" value="'+esc(r.model)+'"></td>'+v.grades.map(function(g){return'<td><input class="price" data-i="'+i+'" data-g="'+esc(g)+'" value="'+esc(r[g])+'" inputmode="numeric"></td>'}).join("")+'<td class="center"><button class="del btn danger" data-i="'+i+'">×</button></td></tr>'}).join("")+'</tbody></table></div><button id="savePrices" class="btn primary" style="margin-top:14px">단가 저장</button>'
+    }
+    function reportPage(v){
+      var list=S.snaps[v.id]||[];if(!list.length)return'<div class="empty" style="margin-top:30px">저장된 단가가 없습니다.</div>';if(S.reportIndex===null||S.reportIndex>=list.length)S.reportIndex=list.length-1;
+      var rows=comparisons(v,S.reportIndex),now=list[S.reportIndex];
+      return title("WEEKLY REPORT",v.name+" 주간 보고서","저장일별 단가와 변동을 확인합니다.")+
+      '<select id="reportDate" class="field" style="margin-bottom:12px">'+list.map(function(s,i){return'<option value="'+i+'" '+(i===S.reportIndex?"selected":"")+'>'+esc(s.date)+'</option>'}).join("")+'</select>'+
+      '<div class="tablewrap"><table><thead><tr><th class="left">모델</th>'+v.grades.map(function(g){return"<th>"+esc(g)+"</th>"}).join("")+'</tr></thead><tbody>'+rows.map(function(r){return'<tr><td class="left bold">'+esc(r.model)+'</td>'+r.cells.map(function(c){var d=c.diff===null||c.diff===0?"":'<div class="'+(c.diff>0?"up":"down")+'">'+(c.diff>0?"▲ ":"▼ ")+won(Math.abs(c.diff))+'</div>';return"<td><b>"+won(c.now)+"</b>"+d+"</td>"}).join("")+"</tr>"}).join("")+'</tbody></table></div>'
+    }
+    function vendorsPage(){
+      return title("VENDORS","거래처 양식 관리","거래처와 사용하는 등급 칸을 추가합니다.")+
+      '<div class="card formgrid"><div><div class="muted">거래처 이름</div><input id="newName" class="field" placeholder="새 거래처"></div><div><div class="muted">등급 칸(쉼표 구분)</div><input id="newGrades" class="field" style="width:100%" value="A급, A-급, B+, B, 액파, LCD"></div><button id="addVendor" class="btn primary">+ 추가</button></div>'+
+      '<div class="section">'+S.vendors.map(function(v){return'<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px"><div><b>'+esc(v.name)+'</b><div class="muted">'+v.grades.map(esc).join(" · ")+'</div></div><div class="actions"><button class="pick btn" data-id="'+v.id+'">입력하기</button><button class="remove btn danger" data-id="'+v.id+'">삭제</button></div></div>'}).join("")+'</div>'
+    }
+    function render(){
+      var v=vendor(),show=S.tab!=="all";
+      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서</h1></div><div class="tabs">'+
+      [["all","통합 대시보드"],["compare","다원 기준 비교"],["vendor","업체별 대시보드"],["input","단가 입력"],["report","주간 보고서"],["vendors","거래처 양식"]].map(function(x){return'<button class="tab '+(S.tab===x[0]?"on":"")+'" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join("")+'</div><div class="actions" style="margin-left:auto"><button id="backupBtn" class="tab">💾 백업</button><button id="restoreBtn" class="tab">📂 복원</button><input id="restoreFile" type="file" accept=".json" hidden></div></header>'+
+      (show?'<div class="vendorbar"><span class="muted">거래처</span>'+S.vendors.map(function(x){return'<button class="chip '+(x.id===S.active?"on":"")+'" data-v="'+x.id+'">'+esc(x.name)+'</button>'}).join("")+'</div>':"")+
+      '<main>'+(S.tab==="all"?allDashboard():S.tab==="compare"?comparePage():S.tab==="vendor"?vendorDashboard(v):S.tab==="input"?inputPage(v):S.tab==="report"?reportPage(v):vendorsPage())+'</main>';
+      bind()
+    }
+    function parseSheet(sheet,v){
+      var matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:false}),head=-1,mi=-1,cols={};
+      for(var i=0;i<matrix.length;i++){var row=matrix[i],m=-1,c={};row.forEach(function(cell,j){var h=String(cell).trim();if(["모델","모델명","기종","기종명","MODEL"].indexOf(h.toUpperCase())>=0)m=j;v.grades.forEach(function(g){if(gkey(h)===gkey(g))c[g]=j})});if(m>=0&&Object.keys(c).length){head=i;mi=m;cols=c;break}}
+      if(head<0)return[];var out=[];for(var r=head+1;r<matrix.length;r++){var model=String(matrix[r][mi]||"").trim();if(!model)continue;var x=emptyRow(v);x.model=model;v.grades.forEach(function(g){x[g]=cols[g]===undefined?"":num(matrix[r][cols[g]])||""});out.push(x)}return out
+    }
+    function bind(){
+      var bb=document.getElementById("backupBtn");if(bb)bb.onclick=function(){var data={vendors:S.vendors,snaps:S.snaps,backupDate:today()};var blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="다원단가_백업_"+today()+".json";a.click();toast("백업 파일을 저장했습니다.")};
+      var rb=document.getElementById("restoreBtn"),rf=document.getElementById("restoreFile");
+      if(rb&&rf){rb.onclick=function(){rf.click()};rf.onchange=function(){var f=rf.files[0];if(!f)return;var reader=new FileReader();reader.onload=function(e){try{var d=JSON.parse(e.target.result);if(!d.vendors||!d.snaps){toast("올바른 백업 파일이 아닙니다.");return}if(!confirm("현재 데이터를 백업 파일로 교체할까요? (기존 데이터는 사라집니다)"))return;S.vendors=d.vendors;S.snaps=d.snaps;if(!S.vendors.some(function(v){return v.id===S.active}))S.active=S.vendors[0].id;write();toast("복원 완료!");render()}catch(err){toast("백업 파일을 읽지 못했습니다.")}};reader.readAsText(f)}}
+      document.querySelectorAll("[data-tab]").forEach(function(b){b.onclick=function(){S.tab=b.dataset.tab;S.reportIndex=null;render()}});
+      document.querySelectorAll("[data-v]").forEach(function(b){b.onclick=function(){S.active=b.dataset.v;S.reportIndex=null;render()}});
+      var v=vendor();
+      if(S.tab==="input"){
+        var rows=S.draft[v.id];
+        document.querySelectorAll(".model").forEach(function(x){x.oninput=function(){rows[+x.dataset.i].model=x.value}});
+        document.querySelectorAll(".price").forEach(function(x){x.oninput=function(){x.value=x.value.replace(/[^0-9]/g,"");rows[+x.dataset.i][x.dataset.g]=x.value?+x.value:""}});
+        document.querySelectorAll(".del").forEach(function(x){x.onclick=function(){rows.splice(+x.dataset.i,1);if(!rows.length)rows.push(emptyRow(v));render()}});
+        document.getElementById("saveDate").onchange=function(e){S.date[v.id]=e.target.value||today()};
+        document.getElementById("addRow").onclick=function(){rows.push(emptyRow(v));render()};
+        document.getElementById("clear").onclick=function(){if(confirm("현재 입력 내용을 모두 지울까요?")){S.draft[v.id]=[emptyRow(v)];render()}};
+        document.getElementById("pasteBtn").onclick=function(){document.getElementById("pasteBox").style.display="block"};
+        document.getElementById("pasteCancel").onclick=function(){document.getElementById("pasteBox").style.display="none"};
+        document.getElementById("pasteLoad").onclick=function(){var text=document.getElementById("pasteText").value.trim();if(!text)return toast("붙여넣을 내용이 없습니다.");var parsed=text.split(/\r?\n/).filter(Boolean).map(function(line){var p=line.split(/\t|,|\s{2,}/);if(p.length<2)p=line.split(/\s+/);var r=emptyRow(v);r.model=p[0]||"";v.grades.forEach(function(g,i){r[g]=num(p[i+1])||""});return r});S.draft[v.id]=parsed;toast(parsed.length+"행을 불러왔습니다.");render()};
+        var file=document.getElementById("excelFile");document.getElementById("excelBtn").onclick=function(){file.click()};
+        file.onchange=function(){var f=file.files[0];if(!f)return;if(typeof XLSX==="undefined")return toast("인터넷 연결 후 다시 시도해 주세요.");var reader=new FileReader();reader.onload=function(e){try{var wb=XLSX.read(e.target.result,{type:"array"}),names=wb.SheetNames.filter(function(n){return["중고단가","폴드플립"].indexOf(n.trim())>=0});if(!names.length)names=wb.SheetNames;var data=[];names.forEach(function(n){data=data.concat(parseSheet(wb.Sheets[n],v))});if(!data.length)return toast("모델과 등급 열을 찾지 못했습니다.");S.draft[v.id]=data;toast(data.length+"개 모델을 불러왔습니다.");render()}catch(err){toast("엑셀을 읽지 못했습니다.")}};reader.readAsArrayBuffer(f)};
+        document.getElementById("savePrices").onclick=function(){var clean=rows.filter(function(r){return r.model.trim()});if(!clean.length)return toast("저장할 데이터가 없습니다.");var date=S.date[v.id]||today(),list=(S.snaps[v.id]||[]).slice(),snap={date:date,rows:clean.map(function(r){return Object.assign({},r)})},i=list.findIndex(function(s){return s.date===date});if(i>=0&&!confirm(date+" 자료를 덮어쓸까요?"))return;if(i>=0)list[i]=snap;else list.push(snap);list.sort(function(a,b){return a.date.localeCompare(b.date)});S.snaps[v.id]=list;write();toast("단가 저장 완료!")};
       }
-    );
-  });
-
-  return result;
-}
-
-/* 통합 GAP 표 화면 출력 */
-function renderIntegratedVendorGap() {
-  var tbody = document.getElementById(
-    "integratedVendorGapBody"
-  );
-
-  var countElement = document.getElementById(
-    "integratedVendorGapCount"
-  );
-
-  if (!tbody) {
-    return;
-  }
-
-  var rows = buildIntegratedVendorGapRows();
-
-  if (countElement) {
-    countElement.textContent =
-      rows.length.toLocaleString("ko-KR") + "개";
-  }
-
-  if (rows.length === 0) {
-    tbody.innerHTML =
-      '<tr>' +
-        '<td colspan="11" class="integrated-gap-empty">' +
-          "등록된 업체 단가 데이터가 없습니다." +
-        "</td>" +
-      "</tr>";
-
-    return;
-  }
-
-  tbody.innerHTML = rows
-    .map(function (row) {
-      var gradeCells = INTEGRATED_GAP_GRADES
-        .map(function (grade) {
-          var price = row.prices[grade];
-
-          if (!Number.isFinite(price)) {
-            return (
-              '<td class="price-cell empty-price">' +
-                "-" +
-              "</td>"
-            );
-          }
-
-          var classes = [
-            "price-cell"
-          ];
-
-          if (
-            row.highestPrice !== row.lowestPrice &&
-            price === row.highestPrice
-          ) {
-            classes.push("highest-grade");
-          }
-
-          if (
-            row.highestPrice !== row.lowestPrice &&
-            price === row.lowestPrice
-          ) {
-            classes.push("lowest-grade");
-          }
-
-          return (
-            '<td class="' + classes.join(" ") + '">' +
-              escapeIntegratedHtml(
-                formatIntegratedWon(price)
-              ) +
-            "</td>"
-          );
-        })
-        .join("");
-
-      var gapClass =
-        row.gap === 0
-          ? "gap-summary no-gap"
-          : "gap-summary";
-
-      return (
-        "<tr>" +
-
-          '<td class="vendor-cell sticky-vendor">' +
-            escapeIntegratedHtml(row.vendor) +
-          "</td>" +
-
-          '<td class="model-cell sticky-model">' +
-            escapeIntegratedHtml(row.model) +
-          "</td>" +
-
-          gradeCells +
-
-          '<td class="highest-summary">' +
-            escapeIntegratedHtml(
-              formatIntegratedWon(row.highestPrice)
-            ) +
-          "</td>" +
-
-          '<td class="lowest-summary">' +
-            escapeIntegratedHtml(
-              formatIntegratedWon(row.lowestPrice)
-            ) +
-          "</td>" +
-
-          '<td class="' + gapClass + '">' +
-            escapeIntegratedHtml(
-              formatIntegratedWon(row.gap)
-            ) +
-          "</td>" +
-
-        "</tr>"
-      );
-    })
-    .join("");
-}
-    function renderDashboard() {
-  renderKpi();
-  renderCharts();
-  renderAiComments();
-}
-    renderIntegratedVendorGap();
-    function renderDashboard() {
-  renderKpi();
-  renderCharts();
-  renderAiComments();
-
-  renderIntegratedVendorGap();
-}
+      if(S.tab==="report"){var s=document.getElementById("reportDate");if(s)s.onchange=function(){S.reportIndex=+s.value;render()}}
+      if(S.tab==="vendors"){
+        document.getElementById("addVendor").onclick=function(){var n=document.getElementById("newName").value.trim(),g=document.getElementById("newGrades").value.split(",").map(function(x){return x.trim()}).filter(Boolean);if(!n||!g.length)return toast("거래처 이름과 등급을 입력해 주세요.");S.vendors.push({id:"v"+Date.now(),name:n,grades:g});write();render()};
+        document.querySelectorAll(".pick").forEach(function(b){b.onclick=function(){S.active=b.dataset.id;S.tab="input";render()}});
+        document.querySelectorAll(".remove").forEach(function(b){b.onclick=function(){if(S.vendors.length<=1)return toast("최소 한 업체가 필요합니다.");if(!confirm("이 거래처 양식을 삭제할까요?"))return;S.vendors=S.vendors.filter(function(v){return v.id!==b.dataset.id});if(S.active===b.dataset.id)S.active=S.vendors[0].id;write();render()}});
+      }
+    }
+    render();
+  }());
+  </script>
+</body>
+</html>
