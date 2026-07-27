@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>다원트레이드 통합 단가 대시보드 v4 · 만원 단위</title>
+  <title>다원트레이드 통합 단가 대시보드 v5 · 다원 기준</title>
   <style>
     *{box-sizing:border-box} :root{--ink:#14202e;--paper:#f7f5f0;--line:#ded8cc;--sub:#6b6558;--gold:#c8892a;--up:#c0392b;--down:#1f6e5a}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif}
@@ -20,7 +20,7 @@
     .metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}.card{padding:16px;border:1px solid var(--line);border-radius:12px;background:white}.metric span{color:var(--sub);font-size:12px}.metric strong{display:block;margin-top:4px;font-size:25px}.section{margin-top:20px}.section h3{margin:0 0 4px}.section-head{display:flex;justify-content:space-between;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:10px}
     .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.rank{display:grid;grid-template-columns:32px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #eee}.rank:last-child{border:0}.num{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#efebe2;font-weight:800}.up{color:var(--up)}.down{color:var(--down)}
     .tablewrap{overflow:auto;max-height:68vh;border:1px solid var(--line);border-radius:10px;background:white}table{width:100%;min-width:1050px;border-collapse:separate;border-spacing:0;background:white;font-size:12px}th{position:sticky;top:0;z-index:5;padding:11px 9px;background:var(--ink);color:white;white-space:nowrap}td{height:48px;padding:8px;border-right:1px solid #eee;border-bottom:1px solid #eee;text-align:right;white-space:nowrap}tbody tr:hover td{background:#faf8f3}.left{text-align:left}.center{text-align:center}.bold{font-weight:800}
-    .sticky-v{position:sticky;left:0;z-index:8;width:145px;min-width:145px}.sticky-m{position:sticky;left:145px;z-index:8;width:210px;min-width:210px}td.sticky-v,td.sticky-m{z-index:3;background:white}.vendor{color:#1e3a8a;font-weight:800}.high{background:#fff7ed!important;color:#c2410c;font-weight:900}.low{background:#eff6ff!important;color:#1d4ed8;font-weight:900}.gap{background:#fef2f2!important;color:#dc2626;font-weight:900}.empty{padding:35px;text-align:center;color:var(--sub);border:1px dashed var(--line);border-radius:10px;background:white}
+    .sticky-v{position:sticky;left:0;z-index:8;width:145px;min-width:145px}.sticky-m{position:sticky;left:145px;z-index:8;width:210px;min-width:210px}td.sticky-v,td.sticky-m{z-index:3;background:white}.vendor{color:#1e3a8a;font-weight:800}.base-row td{background:#fffbeb;border-top:2px solid var(--gold)}.base-row td.sticky-v,.base-row td.sticky-m{background:#fffbeb}.base-badge{display:inline-block;margin-left:5px;padding:2px 6px;border-radius:10px;background:var(--gold);color:white;font-size:10px;font-weight:900}.high{background:#fff7ed!important;color:#c2410c;font-weight:900}.low{background:#eff6ff!important;color:#1d4ed8;font-weight:900}.gap{background:#fef2f2!important;color:#dc2626;font-weight:900}.empty{padding:35px;text-align:center;color:var(--sub);border:1px dashed var(--line);border-radius:10px;background:white}
     .field{padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:white}.price,.model{width:100%;border:1px solid transparent;border-radius:4px;background:transparent;padding:6px}.price:focus,.model:focus{outline:none;border-color:var(--gold);background:#fffdf7}.money-input{display:flex;align-items:center;gap:3px}.money-input .price{min-width:55px;text-align:right}.money-input b{color:var(--gold);font-size:12px}.formgrid{display:grid;grid-template-columns:1fr 2fr auto;gap:12px;align-items:end}
     textarea{width:100%;min-height:110px;padding:10px;border:1px solid var(--line);border-radius:8px}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:50;padding:12px 20px;border-radius:10px;background:var(--ink);color:white}
     @media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}}@media(max-width:600px){main{padding:14px}.metrics{grid-template-columns:1fr 1fr}.metric strong{font-size:21px}}
@@ -75,12 +75,18 @@
         out.push({vendor:v.name,model:r.model,prices:prices,high:valid.length?Math.max.apply(null,valid):null,low:valid.length?Math.min.apply(null,valid):null});
       })});
       out.forEach(function(r){r.gap=r.high!==null?r.high-r.low:null});
-      return out.sort(function(a,b){return a.model.localeCompare(b.model,"ko",{numeric:true})||a.vendor.localeCompare(b.vendor,"ko")})
+      return out.sort(function(a,b){
+        var modelOrder=a.model.localeCompare(b.model,"ko",{numeric:true});
+        if(modelOrder)return modelOrder;
+        var aBase=a.vendor.indexOf("다원")>=0?0:1,bBase=b.vendor.indexOf("다원")>=0?0:1;
+        if(aBase!==bBase)return aBase-bBase;
+        return a.vendor.localeCompare(b.vendor,"ko")
+      })
     }
     function gapTable(rows){
       if(!rows.length)return'<div class="empty">저장된 업체 단가가 없습니다. ‘단가 입력’에서 먼저 저장해 주세요.</div>';
       return'<div class="tablewrap"><table><thead><tr><th class="sticky-v">업체명</th><th class="sticky-m">모델</th>'+GRADES.map(function(g){return"<th>"+g+"</th>"}).join("")+'<th>최고단가</th><th>최저단가</th><th>GAP</th></tr></thead><tbody>'+
-      rows.map(function(r){return'<tr><td class="left vendor sticky-v">'+esc(r.vendor)+'</td><td class="left bold sticky-m">'+esc(r.model)+'</td>'+
+      rows.map(function(r){var isBase=r.vendor.indexOf("다원")>=0;return'<tr class="'+(isBase?"base-row":"")+'"><td class="left vendor sticky-v">'+esc(r.vendor)+(isBase?'<span class="base-badge">기준</span>':'')+'</td><td class="left bold sticky-m">'+esc(r.model)+'</td>'+
         GRADES.map(function(g){var p=r.prices[g],cl=p===null?"":p===r.high&&r.high!==r.low?"high":p===r.low&&r.high!==r.low?"low":"";return'<td class="'+cl+'">'+won(p)+'</td>'}).join("")+
         '<td class="high">'+won(r.high)+'</td><td class="low">'+won(r.low)+'</td><td class="gap">'+won(r.gap)+'</td></tr>'}).join("")+'</tbody></table></div>'
     }
@@ -127,7 +133,7 @@
       return title("ALL VENDORS","통합 대시보드","등록한 모든 업체의 최신 단가와 변동을 한 화면에서 확인합니다.")+
       '<div class="metrics">'+metric("등록 업체",S.vendors.length+"개","var(--ink)")+metric("자료 보유 업체",dataV.length+"개","var(--down)")+metric("통합 모델",Object.keys(models).length+"개","var(--ink)")+metric("가로형 비교 행",piv.length+"개","var(--gold)")+metric("최대 등급 GAP",won(piv.reduce(function(m,r){return Math.max(m,r.gap||0)},0)),"var(--up)")+'</div>'+
       '<div class="section"><div class="section-head"><div><h3>전체 업체 변동 TOP 10</h3><div class="muted">업체별 직전 저장 단가 대비</div></div></div><div class="two"><div class="card"><h3 class="down">▼ 하락 TOP 10</h3>'+rank(downs,"down")+'</div><div class="card"><h3 class="up">▲ 상승 TOP 10</h3>'+rank(ups,"up")+'</div></div></div>'+
-      '<div class="section"><div class="section-head"><div><h3>전체 업체 등급 GAP</h3><div class="muted">한 줄 기준: 업체명 + 모델 · 최고등급과 최저등급의 차이</div></div><b>'+piv.length+'개</b></div>'+gapTable(piv)+'</div>'
+      '<div class="section"><div class="section-head"><div><h3>전체 업체 등급 GAP</h3><div class="muted">모델별로 묶고 항상 다원을 첫 줄 기준으로 표시합니다.</div></div><b>'+piv.length+'개</b></div>'+gapTable(piv)+'</div>'
     }
     function vendorDashboard(v){
       var s=latest(v.id);if(!s)return title("VENDOR","업체별 대시보드","선택 업체의 흐름을 확인합니다.")+'<div class="empty">이 업체의 단가표가 아직 없습니다.</div>';
@@ -159,7 +165,7 @@
     }
     function render(){
       var v=vendor(),show=S.tab!=="all"&&S.tab!=="compare";
-      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v4 · 금액 단위: 만원</span></h1></div><div class="tabs">'+
+      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v5 · 다원 기준 · 만원 단위</span></h1></div><div class="tabs">'+
       [["all","통합 대시보드"],["compare","다원 기준 비교"],["vendor","업체별 대시보드"],["input","단가 입력"],["report","주간 보고서"],["vendors","거래처 양식"]].map(function(x){return'<button class="tab '+(S.tab===x[0]?"on":"")+'" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join("")+'<button id="backupBtn" class="tab">백업</button><button id="restoreBtn" class="tab">복원</button><input id="restoreFile" type="file" accept=".json" hidden></div></header>'+
       (show?'<div class="vendorbar"><span class="muted">거래처</span>'+S.vendors.map(function(x){return'<button class="chip '+(x.id===S.active?"on":"")+'" data-v="'+x.id+'">'+esc(x.name)+'</button>'}).join("")+'</div>':"")+
       '<main>'+(S.tab==="all"?allDashboard():S.tab==="compare"?dawonComparePage():S.tab==="vendor"?vendorDashboard(v):S.tab==="input"?inputPage(v):S.tab==="report"?reportPage(v):vendorsPage())+'</main>';
