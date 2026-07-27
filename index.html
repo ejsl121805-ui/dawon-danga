@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>다원트레이드 통합 단가 대시보드 v7 · 다원 GAP 금액차</title>
+  <title>다원트레이드 통합 단가 대시보드 v5 · 다원 기준</title>
   <style>
     *{box-sizing:border-box} :root{--ink:#14202e;--paper:#f7f5f0;--line:#ded8cc;--sub:#6b6558;--gold:#c8892a;--up:#c0392b;--down:#1f6e5a}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif}
@@ -44,13 +44,11 @@
     function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]})}
     function num(v){if(v==null||v==="")return null;var n=Number(String(v).replace(/[^0-9.-]/g,""));return Number.isFinite(n)?n:null}
     /* 모든 가격은 내부적으로 '만원' 단위로 통일한다.
-       엑셀 원 단위 자료(예: 5000, 350000)는 0.5만, 35만으로 자동 변환한다.
-       직접 입력하는 휴대폰 단가는 통상 1000만 미만이므로 1000부터 원 단위 자료로 판정한다. */
-    function price(v){var n=num(v);if(n===null)return null;return Math.abs(n)>=1000?n/10000:n}
+       과거 원 단위 자료(예: 350000)는 자동으로 35로 변환한다. */
+    function price(v){var n=num(v);if(n===null)return null;return Math.abs(n)>=10000?n/10000:n}
     function shortNumber(v){var n=Number(v);if(!Number.isFinite(n))return"-";var rounded=Math.round(n*10)/10;return Number.isInteger(rounded)?String(rounded):rounded.toFixed(1)}
     function won(v){var n=price(v);return n===null?"-":shortNumber(n)+"만"}
     function signed(v){var n=Number(v);if(!Number.isFinite(n))return"-";return(n>0?"+":"")+shortNumber(n)+"만"}
-    function gapNumber(v){var n=Number(v);if(!Number.isFinite(n))return"-";return(n>0?"+":"")+shortNumber(n)}
     function key(v){return String(v||"").toLowerCase().replace(/[\s_-]/g,"")}
     function gkey(v){var x=String(v||"").toUpperCase().replace(/\s|급|등급/g,"");if(["액정파손","파손","액파"].indexOf(x)>=0)return"액파";return x}
     function today(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -120,12 +118,12 @@
       if(!latest(base.id))return title("DAWON GAP","다원 기준 비교","경쟁업체 단가 - 다원 단가")+'<div class="empty">먼저 '+esc(base.name)+' 단가를 저장해 주세요.</div>';
       var cheap=rows.filter(function(r){return r.average!==null&&r.average<0}).length;
       var expensive=rows.filter(function(r){return r.average!==null&&r.average>0}).length;
-      return title("DAWON GAP","다원 기준 비교","경쟁업체 단가 - 다원 단가 · 단위: 만원 · 퍼센트 미사용")+
+      return title("DAWON GAP","다원 기준 비교","각 셀은 경쟁업체 단가와 다원 대비 차이를 함께 보여줍니다.")+
       '<div class="metrics">'+metric("기준 업체",esc(base.name),"var(--ink)")+metric("비교 행",rows.length+"개","var(--gold)")+metric("매입 검토",cheap+"개","var(--down)")+metric("다원보다 비쌈",expensive+"개","var(--up)")+metric("금액 단위","만원","var(--ink)")+'</div>'+
-      (rows.length?'<div class="tablewrap"><table><thead><tr><th class="sticky-v">경쟁업체</th><th class="sticky-m">모델</th>'+GRADES.map(function(g){return"<th>"+g+" 차이</th>"}).join("")+'<th>평균 단가차</th><th>추천</th></tr></thead><tbody>'+
+      (rows.length?'<div class="tablewrap"><table><thead><tr><th class="sticky-v">경쟁업체</th><th class="sticky-m">모델</th>'+GRADES.map(function(g){return"<th>"+g+"</th>"}).join("")+'<th>평균 GAP</th><th>추천</th></tr></thead><tbody>'+
       rows.map(function(r){return'<tr><td class="left vendor sticky-v">'+esc(r.vendor)+'</td><td class="left bold sticky-m">'+esc(r.model)+'</td>'+
-      GRADES.map(function(g){var c=r.cells[g];if(c.diff===null)return'<td>-</td>';var cl=c.diff<0?"down":c.diff>0?"up":"";return'<td class="'+cl+' bold">'+gapNumber(c.diff)+'</td>'}).join("")+
-      '<td class="'+(r.average<0?"down":r.average>0?"up":"")+' bold">'+(r.average===null?"-":gapNumber(r.average))+'</td><td class="center bold">'+esc(r.recommend)+'</td></tr>'}).join("")+'</tbody></table></div>':'<div class="empty">동일한 모델로 비교할 경쟁업체 자료가 없습니다.</div>')
+      GRADES.map(function(g){var c=r.cells[g];if(c.diff===null)return'<td>-</td>';var cl=c.diff<0?"down":c.diff>0?"up":"";return'<td><b>'+won(c.comp)+'</b><div class="'+cl+'">'+signed(c.diff)+'</div><div class="muted">다원 '+won(c.base)+'</div></td>'}).join("")+
+      '<td class="'+(r.average<0?"down":r.average>0?"up":"")+' bold">'+(r.average===null?"-":signed(r.average))+'</td><td class="center bold">'+esc(r.recommend)+'</td></tr>'}).join("")+'</tbody></table></div>':'<div class="empty">동일한 모델로 비교할 경쟁업체 자료가 없습니다.</div>')
     }
     function allDashboard(){
       var piv=pivotRows(),all=[];S.vendors.forEach(function(v){all=all.concat(movers(v))});
@@ -167,50 +165,16 @@
     }
     function render(){
       var v=vendor(),show=S.tab!=="all"&&S.tab!=="compare";
-      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v7 · 다원 GAP 금액차 · 만원 단위</span></h1></div><div class="tabs">'+
+      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v5 · 다원 기준 · 만원 단위</span></h1></div><div class="tabs">'+
       [["all","통합 대시보드"],["compare","다원 기준 비교"],["vendor","업체별 대시보드"],["input","단가 입력"],["report","주간 보고서"],["vendors","거래처 양식"]].map(function(x){return'<button class="tab '+(S.tab===x[0]?"on":"")+'" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join("")+'<button id="backupBtn" class="tab">백업</button><button id="restoreBtn" class="tab">복원</button><input id="restoreFile" type="file" accept=".json" hidden></div></header>'+
       (show?'<div class="vendorbar"><span class="muted">거래처</span>'+S.vendors.map(function(x){return'<button class="chip '+(x.id===S.active?"on":"")+'" data-v="'+x.id+'">'+esc(x.name)+'</button>'}).join("")+'</div>':"")+
       '<main>'+(S.tab==="all"?allDashboard():S.tab==="compare"?dawonComparePage():S.tab==="vendor"?vendorDashboard(v):S.tab==="input"?inputPage(v):S.tab==="report"?reportPage(v):vendorsPage())+'</main>';
       bind()
     }
-    function excelGradeName(value){
-      var h=String(value||"").toUpperCase().replace(/\s|등급|급/g,"");
-      if(/^A[-－]/.test(h))return"A-";
-      if(h==="A")return"A";
-      if(/^B[+＋]/.test(h))return"B+";
-      if(h==="B"||/^B\(/.test(h))return"B";
-      if(h.indexOf("무잔상매입")>=0||h==="액파"||h.indexOf("액정파손")>=0)return"액파";
-      if((h==="LCD"||h==="LCD매입")&&h.indexOf("검불")<0)return"LCD";
-      return null
-    }
     function parseSheet(sheet,v){
-      var matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:false}),modelRow=-1,mi=-1,cols={};
-      for(var i=0;i<Math.min(matrix.length,40);i++){
-        matrix[i].forEach(function(cell,j){
-          var h=String(cell).trim().toUpperCase();
-          if(modelRow<0&&["모델","모델명","기종","기종명","MODEL"].indexOf(h)>=0){modelRow=i;mi=j}
-        });
-        if(modelRow>=0)break
-      }
-      if(modelRow<0)return[];
-      for(var hr=modelRow;hr<Math.min(matrix.length,modelRow+4);hr++){
-        matrix[hr].forEach(function(cell,j){
-          var canonical=excelGradeName(cell);
-          if(!canonical)return;
-          var target=v.grades.find(function(g){return gkey(g)===gkey(canonical)});
-          if(target&&cols[target]===undefined)cols[target]=j
-        })
-      }
-      if(!Object.keys(cols).length)return[];
-      var out=[];
-      for(var r=modelRow+1;r<matrix.length;r++){
-        var model=String(matrix[r][mi]||"").trim();
-        if(!model||["모델","모델명"].indexOf(model)>=0)continue;
-        var x=emptyRow(v),hasPrice=false;x.model=model;
-        v.grades.forEach(function(g){var p=cols[g]===undefined?null:price(matrix[r][cols[g]]);x[g]=p===null?"":p;if(p!==null)hasPrice=true});
-        if(hasPrice)out.push(x)
-      }
-      return out
+      var matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:"",raw:false}),head=-1,mi=-1,cols={};
+      for(var i=0;i<matrix.length;i++){var row=matrix[i],m=-1,c={};row.forEach(function(cell,j){var h=String(cell).trim();if(["모델","모델명","기종","기종명","MODEL"].indexOf(h.toUpperCase())>=0)m=j;v.grades.forEach(function(g){if(gkey(h)===gkey(g))c[g]=j})});if(m>=0&&Object.keys(c).length){head=i;mi=m;cols=c;break}}
+      if(head<0)return[];var out=[];for(var r=head+1;r<matrix.length;r++){var model=String(matrix[r][mi]||"").trim();if(!model)continue;var x=emptyRow(v);x.model=model;v.grades.forEach(function(g){x[g]=cols[g]===undefined?"":price(matrix[r][cols[g]])||""});out.push(x)}return out
     }
     function bind(){
       document.querySelectorAll("[data-tab]").forEach(function(b){b.onclick=function(){S.tab=b.dataset.tab;S.reportIndex=null;render()}});
