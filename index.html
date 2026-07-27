@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>다원트레이드 통합 단가 대시보드 v6 · 통합 화면 개편</title>
+  <title>다원트레이드 통합 단가 대시보드 v7 · 오늘 확인 · 등록률</title>
   <style>
     *{box-sizing:border-box} :root{--ink:#14202e;--paper:#f7f5f0;--line:#ded8cc;--sub:#6b6558;--gold:#c8892a;--up:#c0392b;--down:#1f6e5a}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif}
@@ -20,6 +20,7 @@
     .metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}.card{padding:16px;border:1px solid var(--line);border-radius:12px;background:white}.metric span{color:var(--sub);font-size:12px}.metric strong{display:block;margin-top:4px;font-size:25px}.section{margin-top:20px}.section h3{margin:0 0 4px}.section-head{display:flex;justify-content:space-between;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:10px}
     .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.rank{display:grid;grid-template-columns:32px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #eee}.rank:last-child{border:0}.num{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#efebe2;font-weight:800}.up{color:var(--up)}.down{color:var(--down)}
     .compare-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin:18px 0 22px}.compare-card{padding:16px;border:1px solid var(--line);border-radius:12px;background:white}.compare-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.compare-head strong{font-size:16px}.compare-total{padding:4px 9px;border-radius:999px;background:#efebe2;color:var(--sub);font-size:11px;font-weight:800}.compare-bar{display:flex;height:15px;margin:14px 0 12px;overflow:hidden;border-radius:999px;background:#eee}.compare-bar span{min-width:0}.bar-dawon{background:var(--up)}.bar-vendor{background:var(--down)}.bar-mixed{background:#a8a29e}.compare-counts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.compare-count{padding:9px 7px;border-radius:8px;background:#f7f5f0;text-align:center}.compare-count b{display:block;margin-top:2px;font-size:20px}.compare-count.dawon b{color:var(--up)}.compare-count.other b{color:var(--down)}.compare-count.mixed b{color:#78716c}.section-label{margin:20px 0 9px;font-size:15px;font-weight:900}.section-note{margin:-4px 0 10px;color:var(--sub);font-size:12px}
+    .attention-box{margin:18px 0 22px;padding:16px;border:1px solid #ead4a2;border-radius:12px;background:#fffaf0}.attention-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.attention-head h3{margin:0}.attention-count{padding:4px 9px;border-radius:999px;background:#fff1cc;color:#8a5a00;font-size:11px;font-weight:900}.attention-list{display:grid;gap:7px}.attention-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;background:white;border:1px solid #eee7d8;font-size:12px}.attention-badge{flex:0 0 auto;min-width:58px;padding:3px 7px;border-radius:999px;text-align:center;font-size:10px;font-weight:900}.attention-item.danger .attention-badge{background:#fee2e2;color:#b91c1c}.attention-item.warn .attention-badge{background:#fef3c7;color:#92400e}.attention-item.change .attention-badge{background:#e0f2fe;color:#075985}.attention-ok{padding:12px;border-radius:9px;background:#ecfdf5;color:#166534;font-weight:800}.coverage-bar{height:10px;margin:12px 0 10px;overflow:hidden;border-radius:999px;background:#ebe7df}.coverage-bar span{display:block;height:100%;border-radius:999px;background:var(--gold)}.coverage-meta{display:flex;justify-content:space-between;gap:10px;color:var(--sub);font-size:11px}.missing-models{margin-top:10px;min-height:31px;color:var(--sub);font-size:11px;white-space:normal}.status-line{margin-top:9px;padding-top:9px;border-top:1px solid #eee7dc;color:var(--sub);font-size:11px}
     .tablewrap{overflow:auto;max-height:68vh;border:1px solid var(--line);border-radius:10px;background:white}table{width:100%;min-width:1050px;border-collapse:separate;border-spacing:0;background:white;font-size:12px}th{position:sticky;top:0;z-index:5;padding:11px 9px;background:var(--ink);color:white;white-space:nowrap}td{height:48px;padding:8px;border-right:1px solid #eee;border-bottom:1px solid #eee;text-align:right;white-space:nowrap}tbody tr:hover td{background:#faf8f3}.left{text-align:left}.center{text-align:center}.bold{font-weight:800}
     .sticky-v{position:sticky;left:0;z-index:8;width:145px;min-width:145px}.sticky-m{position:sticky;left:145px;z-index:8;width:210px;min-width:210px}td.sticky-v,td.sticky-m{z-index:3;background:white}.vendor{color:#1e3a8a;font-weight:800}.base-row td{background:#fffbeb;border-top:2px solid var(--gold)}.base-row td.sticky-v,.base-row td.sticky-m{background:#fffbeb}.base-badge{display:inline-block;margin-left:5px;padding:2px 6px;border-radius:10px;background:var(--gold);color:white;font-size:10px;font-weight:900}.high{background:#fff7ed!important;color:#c2410c;font-weight:900}.low{background:#eff6ff!important;color:#1d4ed8;font-weight:900}.gap{background:#fef2f2!important;color:#dc2626;font-weight:900}.empty{padding:35px;text-align:center;color:var(--sub);border:1px dashed var(--line);border-radius:10px;background:white}
     .field{padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:white}.price,.model{width:100%;border:1px solid transparent;border-radius:4px;background:transparent;padding:6px}.price:focus,.model:focus{outline:none;border-color:var(--gold);background:#fffdf7}.money-input{display:flex;align-items:center;gap:3px}.money-input .price{min-width:55px;text-align:right}.money-input b{color:var(--gold);font-size:12px}.formgrid{display:grid;grid-template-columns:1fr 2fr auto;gap:12px;align-items:end}
@@ -155,25 +156,56 @@
       GRADES.map(function(g){var c=r.cells[g];if(c.diff===null)return'<td>-</td>';var cl=c.diff<0?"down":c.diff>0?"up":"";return'<td><div class="bold">다원 '+won(c.base)+'</div><div class="muted">'+esc(r.vendor)+' '+won(c.comp)+'</div><div class="'+cl+' bold">차이 '+signed(c.diff)+'</div></td>'}).join("")+
       '</tr>'}).join("")+'</tbody></table></div>':'<div class="empty">동일한 모델로 비교할 경쟁업체 자료가 없습니다.</div>')
     }
-    function vendorStatusHtml(){
-      return'<div class="section-label">업체별 최신 단가 현황</div>'+
-      '<div class="section-note">업체별 최근 저장일, 등록 모델 수와 직전 단가 대비 상승·하락 건수입니다.</div>'+
-      '<div class="compare-summary">'+S.vendors.map(function(v){
-        var s=latest(v.id),move=movers(v),up=move.filter(function(x){return x.diff>0}).length,down=move.filter(function(x){return x.diff<0}).length;
-        return'<div class="compare-card"><div class="compare-head"><strong>'+esc(v.name)+'</strong><span class="compare-total">'+(s?"최근 "+esc(s.date):"자료 미등록")+'</span></div>'+
-        '<div class="compare-counts" style="margin-top:14px"><div class="compare-count">등록 모델<b>'+(s?s.rows.length:0)+'</b></div>'+
-        '<div class="compare-count dawon">상승<b>'+up+'</b></div><div class="compare-count other">하락<b>'+down+'</b></div></div></div>'
+    function modelCoverageData(){
+      var base=dawonVendor(),baseSnap=latest(base.id);if(!baseSnap)return[];
+      var baseModels={},baseNames={};
+      baseSnap.rows.forEach(function(r){var k=key(r.model);if(k){baseModels[k]=1;baseNames[k]=r.model}});
+      var baseKeys=Object.keys(baseModels),baseTotal=baseKeys.length;
+      return S.vendors.map(function(v){
+        var s=latest(v.id),own={};if(s)s.rows.forEach(function(r){own[key(r.model)]=1});
+        var missing=baseKeys.filter(function(k){return !own[k]}),matched=baseTotal-missing.length;
+        return{vendor:v,latest:s,base:v.id===base.id,total:baseTotal,matched:matched,rate:baseTotal?Math.round(matched/baseTotal*100):0,missing:missing.map(function(k){return baseNames[k]})}
+      }).sort(function(a,b){if(a.base!==b.base)return a.base?-1:1;return a.vendor.name.localeCompare(b.vendor.name,"ko",{numeric:true})})
+    }
+    function vendorStatusHtml(coverage){
+      return'<div class="section-label">업체별 최신 단가 · 등록률</div>'+
+      '<div class="section-note">다원의 모델 목록을 100% 기준으로 공통 모델과 누락 모델을 계산합니다.</div>'+
+      '<div class="compare-summary">'+coverage.map(function(c){
+        var move=movers(c.vendor),up=move.filter(function(x){return x.diff>0}).length,down=move.filter(function(x){return x.diff<0}).length;
+        var missingText=c.base?"다원 기준 모델 "+c.total+"개":c.missing.length?"누락: "+c.missing.slice(0,3).map(esc).join(", ")+(c.missing.length>3?" 외 "+(c.missing.length-3)+"개":""):"누락 모델 없음";
+        return'<div class="compare-card"><div class="compare-head"><strong>'+esc(c.vendor.name)+(c.base?'<span class="base-badge">기준</span>':'')+'</strong><span class="compare-total">'+(c.latest?"최근 "+esc(c.latest.date):"자료 미등록")+'</span></div>'+
+        '<div class="coverage-bar"><span style="width:'+c.rate+'%"></span></div><div class="coverage-meta"><b>등록률 '+c.rate+'%</b><span>공통 '+c.matched+' / '+c.total+'개</span><span>누락 '+c.missing.length+'개</span></div>'+
+        '<div class="missing-models">'+missingText+'</div><div class="status-line">직전 단가 대비 <b class="up">상승 '+up+'건</b> · <b class="down">하락 '+down+'건</b></div></div>'
       }).join("")+'</div>'
+    }
+    function attentionData(coverage){
+      var alerts=[],base=dawonVendor();
+      S.vendors.forEach(function(v){
+        var s=latest(v.id);
+        if(!s){alerts.push({level:"danger",badge:"미등록",text:v.name+" 단가 자료가 아직 없습니다."});return}
+        var d=new Date(s.date+"T00:00:00"),now=new Date(today()+"T00:00:00"),age=Math.max(0,Math.floor((now-d)/86400000));
+        if(age>=7)alerts.push({level:"warn",badge:"업데이트",text:v.name+" 단가가 "+age+"일 동안 업데이트되지 않았습니다."})
+      });
+      coverage.forEach(function(c){if(!c.base&&c.latest&&c.missing.length)alerts.push({level:"warn",badge:"모델 누락",text:c.vendor.name+"에 다원 기준 모델 "+c.missing.length+"개가 누락되어 있습니다."})});
+      var big=[];S.vendors.forEach(function(v){movers(v).forEach(function(x){if(Math.abs(x.diff)>=3)big.push(x)})});
+      big.sort(function(a,b){return Math.abs(b.diff)-Math.abs(a.diff)}).slice(0,5).forEach(function(x){
+        alerts.push({level:"change",badge:"큰 변동",text:x.vendor+" · "+x.model+" · "+x.grade+" "+signed(x.diff)})
+      });
+      return alerts
+    }
+    function attentionHtml(alerts){
+      return'<div class="attention-box"><div class="attention-head"><div><h3>오늘 확인할 것</h3><div class="muted">미등록·업데이트 지연·모델 누락·3만원 이상 변동</div></div><span class="attention-count">'+alerts.length+'건</span></div>'+
+      (alerts.length?'<div class="attention-list">'+alerts.slice(0,8).map(function(a){return'<div class="attention-item '+a.level+'"><span class="attention-badge">'+esc(a.badge)+'</span><span>'+esc(a.text)+'</span></div>'}).join("")+(alerts.length>8?'<div class="muted">그 외 '+(alerts.length-8)+'건이 더 있습니다.</div>':"")+'</div>':'<div class="attention-ok">현재 바로 확인할 이상 항목이 없습니다.</div>')+'</div>'
     }
     function allDashboard(){
       var piv=pivotRows(),all=[];S.vendors.forEach(function(v){all=all.concat(movers(v))});
       var ups=all.filter(function(x){return x.diff>0}).sort(function(a,b){return b.diff-a.diff}).slice(0,10);
       var downs=all.filter(function(x){return x.diff<0}).sort(function(a,b){return a.diff-b.diff}).slice(0,10);
-      var dataV=S.vendors.filter(function(v){return latest(v.id)}),models={},compareRows=dawonCompareRows(),summaries=dawonCompareSummary(compareRows);
+      var dataV=S.vendors.filter(function(v){return latest(v.id)}),models={},compareRows=dawonCompareRows(),summaries=dawonCompareSummary(compareRows),coverage=modelCoverageData(),alerts=attentionData(coverage);
       piv.forEach(function(r){models[key(r.model)]=1});
       return title("ALL VENDORS","통합 대시보드","업체별 자료 현황과 시장 변동, 다원 기준 비교를 한 화면에서 확인합니다.")+
       '<div class="metrics">'+metric("등록 업체",S.vendors.length+"개","var(--ink)")+metric("단가 입력 완료",dataV.length+"개","var(--down)")+metric("통합 모델",Object.keys(models).length+"개","var(--ink)")+metric("상승 변동",all.filter(function(x){return x.diff>0}).length+"건","var(--up)")+metric("하락 변동",all.filter(function(x){return x.diff<0}).length+"건","var(--down)")+'</div>'+
-      vendorStatusHtml()+
+      attentionHtml(alerts)+vendorStatusHtml(coverage)+
       '<div class="section"><div class="section-head"><div><h3>다원 기준 업체별 비교</h3><div class="muted">공통 모델에서 단가가 높은 등급이 더 많은 쪽을 집계합니다.</div></div></div>'+dawonCompareSummaryHtml(summaries,true)+'</div>'+
       '<div class="section"><div class="section-head"><div><h3>전체 업체 변동 TOP 10</h3><div class="muted">업체별 직전 저장 단가 대비 실제 상승·하락 금액</div></div></div><div class="two"><div class="card"><h3 class="down">▼ 하락 TOP 10</h3>'+rank(downs,"down")+'</div><div class="card"><h3 class="up">▲ 상승 TOP 10</h3>'+rank(ups,"up")+'</div></div></div>'
     }
@@ -207,7 +239,7 @@
     }
     function render(){
       var v=vendor(),show=S.tab!=="all"&&S.tab!=="compare";
-      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v6 · 통합 대시보드 개편 · 만원 단위</span></h1></div><div class="tabs">'+
+      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v7 · 오늘 확인 · 등록률 · 만원 단위</span></h1></div><div class="tabs">'+
       [["all","통합 대시보드"],["compare","다원 기준 비교"],["vendor","업체별 대시보드"],["input","단가 입력"],["report","주간 보고서"],["vendors","거래처 양식"]].map(function(x){return'<button class="tab '+(S.tab===x[0]?"on":"")+'" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join("")+'<button id="backupBtn" class="tab">백업</button><button id="restoreBtn" class="tab">복원</button><input id="restoreFile" type="file" accept=".json" hidden></div></header>'+
       (show?'<div class="vendorbar"><span class="muted">거래처</span>'+S.vendors.map(function(x){return'<button class="chip '+(x.id===S.active?"on":"")+'" data-v="'+x.id+'">'+esc(x.name)+'</button>'}).join("")+'</div>':"")+
       '<main>'+(S.tab==="all"?allDashboard():S.tab==="compare"?dawonComparePage():S.tab==="vendor"?vendorDashboard(v):S.tab==="input"?inputPage(v):S.tab==="report"?reportPage(v):vendorsPage())+'</main>';
