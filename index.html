@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>다원트레이드 통합 단가 대시보드 v14 · 기종 분류 · 전체폭</title>
+  <title>다원트레이드 통합 단가 대시보드 v15 · 사진 OCR · 입력 검사</title>
   <style>
     *{box-sizing:border-box} :root{--ink:#14202e;--paper:#f7f5f0;--line:#ded8cc;--sub:#6b6558;--gold:#c8892a;--up:#c0392b;--down:#1f6e5a}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif}
@@ -28,12 +28,14 @@
     .sticky-v{position:sticky;left:0;z-index:8;width:145px;min-width:145px}.sticky-m{position:sticky;left:145px;z-index:8;width:210px;min-width:210px}td.sticky-v,td.sticky-m{z-index:3;background:white}.vendor{color:#1e3a8a;font-weight:800}.base-row td{background:#fffbeb;border-top:2px solid var(--gold)}.base-row td.sticky-v,.base-row td.sticky-m{background:#fffbeb}.base-badge{display:inline-block;margin-left:5px;padding:2px 6px;border-radius:10px;background:var(--gold);color:white;font-size:10px;font-weight:900}.high{background:#fff7ed!important;color:#c2410c;font-weight:900}.low{background:#eff6ff!important;color:#1d4ed8;font-weight:900}.gap{background:#fef2f2!important;color:#dc2626;font-weight:900}.empty{padding:35px;text-align:center;color:var(--sub);border:1px dashed var(--line);border-radius:10px;background:white}
     .field{padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:white}.price,.model{width:100%;border:1px solid transparent;border-radius:4px;background:transparent;padding:6px}.price:focus,.model:focus{outline:none;border-color:var(--gold);background:#fffdf7}.money-input{display:flex;align-items:center;gap:3px}.money-input .price{min-width:55px;text-align:right}.money-input b{color:var(--gold);font-size:12px}.formgrid{display:grid;grid-template-columns:1fr 2fr auto;gap:12px;align-items:end}
     textarea{width:100%;min-height:110px;padding:10px;border:1px solid var(--line);border-radius:8px}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:50;padding:12px 20px;border-radius:10px;background:var(--ink);color:white}
-    @media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}}@media(max-width:600px){main{padding:14px}.metrics{grid-template-columns:1fr 1fr}.metric strong{font-size:21px}}
+    .ocr-card{margin-bottom:15px;padding:16px;border:1px solid #d8cfbf;border-radius:14px;background:white}.ocr-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:12px}.ocr-head h3{margin:0 0 4px;font-size:16px}.ocr-drop{display:grid;place-items:center;min-height:128px;padding:18px;border:2px dashed #d3c6b1;border-radius:12px;background:#fffaf0;text-align:center;transition:.18s}.ocr-drop.drag{border-color:var(--gold);background:#fff3d6}.ocr-drop strong{display:block;margin-bottom:5px;font-size:15px}.ocr-file-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:10px}.ocr-file{display:flex;align-items:center;gap:9px;min-width:0;padding:9px;border:1px solid #eee7dc;border-radius:9px;background:#fbfaf7}.ocr-thumb{width:42px;height:42px;flex:0 0 42px;border-radius:7px;object-fit:cover;background:#eee}.ocr-file-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:800}.ocr-file-meta{margin-top:2px;color:var(--sub);font-size:10px}.ocr-progress{height:10px;margin:12px 0 6px;overflow:hidden;border-radius:999px;background:#ece7de}.ocr-progress span{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--gold),#e4b45e);transition:width .2s}.ocr-status{display:flex;justify-content:space-between;gap:10px;color:var(--sub);font-size:11px}.ocr-result{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #eee7dc}.ocr-result.show{display:block}.ocr-result textarea{min-height:150px;font-family:Consolas,"Malgun Gothic",monospace;font-size:12px}.input-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}.input-stat{padding:10px;border:1px solid var(--line);border-radius:9px;background:white;text-align:center}.input-stat span{display:block;color:var(--sub);font-size:10px}.input-stat b{display:block;margin-top:2px;font-size:19px}.input-stat.ok b{color:var(--down)}.input-stat.warn b{color:#a16207}.input-stat.bad b{color:var(--up)}.input-row-error td{background:#fff1f2}.input-row-warn td{background:#fffbeb}.row-status{display:inline-block;min-width:62px;padding:4px 7px;border-radius:999px;text-align:center;font-size:10px;font-weight:900}.row-status.ok{background:#dcfce7;color:#166534}.row-status.warn{background:#fef3c7;color:#92400e}.row-status.bad{background:#fee2e2;color:#b91c1c}.row-status.blank{background:#f1f5f9;color:#64748b}.input-savebar{position:sticky;bottom:10px;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;padding:11px 12px;border:1px solid #d7c9b2;border-radius:11px;background:#fffdf8;box-shadow:0 8px 28px #14202e1f}.input-savebar .save-summary{color:var(--sub);font-size:11px;font-weight:800}.input-search{flex:1;min-width:220px}.input-search input{width:100%}
+    @media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.input-summary{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){main{padding:14px}.metrics{grid-template-columns:1fr 1fr}.metric strong{font-size:21px}.input-summary{grid-template-columns:repeat(2,1fr)}.ocr-card{padding:12px}}
   </style>
 </head>
 <body>
   <div id="app"></div>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
   (function(){
     "use strict";
@@ -43,7 +45,7 @@
     function read(k,f){try{var v=JSON.parse(localStorage.getItem(k));return v==null?f:v}catch(e){return f}}
     function write(){localStorage.setItem(KEYS.vendors,JSON.stringify(S.vendors));localStorage.setItem(KEYS.snaps,JSON.stringify(S.snaps));localStorage.setItem(KEYS.aliases,JSON.stringify(S.aliases))}
     function defaults(){return[{id:"dawon",name:"다원(자체)",grades:GRADES.slice()},{id:"jinwoo",name:"진우아이엔씨",grades:GRADES.slice()}]}
-    var S={tab:"all",active:"dawon",vendors:read(KEYS.vendors,defaults()),snaps:read(KEYS.snaps,{}),draft:{},date:{},reportIndex:null,gradeFilter:read(KEYS.gradeFilter,GRADES.slice()),aliases:read(KEYS.aliases,{}),modelSearch:"",modelCategory:read(KEYS.modelCategory,"all"),showAliasManager:false};
+    var S={tab:"all",active:"dawon",vendors:read(KEYS.vendors,defaults()),snaps:read(KEYS.snaps,{}),draft:{},date:{},reportIndex:null,gradeFilter:read(KEYS.gradeFilter,GRADES.slice()),aliases:read(KEYS.aliases,{}),modelSearch:"",modelCategory:read(KEYS.modelCategory,"all"),showAliasManager:false,ocr:{},inputSearch:""};
     if(!Array.isArray(S.vendors)||!S.vendors.length)S.vendors=defaults();
     if(!S.vendors.some(function(v){return v.id===S.active}))S.active=S.vendors[0].id;
     if(!S.aliases||typeof S.aliases!=="object"||Array.isArray(S.aliases))S.aliases={};
@@ -74,6 +76,101 @@
     function latest(id){var a=S.snaps[id]||[];return a.length?a[a.length-1]:null}
     function previous(id){var a=S.snaps[id]||[];return a.length>1?a[a.length-2]:null}
     function emptyRow(v){var r={model:""};v.grades.forEach(function(g){r[g]=""});return r}
+    function ocrState(id){if(!S.ocr[id])S.ocr[id]={files:[],previews:[],meta:[],text:"",status:"사진을 선택해 주세요.",progress:0,running:false,worker:null,token:0};return S.ocr[id]}
+    function rowHasValue(r,v){return String(r.model||"").trim()||v.grades.some(function(g){return r[g]!==""&&r[g]!=null})}
+    function inputValidation(rows,v){
+      var base=dawonVendor(),baseSnap=latest(base.id),baseKeys={};
+      if(baseSnap)baseSnap.rows.forEach(function(r){baseKeys[key(r.model)]=1});
+      var counts={},details=[],summary={total:0,ok:0,duplicate:0,match:0,amount:0,incomplete:0,hard:0,warn:0};
+      rows.forEach(function(r){if(String(r.model||"").trim())counts[key(r.model)]=(counts[key(r.model)]||0)+1});
+      rows.forEach(function(r){
+        var model=String(r.model||"").trim(),active=rowHasValue(r,v),filled=0,badAmount=false;
+        v.grades.forEach(function(g){if(r[g]!==""&&r[g]!=null){var n=price(r[g]);filled++;if(n===null||n<0.1||n>500)badAmount=true}});
+        var type="blank",label="입력 대기",reason="";
+        if(active){
+          summary.total++;
+          if(!model){type="bad";label="모델 확인";reason="모델명이 없습니다.";summary.amount++;summary.hard++}
+          else if(counts[key(model)]>1){type="bad";label="중복";reason="같은 모델이 두 번 있습니다.";summary.duplicate++;summary.hard++}
+          else if(badAmount){type="bad";label="금액 확인";reason="0.1만~500만원 범위를 확인해 주세요.";summary.amount++;summary.hard++}
+          else if(!filled){type="bad";label="금액 없음";reason="단가가 하나도 없습니다.";summary.amount++;summary.hard++}
+          else if(v.id!==base.id&&baseSnap&&!baseKeys[key(model)]){type="warn";label="매칭 필요";reason="다원 기준 모델과 연결되지 않았습니다.";summary.match++;summary.warn++}
+          else if(filled<v.grades.length){type="warn";label="일부 비어있음";reason="입력되지 않은 등급이 있습니다.";summary.incomplete++;summary.warn++}
+          else{type="ok";label="정상";summary.ok++}
+        }
+        details.push({type:type,label:label,reason:reason})
+      });
+      return{summary:summary,details:details}
+    }
+    function refreshInputValidation(v,rows){
+      var result=inputValidation(rows,v),s=result.summary;
+      [["inputTotal",s.total],["inputOk",s.ok],["inputDuplicate",s.duplicate],["inputMatch",s.match],["inputAmount",s.amount]].forEach(function(x){var el=document.getElementById(x[0]);if(el)el.textContent=x[1]});
+      result.details.forEach(function(d,i){var tr=document.querySelector('[data-input-row="'+i+'"]'),badge=document.querySelector('[data-row-status="'+i+'"]');if(tr){tr.classList.toggle("input-row-error",d.type==="bad");tr.classList.toggle("input-row-warn",d.type==="warn");tr.title=d.reason||""}if(badge){badge.className="row-status "+d.type;badge.textContent=d.label}});
+      var saveSummary=document.getElementById("inputSaveSummary");if(saveSummary)saveSummary.textContent="정상 "+s.ok+"개 · 확인 필요 "+(s.hard+s.warn)+"개";
+      return result
+    }
+    function splitCountForImage(width,height){var ratio=height/Math.max(width,1);return Math.max(3,Math.min(6,Math.ceil(ratio*2.2)))}
+    function loadImageFile(file){return new Promise(function(resolve,reject){var img=new Image(),url=URL.createObjectURL(file);img.onload=function(){URL.revokeObjectURL(url);resolve(img)};img.onerror=function(){URL.revokeObjectURL(url);reject(Error("image"))};img.src=url})}
+    function makeOcrSlices(img,count){
+      var slices=[],sliceHeight=img.height/count,targetWidth=Math.max(1600,Math.min(2200,img.width)),scale=targetWidth/img.width;
+      for(var i=0;i<count;i++){
+        var overlap=sliceHeight*.055,start=Math.max(0,i*sliceHeight-overlap),end=Math.min(img.height,(i+1)*sliceHeight+overlap),cropHeight=end-start;
+        var canvas=document.createElement("canvas");canvas.width=Math.round(targetWidth);canvas.height=Math.max(1,Math.round(cropHeight*scale));
+        var ctx=canvas.getContext("2d",{willReadFrequently:true});ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";ctx.drawImage(img,0,start,img.width,cropHeight,0,0,canvas.width,canvas.height);
+        try{var data=ctx.getImageData(0,0,canvas.width,canvas.height),px=data.data;for(var p=0;p<px.length;p+=4){var gray=.299*px[p]+.587*px[p+1]+.114*px[p+2],value=Math.max(0,Math.min(255,(gray-128)*1.18+128));px[p]=px[p+1]=px[p+2]=value}ctx.putImageData(data,0,0)}catch(e){}
+        slices.push(canvas.toDataURL("image/jpeg",.94))
+      }
+      return slices
+    }
+    function cleanOcrText(parts){
+      var out=[],recent=[];
+      parts.join("\n").split(/\r?\n/).forEach(function(line){var x=line.replace(/[|¦]/g," ").replace(/\s+/g," ").trim();if(!x)return;if(recent.indexOf(x)>=0)return;out.push(x);recent.push(x);if(recent.length>5)recent.shift()});
+      return out.join("\n")
+    }
+    function ocrMoneyToken(token){
+      var x=String(token||"").trim().replace(/[Oo]/g,"0").replace(/[Il]/g,"1").replace(/[₩원]/g,"").replace(/만원|만/g,"").replace(/,/g,"");
+      if(!/^\d+(?:\.\d+)?$/.test(x))return null;var n=price(x);return n!==null&&n>=0.1&&n<=500?n:null
+    }
+    function looksLikeModel(text){
+      var x=String(text||"").replace(/\s+/g,"").toLowerCase();
+      return /(?:갤럭시|galaxy|아이폰|iphone|폴드|플립|fold|flip|note|sm[-]?[a-z0-9]+|[sajm]\d{2,4})/.test(x)&&/\d/.test(x)
+    }
+    function extractModelLabel(text){
+      var source=String(text||"").trim(),match=source.match(/(?:갤럭시|galaxy|아이폰|iphone|폴드|플립|fold|flip|note|sm\s*-\s*[a-z0-9]+|[sajm]\d{2,4})/i);
+      return(match?source.slice(match.index):source).replace(/\b([SAJM])\s+(\d{2,4})\b/gi,"$1$2").trim()
+    }
+    function parseOcrText(text,v){
+      var rows=[],pending="",lines=String(text||"").split(/\r?\n/);
+      lines.forEach(function(line){
+        var clean=line.replace(/[|¦]/g," ").replace(/[,:;]+(?=\s|$)/g," ").replace(/\b([SAJM])\s+(\d{2,4})\b/gi,"$1$2").replace(/\s+/g," ").trim();if(!clean)return;
+        var tokens=clean.split(" "),firstPrice=-1,values=[];
+        tokens.forEach(function(token,i){var n=ocrMoneyToken(token);if(n!==null){if(firstPrice<0)firstPrice=i;values.push(n)}});
+        var prefix=firstPrice>0?tokens.slice(0,firstPrice).join(" "):"";
+        if(prefix&&looksLikeModel(prefix)){
+          pending=extractModelLabel(prefix);
+          if(values.length){var row=emptyRow(v);row.model=pending;v.grades.forEach(function(g,i){row[g]=values[i]===undefined?"":values[i]});rows.push(row);pending=""}
+        }else if(!values.length&&looksLikeModel(clean)){pending=extractModelLabel(clean)}
+        else if(pending&&values.length){var next=emptyRow(v);next.model=pending;v.grades.forEach(function(g,i){next[g]=values[i]===undefined?"":values[i]});rows.push(next);pending=""}
+      });
+      var seen={};return rows.filter(function(r){var k=rawKey(r.model);if(!k||seen[k])return false;seen[k]=1;return true})
+    }
+    async function runPhotoOcr(v){
+      var state=ocrState(v.id);if(!state.files.length)return toast("먼저 단가표 사진을 선택해 주세요.");if(typeof Tesseract==="undefined")return toast("인터넷 연결 후 다시 시도해 주세요.");
+      state.running=true;state.progress=0;state.status="사진을 준비하고 있습니다.";state.text="";state.meta=[];state.token++;var token=state.token;
+      var start=document.getElementById("ocrStart"),cancel=document.getElementById("ocrCancel"),apply=document.getElementById("ocrApply"),resultBox=document.getElementById("ocrResultBox");if(start)start.disabled=true;if(cancel)cancel.disabled=false;if(apply)apply.disabled=true;if(resultBox)resultBox.classList.remove("show");
+      function setProgress(percent,status){state.progress=percent;state.status=status;if(S.active!==v.id||S.tab!=="input")return;var bar=document.getElementById("ocrProgressBar"),label=document.getElementById("ocrStatusText"),pct=document.getElementById("ocrPercent");if(bar)bar.style.width=percent+"%";if(label)label.textContent=status;if(pct)pct.textContent=Math.round(percent)+"%"}
+      try{
+        var jobs=[],totalSlices=0;
+        for(var f=0;f<state.files.length;f++){var img=await loadImageFile(state.files[f]),count=splitCountForImage(img.width,img.height),slices=makeOcrSlices(img,count);state.meta.push({name:state.files[f].name,count:count});totalSlices+=count;slices.forEach(function(slice,i){jobs.push({image:slice,file:f,index:i,count:count})})}
+        if(token!==state.token)return;
+        setProgress(2,"총 "+totalSlices+"조각으로 나눴습니다. 글자를 읽는 중...");
+        var currentJob=0,worker=await Tesseract.createWorker("kor+eng",1,{logger:function(m){if(m.status==="recognizing text"){var base=currentJob/totalSlices,part=(m.progress||0)/totalSlices;setProgress(Math.min(98,(base+part)*100),"사진 "+(currentJob+1)+"/"+totalSlices+" 조각을 읽는 중...")}}});state.worker=worker;
+        var texts=[];
+        for(currentJob=0;currentJob<jobs.length;currentJob++){if(token!==state.token)break;var result=await worker.recognize(jobs[currentJob].image);texts.push(result.data.text||"")}
+        await worker.terminate();state.worker=null;if(token!==state.token)return;
+        state.text=cleanOcrText(texts);state.running=false;setProgress(100,"사진 인식 완료 · 내용을 확인한 뒤 입력표로 불러오세요.");
+        var textarea=document.getElementById("ocrText");if(textarea)textarea.value=state.text;if(resultBox)resultBox.classList.add("show");if(apply)apply.disabled=!state.text;if(start)start.disabled=false
+      }catch(err){if(token!==state.token)return;console.error(err);state.running=false;state.worker=null;setProgress(0,"사진을 읽지 못했습니다. 사진 또는 인터넷 연결을 확인해 주세요.");if(start)start.disabled=false;if(cancel)cancel.disabled=true}
+    }
     function toast(t){var x=document.createElement("div");x.className="toast";x.textContent=t;document.body.appendChild(x);setTimeout(function(){x.remove()},2600)}
     function title(a,b,c){return'<div class="title"><small>'+esc(a)+'</small><h2>'+esc(b)+'</h2><p>'+esc(c)+'</p></div>'}
     function metric(a,b,c){return'<div class="card metric"><span>'+esc(a)+'</span><strong style="color:'+c+'">'+b+'</strong></div>'}
@@ -280,12 +377,20 @@
       '<div class="section"><h3>선택 업체 등급별 단가</h3>'+gapTable(mine)+'</div>'
     }
     function inputPage(v){
-      var last=latest(v.id);if(!S.draft[v.id])S.draft[v.id]=last?last.rows.map(function(r){var x=Object.assign({},r);v.grades.forEach(function(g){x[g]=price(r[g])||""});return x}):[emptyRow(v)];if(!S.date[v.id])S.date[v.id]=today();var rows=S.draft[v.id];
-      return title("PRICE INPUT",v.name+" 단가 입력","엑셀이나 붙여넣기로 불러온 뒤 저장하세요.")+
-      '<div class="notice"><b>모든 금액은 만원 단위입니다.</b> 35를 입력하면 35만, 14를 입력하면 14만으로 계산됩니다. 과거 원 단위 자료 350000도 자동으로 35만으로 변환합니다. 엑셀 업로드는 인터넷 연결이 필요합니다.</div>'+
-      '<div class="actions" style="margin-bottom:12px"><label class="muted">기준일</label><input id="saveDate" class="field" type="date" value="'+esc(S.date[v.id])+'"><button id="excelBtn" class="btn">엑셀 업로드</button><input id="excelFile" type="file" accept=".xlsx,.xls" hidden><button id="pasteBtn" class="btn">붙여넣기</button><button id="addRow" class="btn">+ 행 추가</button><button id="clear" class="btn danger">전체 지우기</button></div>'+
+      var last=latest(v.id);if(!S.draft[v.id])S.draft[v.id]=last?last.rows.map(function(r){var x=Object.assign({},r);v.grades.forEach(function(g){x[g]=price(r[g])||""});return x}):[emptyRow(v)];if(!S.date[v.id])S.date[v.id]=today();var rows=S.draft[v.id],ocr=ocrState(v.id),validation=inputValidation(rows,v),sum=validation.summary;
+      return title("PRICE INPUT",v.name+" 단가 입력","사진 OCR, 엑셀, 붙여넣기 중 편한 방식으로 불러온 뒤 검사하고 저장하세요.")+
+      '<div class="ocr-card"><div class="ocr-head"><div><h3>📷 경쟁업체 단가표 사진 읽기</h3><div class="muted">긴 사진도 자동으로 3~6조각으로 나눠 순서대로 읽습니다. 여러 장을 한 번에 선택해도 됩니다.</div></div><span class="row-status '+(ocr.running?"warn":ocr.text?"ok":"blank")+'">'+(ocr.running?"인식 중":ocr.text?"인식 완료":"사진 대기")+'</span></div>'+
+      '<div id="ocrDrop" class="ocr-drop"><div><strong>단가표 사진을 여기로 끌어놓으세요</strong><div class="muted">JPG · PNG · WEBP · 휴대폰 캡처 가능</div><button id="ocrPick" class="btn primary" style="margin-top:10px">사진 선택</button><input id="ocrFiles" type="file" accept="image/*" multiple hidden></div></div>'+
+      (ocr.files.length?'<div class="ocr-file-list">'+ocr.files.map(function(file,i){return'<div class="ocr-file"><img class="ocr-thumb" src="'+esc(ocr.previews[i]||"")+'" alt=""><div style="min-width:0"><div class="ocr-file-name">'+esc(file.name)+'</div><div class="ocr-file-meta">'+(ocr.meta[i]?"자동 "+ocr.meta[i].count+"분할":"인식 시 3~6분할")+'</div></div></div>'}).join("")+'</div>':"")+
+      '<div class="ocr-progress"><span id="ocrProgressBar" style="width:'+ocr.progress+'%"></span></div><div class="ocr-status"><span id="ocrStatusText">'+esc(ocr.status)+'</span><b id="ocrPercent">'+Math.round(ocr.progress)+'%</b></div>'+
+      '<div class="actions" style="margin-top:11px"><button id="ocrStart" class="btn primary" '+(!ocr.files.length||ocr.running?"disabled":"")+'>사진 읽기 시작</button><button id="ocrCancel" class="btn" '+(!ocr.running?"disabled":"")+'>인식 취소</button><button id="ocrClear" class="btn danger" '+(!ocr.files.length&&!ocr.text?"disabled":"")+'>사진 비우기</button></div>'+
+      '<div id="ocrResultBox" class="ocr-result '+(ocr.text?"show":"")+'"><div class="section-head"><div><b>인식된 글자</b><div class="muted">잘못 읽힌 숫자는 여기서 직접 고친 뒤 불러올 수 있습니다.</div></div><button id="ocrApply" class="btn primary" '+(!ocr.text?"disabled":"")+'>입력표로 불러오기</button></div><textarea id="ocrText" placeholder="사진을 읽으면 인식 결과가 여기에 표시됩니다.">'+esc(ocr.text)+'</textarea></div></div>'+
+      '<div class="notice"><b>모든 금액은 만원 단위입니다.</b> 35를 입력하면 35만, 14를 입력하면 14만입니다. 사진 인식과 엑셀 업로드는 인터넷 연결이 필요하며, 인식 결과는 자동 저장되지 않습니다.</div>'+
+      '<div class="actions" style="margin-bottom:12px"><label class="muted">기준일</label><input id="saveDate" class="field" type="date" value="'+esc(S.date[v.id])+'"><button id="excelBtn" class="btn">엑셀 업로드</button><input id="excelFile" type="file" accept=".xlsx,.xls" hidden><button id="pasteBtn" class="btn">붙여넣기</button><button id="addRow" class="btn">+ 행 추가</button><button id="clear" class="btn danger">전체 지우기</button><div class="input-search"><input id="inputSearch" class="field" value="'+esc(S.inputSearch)+'" placeholder="입력표 모델 검색"></div></div>'+
       '<div id="pasteBox" class="card" style="display:none;margin-bottom:12px"><textarea id="pasteText" placeholder="모델명 [탭] A급 [탭] A-급 [탭] B+ [탭] B [탭] 액파 [탭] LCD"></textarea><div class="actions" style="margin-top:8px"><button id="pasteLoad" class="btn primary">불러오기</button><button id="pasteCancel" class="btn">취소</button></div></div>'+
-      '<div class="tablewrap"><table><thead><tr><th class="left">모델명</th>'+v.grades.map(function(g){return"<th>"+esc(g)+" (만원)</th>"}).join("")+'<th></th></tr></thead><tbody>'+rows.map(function(r,i){return'<tr><td><input class="model" data-i="'+i+'" value="'+esc(r.model)+'"></td>'+v.grades.map(function(g){return'<td><div class="money-input"><input class="price" data-i="'+i+'" data-g="'+esc(g)+'" value="'+esc(r[g])+'" inputmode="decimal"><b>만</b></div></td>'}).join("")+'<td class="center"><button class="del btn danger" data-i="'+i+'">×</button></td></tr>'}).join("")+'</tbody></table></div><button id="savePrices" class="btn primary" style="margin-top:14px">단가 저장</button>'
+      '<div class="input-summary"><div class="input-stat"><span>입력 모델</span><b id="inputTotal">'+sum.total+'</b></div><div class="input-stat ok"><span>정상</span><b id="inputOk">'+sum.ok+'</b></div><div class="input-stat bad"><span>중복</span><b id="inputDuplicate">'+sum.duplicate+'</b></div><div class="input-stat warn"><span>모델 매칭 필요</span><b id="inputMatch">'+sum.match+'</b></div><div class="input-stat bad"><span>금액 확인</span><b id="inputAmount">'+sum.amount+'</b></div></div>'+
+      '<div class="tablewrap"><table><thead><tr><th class="left">모델명</th>'+v.grades.map(function(g){return"<th>"+esc(g)+" (만원)</th>"}).join("")+'<th>검사</th><th></th></tr></thead><tbody>'+rows.map(function(r,i){var d=validation.details[i],rowClass=d.type==="bad"?"input-row-error":d.type==="warn"?"input-row-warn":"";return'<tr class="input-data-row '+rowClass+'" data-input-row="'+i+'" data-input-search="'+esc(rawKey(r.model))+'" title="'+esc(d.reason||"")+'"><td><input class="model" data-i="'+i+'" value="'+esc(r.model)+'"></td>'+v.grades.map(function(g){return'<td><div class="money-input"><input class="price" data-i="'+i+'" data-g="'+esc(g)+'" value="'+esc(r[g])+'" inputmode="decimal"><b>만</b></div></td>'}).join("")+'<td class="center"><span class="row-status '+d.type+'" data-row-status="'+i+'">'+esc(d.label)+'</span></td><td class="center"><button class="del btn danger" data-i="'+i+'">×</button></td></tr>'}).join("")+'</tbody></table></div>'+
+      '<div class="input-savebar"><div class="save-summary" id="inputSaveSummary">정상 '+sum.ok+'개 · 확인 필요 '+(sum.hard+sum.warn)+'개</div><div class="actions"><button id="cancelChanges" class="btn">변경 취소</button><button id="checkPrices" class="btn">검사 다시</button><button id="savePrices" class="btn primary">확인 후 단가 저장</button></div></div>'
     }
     function reportPage(v){
       var list=S.snaps[v.id]||[];if(!list.length)return'<div class="empty" style="margin-top:30px">저장된 단가가 없습니다.</div>';if(S.reportIndex===null||S.reportIndex>=list.length)S.reportIndex=list.length-1;
@@ -301,7 +406,7 @@
     }
     function render(){
       var v=vendor(),show=S.tab!=="all"&&S.tab!=="compare";
-      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v14 · 기종 분류 · 전체폭 · 만원 단위</span></h1></div><div class="tabs">'+
+      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v15 · 사진 OCR · 입력 검사 · 만원 단위</span></h1></div><div class="tabs">'+
       [["all","통합 대시보드"],["compare","다원 기준 비교"],["vendor","업체별 대시보드"],["input","단가 입력"],["report","주간 보고서"],["vendors","거래처 양식"]].map(function(x){return'<button class="tab '+(S.tab===x[0]?"on":"")+'" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join("")+'<button id="backupBtn" class="tab">백업</button><button id="restoreBtn" class="tab">복원</button><input id="restoreFile" type="file" accept=".json" hidden></div></header>'+
       (show?'<div class="vendorbar"><span class="muted">거래처</span>'+S.vendors.map(function(x){return'<button class="chip '+(x.id===S.active?"on":"")+'" data-v="'+x.id+'">'+esc(x.name)+'</button>'}).join("")+'</div>':"")+
       '<main>'+(S.tab==="all"?allDashboard():S.tab==="compare"?dawonComparePage():S.tab==="vendor"?vendorDashboard(v):S.tab==="input"?inputPage(v):S.tab==="report"?reportPage(v):vendorsPage())+'</main>';
@@ -356,10 +461,31 @@
         }})
       }
       if(S.tab==="input"){
-        var rows=S.draft[v.id];
-        document.querySelectorAll(".model").forEach(function(x){x.oninput=function(){rows[+x.dataset.i].model=x.value}});
-        document.querySelectorAll(".price").forEach(function(x){x.oninput=function(){x.value=x.value.replace(/[^0-9.]/g,"");rows[+x.dataset.i][x.dataset.g]=x.value?+x.value:""};x.onblur=function(){var p=price(x.value);rows[+x.dataset.i][x.dataset.g]=p===null?"":p;x.value=p===null?"":p}});
+        var rows=S.draft[v.id],ocr=ocrState(v.id);
+        function applyInputSearch(){var q=rawKey(S.inputSearch);document.querySelectorAll(".input-data-row").forEach(function(row){var model=rows[+row.dataset.inputRow]?rows[+row.dataset.inputRow].model:"";row.style.display=!q||rawKey(model).indexOf(q)>=0?"":"none"})}
+        function setOcrFiles(fileList){
+          ocr.previews.forEach(function(url){try{URL.revokeObjectURL(url)}catch(e){}});
+          ocr.files=Array.from(fileList||[]).filter(function(file){return /^image\//.test(file.type)});ocr.previews=ocr.files.map(function(file){return URL.createObjectURL(file)});ocr.meta=[];ocr.text="";ocr.progress=0;ocr.status=ocr.files.length?ocr.files.length+"장 선택됨 · 읽기 시작을 눌러 주세요.":"사진을 선택해 주세요.";ocr.token++;render()
+        }
+        document.querySelectorAll(".model").forEach(function(x){x.oninput=function(){rows[+x.dataset.i].model=x.value;var tr=document.querySelector('[data-input-row="'+x.dataset.i+'"]');if(tr)tr.dataset.inputSearch=rawKey(x.value);refreshInputValidation(v,rows);applyInputSearch()}});
+        document.querySelectorAll(".price").forEach(function(x){x.oninput=function(){x.value=x.value.replace(/[^0-9.]/g,"");rows[+x.dataset.i][x.dataset.g]=x.value?+x.value:"";refreshInputValidation(v,rows)};x.onblur=function(){var p=price(x.value);rows[+x.dataset.i][x.dataset.g]=p===null?"":p;x.value=p===null?"":p;refreshInputValidation(v,rows)}});
         document.querySelectorAll(".del").forEach(function(x){x.onclick=function(){rows.splice(+x.dataset.i,1);if(!rows.length)rows.push(emptyRow(v));render()}});
+        var inputSearch=document.getElementById("inputSearch");if(inputSearch){inputSearch.oninput=function(){S.inputSearch=inputSearch.value;applyInputSearch()};applyInputSearch()}
+        var photoInput=document.getElementById("ocrFiles"),photoDrop=document.getElementById("ocrDrop");
+        document.getElementById("ocrPick").onclick=function(){photoInput.value="";photoInput.click()};
+        photoInput.onchange=function(){setOcrFiles(photoInput.files)};
+        ["dragenter","dragover"].forEach(function(name){photoDrop.addEventListener(name,function(e){e.preventDefault();photoDrop.classList.add("drag")})});
+        ["dragleave","drop"].forEach(function(name){photoDrop.addEventListener(name,function(e){e.preventDefault();photoDrop.classList.remove("drag")})});
+        photoDrop.addEventListener("drop",function(e){setOcrFiles(e.dataTransfer.files)});
+        document.getElementById("ocrStart").onclick=function(){runPhotoOcr(v)};
+        document.getElementById("ocrCancel").onclick=function(){ocr.token++;ocr.running=false;ocr.progress=0;ocr.status="사진 인식을 취소했습니다.";if(ocr.worker){try{ocr.worker.terminate()}catch(e){}ocr.worker=null}render()};
+        document.getElementById("ocrClear").onclick=function(){if(ocr.running)return;setOcrFiles([])};
+        var ocrText=document.getElementById("ocrText");if(ocrText)ocrText.oninput=function(){ocr.text=ocrText.value};
+        document.getElementById("ocrApply").onclick=function(){
+          ocr.text=document.getElementById("ocrText").value;var parsed=parseOcrText(ocr.text,v);if(!parsed.length)return toast("모델과 단가를 자동으로 묶지 못했습니다. 인식 글자를 수정하거나 붙여넣기를 이용해 주세요.");
+          if(rows.some(function(r){return rowHasValue(r,v)})&&!confirm("현재 입력표를 사진 인식 결과로 바꿀까요? 저장된 과거 단가는 바뀌지 않습니다."))return;
+          S.draft[v.id]=parsed;toast(parsed.length+"개 모델을 입력표로 불러왔습니다. 빨간색과 노란색 항목을 확인해 주세요.");render()
+        };
         document.getElementById("saveDate").onchange=function(e){S.date[v.id]=e.target.value||today()};
         document.getElementById("addRow").onclick=function(){rows.push(emptyRow(v));render()};
         document.getElementById("clear").onclick=function(){if(confirm("현재 입력 내용을 모두 지울까요?")){S.draft[v.id]=[emptyRow(v)];render()}};
@@ -368,7 +494,12 @@
         document.getElementById("pasteLoad").onclick=function(){var text=document.getElementById("pasteText").value.trim();if(!text)return toast("붙여넣을 내용이 없습니다.");var parsed=text.split(/\r?\n/).filter(Boolean).map(function(line){var p=line.split(/\t|,|\s{2,}/);if(p.length<2)p=line.split(/\s+/);var r=emptyRow(v);r.model=p[0]||"";v.grades.forEach(function(g,i){r[g]=price(p[i+1])||""});return r});S.draft[v.id]=parsed;toast(parsed.length+"행을 불러왔습니다.");render()};
         var file=document.getElementById("excelFile");document.getElementById("excelBtn").onclick=function(){file.click()};
         file.onchange=function(){var f=file.files[0];if(!f)return;if(typeof XLSX==="undefined")return toast("인터넷 연결 후 다시 시도해 주세요.");var reader=new FileReader();reader.onload=function(e){try{var wb=XLSX.read(e.target.result,{type:"array"}),names=wb.SheetNames.filter(function(n){return["중고단가","폴드플립"].indexOf(n.trim())>=0});if(!names.length)names=wb.SheetNames;var data=[];names.forEach(function(n){data=data.concat(parseSheet(wb.Sheets[n],v))});if(!data.length)return toast("모델과 등급 열을 찾지 못했습니다.");S.draft[v.id]=data;toast(data.length+"개 모델을 불러왔습니다.");render()}catch(err){toast("엑셀을 읽지 못했습니다.")}};reader.readAsArrayBuffer(f)};
-        document.getElementById("savePrices").onclick=function(){var clean=rows.filter(function(r){return r.model.trim()}).map(function(r){var x=Object.assign({},r);v.grades.forEach(function(g){x[g]=price(r[g])||""});return x});if(!clean.length)return toast("저장할 데이터가 없습니다.");var date=S.date[v.id]||today(),list=(S.snaps[v.id]||[]).slice(),snap={date:date,rows:clean},i=list.findIndex(function(s){return s.date===date});if(i>=0&&!confirm(date+" 자료를 덮어쓸까요? 같은 날짜 자료만 수정되고 다른 날짜 이력은 유지됩니다."))return;if(i>=0)list[i]=snap;else list.push(snap);list.sort(function(a,b){return a.date.localeCompare(b.date)});S.snaps[v.id]=list;S.draft[v.id]=clean.map(function(r){return Object.assign({},r)});write();toast("단가 저장 완료!")};
+        document.getElementById("cancelChanges").onclick=function(){if(!confirm("저장하지 않은 변경 내용을 취소할까요?"))return;var last=latest(v.id);S.draft[v.id]=last?last.rows.map(function(r){var x=Object.assign({},r);v.grades.forEach(function(g){x[g]=price(r[g])||""});return x}):[emptyRow(v)];render()};
+        document.getElementById("checkPrices").onclick=function(){var checked=refreshInputValidation(v,rows).summary;toast(checked.hard?"빨간색 항목 "+checked.hard+"개를 확인해 주세요.":"입력 검사가 끝났습니다.")};
+        document.getElementById("savePrices").onclick=function(){
+          var checked=inputValidation(rows,v),s=checked.summary;if(s.hard)return toast("중복·모델명·금액 오류 "+s.hard+"개를 먼저 확인해 주세요.");if(s.warn&&!confirm("확인 필요 항목이 "+s.warn+"개 있습니다. 그래도 저장할까요?"))return;
+          var clean=rows.filter(function(r){return String(r.model||"").trim()}).map(function(r){var x=Object.assign({},r);v.grades.forEach(function(g){var p=price(r[g]);x[g]=p===null?"":p});return x});if(!clean.length)return toast("저장할 데이터가 없습니다.");var date=S.date[v.id]||today(),list=(S.snaps[v.id]||[]).slice(),snap={date:date,rows:clean},i=list.findIndex(function(snapItem){return snapItem.date===date});if(i>=0&&!confirm(date+" 자료를 덮어쓸까요? 같은 날짜 자료만 수정되고 다른 날짜 이력은 유지됩니다."))return;if(i>=0)list[i]=snap;else list.push(snap);list.sort(function(a,b){return a.date.localeCompare(b.date)});S.snaps[v.id]=list;S.draft[v.id]=clean.map(function(r){return Object.assign({},r)});write();toast("단가 저장 완료!");render()
+        };
       }
       if(S.tab==="report"){var s=document.getElementById("reportDate");if(s)s.onchange=function(){S.reportIndex=+s.value;render()}}
       if(S.tab==="vendors"){
