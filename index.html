@@ -49,7 +49,7 @@
   function emptyRow(cols){var r={model:''};cols.forEach(function(g){r[g]=''});return r}
   function defVendors(){return[{id:'dawon',name:'다원(자체)',grades:['A급','A-급','B+급','B급','액파','LCD']},{id:'jinwoo',name:'진우아이엔씨',grades:['A급','A-급','B+급','B급','액정파손','LCD']}]}
   function esc(s){s=String(s==null?'':s);return s.split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;')}
-  var S={tab:'input',vendors:LS.get('vendors')||defVendors(),active:'dawon',snaps:LS.get('snaps')||{},draft:{},curIdx:null,editing:null};
+  var S={tab:'dash',vendors:LS.get('vendors')||defVendors(),active:'dawon',snaps:LS.get('snaps')||{},draft:{},curIdx:null,editing:null,baseVendor:LS.get('baseVendor')||'dawon'};
   if(!S.vendors.find(function(x){return x.id===S.active}))S.active=S.vendors[0].id;
   function countMoves(rows,t){var n=0;rows.forEach(function(r){r.grades.forEach(function(c){if(c.diff==null)return;if(t==='up'&&c.diff>0)n++;if(t==='down'&&c.diff<0)n++;if(t==='flat'&&c.diff===0)n++})});return n}
   function avgPctN(rows){var a=[];rows.forEach(function(r){r.grades.forEach(function(c){if(c.pct!=null)a.push(c.pct)})});return a.length?a.reduce(function(x,y){return x+y},0)/a.length:0}
@@ -152,16 +152,125 @@
     h+='</div>';
     return h;
   }
+  function buildDashboard(){
+    var base=S.vendors.find(function(v){return v.id===S.baseVendor});
+    if(!base)base=S.vendors[0];
+    var others=S.vendors.filter(function(v){return v.id!==base.id});
+    function latest(vid){var s=S.snaps[vid]||[];return {cur:s[s.length-1]||null,prev:s[s.length-2]||null}}
+    var baseSnap=latest(base.id);
+    if(!baseSnap.cur)return {error:'기준 거래처('+base.name+') 단가가 아직 없습니다. 단가 입력에서 먼저 저장하세요.',base:base};
+    var rows=[];
+    baseSnap.cur.rows.forEach(function(br){
+      base.grades.forEach(function(g){
+        var bp=br[g]===''?null:Number(br[g]);
+        if(bp==null)return;
+        var vend=[];
+        others.forEach(function(ov){
+          var os=latest(ov.id).cur;
+          if(!os)return;
+          if(ov.grades.indexOf(g)<0)return;
+          var or=os.rows.find(function(x){return x.model===br.model});
+          if(!or)return;
+          var op=or[g]===''?null:Number(or[g]);
+          if(op==null)return;
+          vend.push({name:ov.name,price:op,diff:op-bp});
+        });
+        if(vend.length)rows.push({model:br.model,grade:g,baseP:bp,vendors:vend});
+      });
+    });
+    var vendorMoves=[];
+    S.vendors.forEach(function(v){
+      var l=latest(v.id);
+      if(!l.cur||!l.prev)return;
+      var pcts=[];
+      l.cur.rows.forEach(function(cr){
+        v.grades.forEach(function(g){
+          var now=cr[g]===''?null:Number(cr[g]);
+          var pr=l.prev.rows.find(function(x){return x.model===cr.model});
+          var before=(pr&&pr[g]!=='')?Number(pr[g]):null;
+          if(now!=null&&before!=null&&before)pcts.push((now-before)/before*100);
+        });
+      });
+      if(pcts.length){var avg=pcts.reduce(function(a,b){return a+b},0)/pcts.length;vendorMoves.push({name:v.name,avg:avg})}
+    });
+    vendorMoves.sort(function(a,b){return b.avg-a.avg});
+    var cheaper=0,pricier=0;
+    rows.forEach(function(r){r.vendors.forEach(function(vd){if(vd.diff<0)cheaper++;else if(vd.diff>0)pricier++})});
+    return {base:base,baseDate:baseSnap.cur.date,rows:rows,vendorMoves:vendorMoves,cheaper:cheaper,pricier:pricier};
+  }
+  function dashTab(){
+    var d=buildDashboard();
+    var h=stTitle(weekLabel(todayISO()),'매입 비교 대시보드','우리(기준 거래처) 단가와 다른 거래처를 비교합니다. 초록=우리보다 싼 곳(매입 유리), 빨강=우리보다 비싼 곳.');
+    h+='<div style="display:flex;gap:8px;margin-bottom:18px;align-items:center;flex-wrap:wrap"><span style="font-size:12px;color:var(--sub)">기준 거래처(우리)</span><select id="baseSel" style="padding:8px 12px;border-radius:8px;border:1px solid var(--line);font-size:13px;background:#fff">';
+    S.vendors.forEach(function(v){h+='<option value="'+v.id+'" '+(v.id===d.base.id?'selected':'')+'>'+esc(v.name)+'</option>'});
+    h+='</select></div>';
+    if(d.error){h+='<div style="padding:50px;text-align:center;color:var(--sub);font-size:14px;background:#fff;border:1px solid var(--line);border-radius:10px">'+esc(d.error)+'</div>';return h}
+    if(!d.rows.length){h+='<div style="padding:50px;text-align:center;color:var(--sub);font-size:14px;background:#fff;border:1px solid var(--line);border-radius:10px">비교할 다른 거래처 단가가 없습니다.<br>같은 모델명으로 2개 이상 거래처에 단가를 저장하면 비교가 나타납니다.</div>';return h}
+    var card=function(l,val,col,sfx){return '<div class="card"><div style="font-size:12px;color:var(--sub)">'+l+'</div><div style="font-size:26px;font-weight:800;color:'+col+'">'+val+'<span style="font-size:13px;margin-left:2px;color:var(--sub)">'+sfx+'</span></div></div>'};
+    h+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:22px">';
+    h+=card('우리보다 싼 항목',d.cheaper,'var(--down)','건 (매입 유리)');
+    h+=card('우리보다 비싼 항목',d.pricier,'var(--up)','건');
+    var topDown=d.vendorMoves.length?d.vendorMoves[d.vendorMoves.length-1]:null;
+    var topUp=d.vendorMoves.length?d.vendorMoves[0]:null;
+    h+=card('가장 많이 내린 곳',topDown?esc(topDown.name):'-',topDown&&topDown.avg<0?'var(--down)':'var(--flat)',topDown?(topDown.avg>0?'+':'')+topDown.avg.toFixed(1)+'%':'');
+    h+=card('가장 많이 오른 곳',topUp?esc(topUp.name):'-',topUp&&topUp.avg>0?'var(--up)':'var(--flat)',topUp?(topUp.avg>0?'+':'')+topUp.avg.toFixed(1)+'%':'');
+    h+='</div>';
+    h+='<div style="font-size:15px;font-weight:700;margin:8px 0 10px">모델·등급별 거래처 비교</div>';
+    var allVendorNames={};
+    d.rows.forEach(function(r){r.vendors.forEach(function(v){allVendorNames[v.name]=1})});
+    var names=Object.keys(allVendorNames);
+    h+='<div class="tblwrap"><table><thead><tr><th style="text-align:left;min-width:130px">모델</th><th>등급</th><th style="background:#2a3a4d">우리(기준)</th>';
+    names.forEach(function(n){h+='<th>'+esc(n)+'</th>'});
+    h+='</tr></thead><tbody>';
+    d.rows.forEach(function(r){
+      h+='<tr><td style="text-align:left;background:#fbfaf7;font-weight:600">'+esc(r.model)+'</td><td style="text-align:center">'+esc(r.grade)+'</td><td style="text-align:right;font-weight:700;background:#f0f4f8">'+won(r.baseP)+'</td>';
+      names.forEach(function(n){
+        var vd=r.vendors.find(function(x){return x.name===n});
+        if(!vd){h+='<td style="text-align:center;color:#ccc">-</td>';return}
+        var col=vd.diff<0?'var(--down)':(vd.diff>0?'var(--up)':'var(--flat)');
+        var bg=vd.diff<0?'#eaf5f0':(vd.diff>0?'#fbeceb':'#fff');
+        var mark=vd.diff<0?'🟢':(vd.diff>0?'🔴':'=');
+        h+='<td style="text-align:right;background:'+bg+'"><div style="font-weight:600">'+won(vd.price)+'</div><div style="font-size:11px;color:'+col+'">'+mark+' '+(vd.diff>0?'+':'')+won(vd.diff)+'</div></td>';
+      });
+      h+='</tr>';
+    });
+    h+='</tbody></table></div>';
+    if(d.vendorMoves.length){
+      h+='<div style="font-size:15px;font-weight:700;margin:22px 0 10px">거래처별 이번주 변동폭</div><div class="tblwrap"><table><thead><tr><th style="text-align:left">거래처</th><th>이번주 평균 변동</th></tr></thead><tbody>';
+      d.vendorMoves.forEach(function(v){
+        var col=v.avg<0?'var(--down)':(v.avg>0?'var(--up)':'var(--flat)');
+        h+='<tr><td style="text-align:left;font-weight:600">'+esc(v.name)+'</td><td style="text-align:center;color:'+col+';font-weight:600">'+(v.avg<0?'▼':(v.avg>0?'▲':'―'))+' '+(v.avg>0?'+':'')+v.avg.toFixed(1)+'%</td></tr>';
+      });
+      h+='</tbody></table></div>';
+    }
+    var best=[];
+    d.rows.forEach(function(r){
+      var cheapest=null;
+      r.vendors.forEach(function(v){if(v.diff<0&&(!cheapest||v.price<cheapest.price))cheapest=v});
+      if(cheapest)best.push({model:r.model,grade:r.grade,name:cheapest.name,diff:cheapest.diff});
+    });
+    if(best.length){
+      best.sort(function(a,b){return a.diff-b.diff});
+      h+='<div style="font-size:15px;font-weight:700;margin:22px 0 10px">💰 매입 추천 (우리보다 싼 곳)</div><div style="display:flex;flex-direction:column;gap:8px">';
+      best.slice(0,8).forEach(function(b){
+        h+='<div style="background:#eaf5f0;border:1px solid #bfe0d4;border-radius:8px;padding:10px 14px;font-size:13px"><b>'+esc(b.model)+' '+esc(b.grade)+'</b> → <b style="color:var(--down)">'+esc(b.name)+'</b>이(가) 우리보다 '+won(Math.abs(b.diff))+'원 저렴 (매입 유리)</div>';
+      });
+      h+='</div>';
+    }
+    return h;
+  }
   function render(){
     var v=S.vendors.find(function(x){return x.id===S.active});
     var html='<header><div><div class="eyebrow">DAWON TRADE · WEEKLY PRICE</div><h1>주간 단가 보고서</h1></div><div class="tabs">';
+    html+='<button class="tb '+(S.tab==='dash'?'on':'')+'" data-tab="dash">대시보드</button>';
     html+='<button class="tb '+(S.tab==='input'?'on':'')+'" data-tab="input">단가 입력</button>';
     html+='<button class="tb '+(S.tab==='report'?'on':'')+'" data-tab="report">주간 보고서</button>';
     html+='<button class="tb '+(S.tab==='vendors'?'on':'')+'" data-tab="vendors">거래처 양식</button>';
     html+='</div></header><div class="vbar"><span style="font-size:12px;color:var(--sub);margin-right:4px">거래처</span>';
     S.vendors.forEach(function(x){html+='<button class="chip '+(S.active===x.id?'on':'')+'" data-v="'+x.id+'">'+esc(x.name)+'</button>'});
     html+='</div><div class="wrap">';
-    if(S.tab==='input')html+=inputTab(v);
+    if(S.tab==='dash')html+=dashTab();
+    else if(S.tab==='input')html+=inputTab(v);
     else if(S.tab==='report')html+=reportTab(v);
     else html+=vendorTab();
     html+='</div>';
@@ -170,6 +279,7 @@
   }
   function bind(){
     A.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){S.tab=b.getAttribute('data-tab');render()}});
+    var bsel=A.querySelector('#baseSel');if(bsel)bsel.onchange=function(){S.baseVendor=bsel.value;LS.set('baseVendor',S.baseVendor);render()};
     A.querySelectorAll('.chip[data-v]').forEach(function(b){b.onclick=function(){S.active=b.getAttribute('data-v');render()}});
     var v=S.vendors.find(function(x){return x.id===S.active});
     if(S.tab==='input'){
