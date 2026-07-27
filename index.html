@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>다원트레이드 통합 단가 대시보드 v5 · 업체 통합 비교</title>
+  <title>다원트레이드 통합 단가 대시보드 v6 · 통합 화면 개편</title>
   <style>
     *{box-sizing:border-box} :root{--ink:#14202e;--paper:#f7f5f0;--line:#ded8cc;--sub:#6b6558;--gold:#c8892a;--up:#c0392b;--down:#1f6e5a}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif}
@@ -127,10 +127,10 @@
       });
       return Object.keys(map).map(function(k){return map[k]}).sort(function(a,b){return a.vendor.localeCompare(b.vendor,"ko",{numeric:true})})
     }
-    function dawonCompareSummaryHtml(summaries){
+    function dawonCompareSummaryHtml(summaries,compact){
       if(!summaries.length)return'<div class="empty">업체별로 통합할 비교 자료가 없습니다.</div>';
-      return'<div class="section-label">업체별 통합 비교</div>'+
-      '<div class="section-note">한 모델에서 단가가 높은 등급이 더 많은 쪽으로 분류했습니다. 등급 수가 같으면 동일·혼합입니다.</div>'+
+      return(compact?"":'<div class="section-label">업체별 통합 비교</div>'+
+      '<div class="section-note">한 모델에서 단가가 높은 등급이 더 많은 쪽으로 분류했습니다. 등급 수가 같으면 동일·혼합입니다.</div>')+
       '<div class="compare-summary">'+summaries.map(function(s){
         var total=s.total||1,dp=s.dawonHigh/total*100,vp=s.vendorHigh/total*100,mp=s.mixed/total*100;
         return'<div class="compare-card"><div class="compare-head"><strong>다원 ↔ '+esc(s.vendor)+'</strong><span class="compare-total">공통 모델 '+s.total+'개</span></div>'+
@@ -155,15 +155,27 @@
       GRADES.map(function(g){var c=r.cells[g];if(c.diff===null)return'<td>-</td>';var cl=c.diff<0?"down":c.diff>0?"up":"";return'<td><div class="bold">다원 '+won(c.base)+'</div><div class="muted">'+esc(r.vendor)+' '+won(c.comp)+'</div><div class="'+cl+' bold">차이 '+signed(c.diff)+'</div></td>'}).join("")+
       '</tr>'}).join("")+'</tbody></table></div>':'<div class="empty">동일한 모델로 비교할 경쟁업체 자료가 없습니다.</div>')
     }
+    function vendorStatusHtml(){
+      return'<div class="section-label">업체별 최신 단가 현황</div>'+
+      '<div class="section-note">업체별 최근 저장일, 등록 모델 수와 직전 단가 대비 상승·하락 건수입니다.</div>'+
+      '<div class="compare-summary">'+S.vendors.map(function(v){
+        var s=latest(v.id),move=movers(v),up=move.filter(function(x){return x.diff>0}).length,down=move.filter(function(x){return x.diff<0}).length;
+        return'<div class="compare-card"><div class="compare-head"><strong>'+esc(v.name)+'</strong><span class="compare-total">'+(s?"최근 "+esc(s.date):"자료 미등록")+'</span></div>'+
+        '<div class="compare-counts" style="margin-top:14px"><div class="compare-count">등록 모델<b>'+(s?s.rows.length:0)+'</b></div>'+
+        '<div class="compare-count dawon">상승<b>'+up+'</b></div><div class="compare-count other">하락<b>'+down+'</b></div></div></div>'
+      }).join("")+'</div>'
+    }
     function allDashboard(){
       var piv=pivotRows(),all=[];S.vendors.forEach(function(v){all=all.concat(movers(v))});
       var ups=all.filter(function(x){return x.diff>0}).sort(function(a,b){return b.diff-a.diff}).slice(0,10);
       var downs=all.filter(function(x){return x.diff<0}).sort(function(a,b){return a.diff-b.diff}).slice(0,10);
-      var dataV=S.vendors.filter(function(v){return latest(v.id)}),models={};piv.forEach(function(r){models[key(r.model)]=1});
-      return title("ALL VENDORS","통합 대시보드","등록한 모든 업체의 최신 단가와 변동을 한 화면에서 확인합니다.")+
-      '<div class="metrics">'+metric("등록 업체",S.vendors.length+"개","var(--ink)")+metric("자료 보유 업체",dataV.length+"개","var(--down)")+metric("통합 모델",Object.keys(models).length+"개","var(--ink)")+metric("가로형 비교 행",piv.length+"개","var(--gold)")+metric("최대 등급 GAP",won(piv.reduce(function(m,r){return Math.max(m,r.gap||0)},0)),"var(--up)")+'</div>'+
-      '<div class="section"><div class="section-head"><div><h3>전체 업체 변동 TOP 10</h3><div class="muted">업체별 직전 저장 단가 대비</div></div></div><div class="two"><div class="card"><h3 class="down">▼ 하락 TOP 10</h3>'+rank(downs,"down")+'</div><div class="card"><h3 class="up">▲ 상승 TOP 10</h3>'+rank(ups,"up")+'</div></div></div>'+
-      '<div class="section"><div class="section-head"><div><h3>전체 업체 등급 GAP</h3><div class="muted">모델별로 묶고 항상 다원을 첫 줄 기준으로 표시합니다.</div></div><b>'+piv.length+'개</b></div>'+gapTable(piv)+'</div>'
+      var dataV=S.vendors.filter(function(v){return latest(v.id)}),models={},compareRows=dawonCompareRows(),summaries=dawonCompareSummary(compareRows);
+      piv.forEach(function(r){models[key(r.model)]=1});
+      return title("ALL VENDORS","통합 대시보드","업체별 자료 현황과 시장 변동, 다원 기준 비교를 한 화면에서 확인합니다.")+
+      '<div class="metrics">'+metric("등록 업체",S.vendors.length+"개","var(--ink)")+metric("단가 입력 완료",dataV.length+"개","var(--down)")+metric("통합 모델",Object.keys(models).length+"개","var(--ink)")+metric("상승 변동",all.filter(function(x){return x.diff>0}).length+"건","var(--up)")+metric("하락 변동",all.filter(function(x){return x.diff<0}).length+"건","var(--down)")+'</div>'+
+      vendorStatusHtml()+
+      '<div class="section"><div class="section-head"><div><h3>다원 기준 업체별 비교</h3><div class="muted">공통 모델에서 단가가 높은 등급이 더 많은 쪽을 집계합니다.</div></div></div>'+dawonCompareSummaryHtml(summaries,true)+'</div>'+
+      '<div class="section"><div class="section-head"><div><h3>전체 업체 변동 TOP 10</h3><div class="muted">업체별 직전 저장 단가 대비 실제 상승·하락 금액</div></div></div><div class="two"><div class="card"><h3 class="down">▼ 하락 TOP 10</h3>'+rank(downs,"down")+'</div><div class="card"><h3 class="up">▲ 상승 TOP 10</h3>'+rank(ups,"up")+'</div></div></div>'
     }
     function vendorDashboard(v){
       var s=latest(v.id);if(!s)return title("VENDOR","업체별 대시보드","선택 업체의 흐름을 확인합니다.")+'<div class="empty">이 업체의 단가표가 아직 없습니다.</div>';
@@ -195,7 +207,7 @@
     }
     function render(){
       var v=vendor(),show=S.tab!=="all"&&S.tab!=="compare";
-      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v5 · 업체 통합 비교 · 다원 상단 · 만원 단위</span></h1></div><div class="tabs">'+
+      app.innerHTML='<header><div><small>DAWON TRADE · WEEKLY PRICE</small><h1>통합 단가 보고서 <span style="font-size:12px;color:var(--gold)">v6 · 통합 대시보드 개편 · 만원 단위</span></h1></div><div class="tabs">'+
       [["all","통합 대시보드"],["compare","다원 기준 비교"],["vendor","업체별 대시보드"],["input","단가 입력"],["report","주간 보고서"],["vendors","거래처 양식"]].map(function(x){return'<button class="tab '+(S.tab===x[0]?"on":"")+'" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join("")+'<button id="backupBtn" class="tab">백업</button><button id="restoreBtn" class="tab">복원</button><input id="restoreFile" type="file" accept=".json" hidden></div></header>'+
       (show?'<div class="vendorbar"><span class="muted">거래처</span>'+S.vendors.map(function(x){return'<button class="chip '+(x.id===S.active?"on":"")+'" data-v="'+x.id+'">'+esc(x.name)+'</button>'}).join("")+'</div>':"")+
       '<main>'+(S.tab==="all"?allDashboard():S.tab==="compare"?dawonComparePage():S.tab==="vendor"?vendorDashboard(v):S.tab==="input"?inputPage(v):S.tab==="report"?reportPage(v):vendorsPage())+'</main>';
