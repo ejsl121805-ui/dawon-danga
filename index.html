@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>다원트레이드 단가 인사이트 v21 · 모델명·펫네임</title>
+<title>다원트레이드 단가 인사이트 v22 · 판매 자동 차감·손익 장부</title>
   <style>
     *{box-sizing:border-box} :root{--ink:#14202e;--paper:#f7f5f0;--line:#ded8cc;--sub:#6b6558;--gold:#c8892a;--up:#c0392b;--down:#1f6e5a}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif}
@@ -59,10 +59,11 @@
     .stock-hero{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(180px,.7fr));gap:11px;padding:19px;border-radius:20px;background:radial-gradient(circle at 88% 18%,#26c6a070 0,transparent 18rem),linear-gradient(125deg,#111d38,#173e58 67%,#235f62);color:#fff;box-shadow:0 17px 40px #1321432b}.stock-hero-main small{color:#8af4d1;font-weight:800;letter-spacing:1.5px}.stock-hero-main h2{margin:4px 0 7px;font-size:27px}.stock-hero-main p{margin:0;color:#d5e6eb;font-size:13px}.stock-hero-card{padding:13px 15px;border:1px solid #ffffff21;border-radius:14px;background:#ffffff10;backdrop-filter:blur(8px)}.stock-hero-card span{display:block;color:#bcd5dd;font-size:11px}.stock-hero-card b{display:block;margin-top:4px;font-size:18px}
     .stock-upload-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.stock-upload{position:relative;overflow:hidden;min-height:176px;border:1px solid #dce5ea;border-radius:16px;background:linear-gradient(145deg,#fff,#f7fbfc);padding:17px}.stock-upload:before{content:"";position:absolute;right:-25px;top:-25px;width:90px;height:90px;border-radius:50%;background:#e3f7f1}.stock-upload .upload-icon{position:relative;display:flex;width:39px;height:39px;align-items:center;justify-content:center;border-radius:12px;background:#dff6ef;font-size:20px}.stock-upload h3{position:relative;margin:11px 0 4px}.stock-upload p{position:relative;min-height:36px;margin:0 0 12px;color:var(--sub);font-size:12px;line-height:1.5}.stock-upload-status{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:11px;padding-top:10px;border-top:1px solid #e7edf0;font-size:11px;color:var(--sub)}.stock-upload-status b{color:#08775d}
     .stock-guide{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stock-guide-item{padding:12px 14px;border:1px solid #e4e9ee;border-radius:12px;background:#fbfcfe}.stock-guide-item b{display:block;margin-bottom:4px;font-size:12px}.stock-guide-item span{color:var(--sub);font-size:11px;line-height:1.55}
-    .stock-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.stock-kpi{padding:15px;border:1px solid #e0e7eb;border-radius:15px;background:linear-gradient(145deg,#fff,#f9fbfc)}.stock-kpi span{color:var(--sub);font-size:11px}.stock-kpi b{display:block;margin:5px 0 2px;font-size:24px}.stock-kpi small{color:#89929d}
+    .stock-kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.stock-kpi{padding:15px;border:1px solid #e0e7eb;border-radius:15px;background:linear-gradient(145deg,#fff,#f9fbfc)}.stock-kpi span{color:var(--sub);font-size:11px}.stock-kpi b{display:block;margin:5px 0 2px;font-size:24px}.stock-kpi small{color:#89929d}
     .stock-signal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.stock-signal{padding:16px;border:1px solid #e1e7eb;border-radius:15px;background:#fff}.stock-signal h3{margin:0 0 3px;font-size:15px}.stock-signal>p{margin:0 0 10px;color:var(--sub);font-size:11px}.stock-rank{display:grid;grid-template-columns:27px minmax(0,1fr) auto;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #edf0f2}.stock-rank:last-child{border-bottom:0}.stock-rank .rank-no{display:flex;width:25px;height:25px;align-items:center;justify-content:center;border-radius:9px;background:#eef3f6;font-size:11px;font-weight:800}.stock-rank b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.stock-rank small{display:block;color:var(--sub);font-size:10px}.stock-rank strong{font-size:13px}
     .stock-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px;padding:11px;border:1px solid #e0e6ea;border-radius:14px;background:#fff}.stock-filters{display:flex;gap:6px;flex-wrap:wrap}.stock-filter{padding:7px 11px;border:1px solid #dde4e8;border-radius:18px;background:#f8fafb;color:#53606b;font-size:11px;font-weight:800}.stock-filter.on{border-color:#15906e;background:#e8f8f2;color:#08775d}.stock-search{min-width:250px;flex:1;padding:9px 12px;border:1px solid #dce3e7;border-radius:10px;outline:none}.stock-search:focus{border-color:#15906e;box-shadow:0 0 0 4px #15906e12}
     .stock-status{display:inline-flex;padding:5px 9px;border-radius:14px;font-size:10px;font-weight:900}.stock-status.fast{background:#e4f8ef;color:#08775d}.stock-status.normal{background:#edf4ff;color:#245cb4}.stock-status.slow{background:#fff5d8;color:#946300}.stock-status.excess{background:#ffede4;color:#b54708}.stock-status.dead{background:#ffe9ed;color:#bf2342}.stock-status.none{background:#eef1f4;color:#65707c}.stock-table td{vertical-align:middle}.stock-rec{max-width:170px;white-space:normal;line-height:1.4}.stock-age{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.stock-age-item{padding:12px;border-radius:12px;background:#f6f8fa}.stock-age-item span{display:block;color:var(--sub);font-size:10px}.stock-age-item b{display:block;margin-top:3px;font-size:18px}.stock-age-bar{height:7px;margin-top:8px;border-radius:6px;background:#e8ecef;overflow:hidden}.stock-age-bar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#20a67b,#d69b2f,#db5367)}
+    .reconcile-note{display:flex;align-items:flex-start;gap:10px;margin-top:10px;padding:13px 15px;border:1px solid #cfe8df;border-radius:13px;background:#f0fbf7;color:#27564a;font-size:12px;line-height:1.65}.reconcile-note b{color:#08775d}.sales-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:10px}.sales-summary .stock-kpi b{font-size:20px}.sales-profit{font-weight:900;color:#d92d48}.sales-profit.negative{color:#246bdb}.sales-ledger-table td{vertical-align:middle}.sales-ledger-table .id-cell{font-size:10px;color:#65707c;white-space:normal;line-height:1.45}.sales-ledger-table .vendor-cell{font-weight:800;color:#243954}.sales-ledger-empty{padding:34px!important;text-align:center!important;color:#87909b}.sales-search-wrap{display:flex;gap:8px;align-items:center;flex:1;min-width:260px}.match-badge{display:inline-flex;padding:4px 8px;border-radius:12px;background:#e5f8ef;color:#08775d;font-size:10px;font-weight:900}.match-badge.unmatched{background:#fff2dd;color:#9b6100}
     textarea{border-color:#dce3ef;border-radius:11px;background:#fcfdff;outline:none}textarea:focus,.field:focus{border-color:#8277ff;box-shadow:0 0 0 4px #7666ff15}.toast{border:1px solid #ffffff1f;border-radius:13px;background:linear-gradient(135deg,#172440,#2d356c);box-shadow:0 15px 35px #10162f3d}
     @media print{header,.vendorbar,.report-toolbar{display:none!important}body,main{background:white}main{max-width:none;padding:0}.report-section,.report-hero{break-inside:avoid;box-shadow:none}}
     @media(max-width:1050px){.report-hero{grid-template-columns:1fr 1fr}.report-hero-main{grid-column:1/-1}.report-category-grid,.strategy-grid{grid-template-columns:repeat(2,1fr)}.vendor-metrics{grid-template-columns:repeat(3,1fr)}.stock-hero{grid-template-columns:1fr 1fr}.stock-hero-main{grid-column:1/-1}.stock-kpis{grid-template-columns:repeat(3,1fr)}}@media(max-width:900px){.metrics{grid-template-columns:repeat(2,1fr)}.two,.report-split{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.input-summary{grid-template-columns:repeat(3,1fr)}.report-grid{grid-template-columns:repeat(2,1fr)}.confidence-box{grid-template-columns:repeat(2,1fr)}.vendor-highlight-grid{grid-template-columns:1fr}.stock-upload-grid,.stock-signal-grid{grid-template-columns:1fr}.stock-guide{grid-template-columns:1fr}.stock-age{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){main{padding:14px}.metrics{grid-template-columns:1fr 1fr}.metric strong{font-size:21px}.input-summary{grid-template-columns:repeat(2,1fr)}.ocr-card{padding:12px}.report-hero,.stock-hero{grid-template-columns:1fr}.report-category-grid,.strategy-grid,.field-notes{grid-template-columns:1fr}.vendor-metrics{grid-template-columns:repeat(2,1fr)}.stock-kpis{grid-template-columns:1fr 1fr}.stock-age{grid-template-columns:1fr 1fr}.stock-search{min-width:100%}}
@@ -81,7 +82,7 @@
     function read(k,f){try{var v=JSON.parse(localStorage.getItem(k));return v==null?f:v}catch(e){return f}}
     function write(){localStorage.setItem(KEYS.vendors,JSON.stringify(S.vendors));localStorage.setItem(KEYS.snaps,JSON.stringify(S.snaps));localStorage.setItem(KEYS.aliases,JSON.stringify(S.aliases));localStorage.setItem(KEYS.reportNotes,JSON.stringify(S.reportNotes));localStorage.setItem(KEYS.reportArchives,JSON.stringify(S.reportArchives));localStorage.setItem(KEYS.inventory,JSON.stringify(S.inventory));localStorage.setItem(KEYS.inbound,JSON.stringify(S.inbound));localStorage.setItem(KEYS.sales,JSON.stringify(S.sales));localStorage.setItem(KEYS.stockFiles,JSON.stringify(S.stockFiles));localStorage.setItem(KEYS.stockReady,JSON.stringify(S.stockReady))}
     function defaults(){return[{id:"dawon",name:"다원(자체)",grades:GRADES.slice()},{id:"jinwoo",name:"진우아이엔씨",grades:GRADES.slice()}]}
-    var S={tab:"all",active:"dawon",vendors:read(KEYS.vendors,defaults()),snaps:read(KEYS.snaps,{}),draft:{},date:{},reportIndex:null,reportMonth:"",reportWeek:null,reportNotes:read(KEYS.reportNotes,{}),reportArchives:read(KEYS.reportArchives,{}),gradeFilter:read(KEYS.gradeFilter,GRADES.slice()),aliases:read(KEYS.aliases,{}),modelSearch:"",modelCategory:read(KEYS.modelCategory,"all"),showAliasManager:false,ocr:{},inputSearch:"",vendorFilter:"all",vendorSearch:"",inventory:read(KEYS.inventory,[]),inbound:read(KEYS.inbound,[]),sales:read(KEYS.sales,[]),stockPeriod:30,stockSearch:"",stockStatus:"all",stockFiles:read(KEYS.stockFiles,{inventory:"저장된 데이터",inbound:"저장된 데이터",sales:"저장된 데이터"}),stockReady:read(KEYS.stockReady,false)};
+    var S={tab:"all",active:"dawon",vendors:read(KEYS.vendors,defaults()),snaps:read(KEYS.snaps,{}),draft:{},date:{},reportIndex:null,reportMonth:"",reportWeek:null,reportNotes:read(KEYS.reportNotes,{}),reportArchives:read(KEYS.reportArchives,{}),gradeFilter:read(KEYS.gradeFilter,GRADES.slice()),aliases:read(KEYS.aliases,{}),modelSearch:"",modelCategory:read(KEYS.modelCategory,"all"),showAliasManager:false,ocr:{},inputSearch:"",vendorFilter:"all",vendorSearch:"",inventory:read(KEYS.inventory,[]),inbound:read(KEYS.inbound,[]),sales:read(KEYS.sales,[]),stockPeriod:30,stockSearch:"",salesSearch:"",stockStatus:"all",stockFiles:read(KEYS.stockFiles,{inventory:"저장된 데이터",inbound:"저장된 데이터",sales:"저장된 데이터"}),stockReady:read(KEYS.stockReady,false)};
     if(!Array.isArray(S.vendors)||!S.vendors.length)S.vendors=defaults();
     if(!S.vendors.some(function(v){return v.id===S.active}))S.active=S.vendors[0].id;
     if(!S.aliases||typeof S.aliases!=="object"||Array.isArray(S.aliases))S.aliases={};
@@ -187,6 +188,35 @@
       if(/(^|[;,(])A급/.test(x))return"A급";
       return stockGrade(fallback)
     }
+    function stockIdToken(v){return String(v==null?"":v).trim().toUpperCase().replace(/[^A-Z0-9]/g,"")}
+    function stockIdentityKeys(row){
+      var keys=[],pg=stockIdToken(row&&row.pgNo),imei=stockIdToken(row&&row.imei),imei2=stockIdToken(row&&row.imei2),serial=stockIdToken(row&&row.serial);
+      if(pg.length>=6)keys.push("PG:"+pg);
+      if(imei.length>=10)keys.push("IMEI:"+imei);
+      if(imei2.length>=10)keys.push("IMEI:"+imei2);
+      if(serial.length>=6)keys.push("SERIAL:"+serial);
+      return keys.filter(function(k,i,a){return a.indexOf(k)===i})
+    }
+    function stockReconciliation(){
+      var keySales={},saleHasId={},saleMatched={},excluded={},matchedInventoryQty=0;
+      S.sales.forEach(function(row,index){var keys=stockIdentityKeys(row);if(keys.length)saleHasId[index]=1;keys.forEach(function(k){if(!keySales[k])keySales[k]=[];keySales[k].push(index)})});
+      S.inventory.forEach(function(row,index){
+        var keys=stockIdentityKeys(row),matched=[];
+        keys.forEach(function(k){if(keySales[k])matched=matched.concat(keySales[k])});
+        matched=matched.filter(function(v,i,a){return a.indexOf(v)===i});
+        if(matched.length){excluded[index]=1;matched.forEach(function(saleIndex){saleMatched[saleIndex]=1});matchedInventoryQty+=Math.max(0,num(row.qty)||0)}
+      });
+      return{excluded:excluded,saleMatched:saleMatched,saleHasId:saleHasId,matchedInventoryQty:matchedInventoryQty,matchedSalesCount:Object.keys(saleMatched).length,salesWithId:Object.keys(saleHasId).length,totalSales:S.sales.length,unmatchedSalesCount:Math.max(0,S.sales.length-Object.keys(saleMatched).length)}
+    }
+    function salesPeriodRows(){
+      var cut=daysAgo(S.stockPeriod-1);
+      return S.sales.map(function(row,index){var copy=Object.assign({},row);copy._saleIndex=index;return copy}).filter(function(row){return stockDate(row.date)>=cut}).sort(function(a,b){return stockDate(b.date).localeCompare(stockDate(a.date))})
+    }
+    function salesLedgerSummary(rows){
+      var out={qty:0,purchase:0,sales:0,profit:0,margin:0};
+      rows.forEach(function(row){var q=Math.max(0,num(row.qty)||0),purchase=stockMoney(row.purchaseCost),sale=stockMoney(row.unitPrice),profit=num(row.profit);if(profit===null)profit=sale-purchase;out.qty+=q;out.purchase+=purchase*q;out.sales+=sale*q;out.profit+=profit*q});
+      out.margin=out.purchase?out.profit/out.purchase*100:0;return out
+    }
     function stockStatusInfo(row){
       if(row.qty<=0)return{key:"none",label:"재고 없음",recommend:"재입고 여부 검토"};
       if(!row.salesQty||row.noSaleDays===null||row.noSaleDays>=30)return{key:"dead",label:"장기 미판매",recommend:"매입 중단 · 특가/수출 검토"};
@@ -196,9 +226,9 @@
       return{key:"normal",label:"정상 회전",recommend:"현재 매입 유지"}
     }
     function stockAnalysis(){
-      var map={},cut=daysAgo(S.stockPeriod-1);
+      var map={},cut=daysAgo(S.stockPeriod-1),recon=stockReconciliation();
       function item(row,grade){var k=stockModelKey(row)+"|||"+stockGrade(grade);if(!map[k])map[k]={model:stockModelLabel(row),modelCode:rowModelCode(row),petName:rowPetName(row),grade:stockGrade(grade),qty:0,value:0,inboundQty:0,salesQty:0,salesRevenue:0,lastSale:"",oldestReceived:""};else{if(!map[k].modelCode)map[k].modelCode=rowModelCode(row);if(!map[k].petName)map[k].petName=rowPetName(row);map[k].model=map[k].petName||map[k].model}return map[k]}
-      S.inventory.forEach(function(r){var x=item(r,r.grade),q=Math.max(0,num(r.qty)||0),cost=stockMoney(r.unitCost);x.qty+=q;x.value+=q*cost;var d=stockDate(r.receivedDate||r.date);if(d&&(!x.oldestReceived||d<x.oldestReceived))x.oldestReceived=d});
+      S.inventory.forEach(function(r,index){if(recon.excluded[index])return;var x=item(r,r.grade),q=Math.max(0,num(r.qty)||0),cost=stockMoney(r.unitCost);x.qty+=q;x.value+=q*cost;var d=stockDate(r.receivedDate||r.date);if(d&&(!x.oldestReceived||d<x.oldestReceived))x.oldestReceived=d});
       S.inbound.forEach(function(r){var d=stockDate(r.date),x=item(r,r.grade);if(d>=cut)x.inboundQty+=Math.max(0,num(r.qty)||0)});
       S.sales.forEach(function(r){var d=stockDate(r.date),x=item(r,r.grade),q=Math.max(0,num(r.qty)||0);if(!x.lastSale||d>x.lastSale)x.lastSale=d;if(d>=cut){x.salesQty+=q;x.salesRevenue+=q*stockMoney(r.unitPrice)}});
       return Object.keys(map).map(function(k){var x=map[k],daily=x.salesQty/S.stockPeriod;x.dailySales=daily;x.selloutDays=daily>0?x.qty/daily:null;x.noSaleDays=x.lastSale?dateDays(x.lastSale):null;x.stockAge=x.oldestReceived?dateDays(x.oldestReceived):null;x.sellThrough=x.salesQty/(x.qty+x.salesQty||1)*100;x.status=stockStatusInfo(x);return x}).sort(function(a,b){return b.qty-a.qty||a.model.localeCompare(b.model,"ko",{numeric:true})})
@@ -211,8 +241,8 @@
       return items.slice(0,5).map(function(r,i){return'<div class="stock-rank"><span class="rank-no">'+(i+1)+'</span><div>'+modelNameHtml(r)+'<small>'+esc(r.grade)+" · "+esc(subFn(r))+'</small></div><strong>'+esc(valueFn(r))+'</strong></div>'}).join("")
     }
     function stockAgeBuckets(){
-      var buckets=[{label:"0~7일",min:0,max:7,qty:0},{label:"8~14일",min:8,max:14,qty:0},{label:"15~30일",min:15,max:30,qty:0},{label:"31~60일",min:31,max:60,qty:0},{label:"61일 이상",min:61,max:99999,qty:0}],total=0;
-      S.inventory.forEach(function(r){var age=dateDays(stockDate(r.receivedDate||r.date)),q=Math.max(0,num(r.qty)||0);if(age===null)return;total+=q;var b=buckets.find(function(x){return age>=x.min&&age<=x.max});if(b)b.qty+=q});
+      var buckets=[{label:"0~7일",min:0,max:7,qty:0},{label:"8~14일",min:8,max:14,qty:0},{label:"15~30일",min:15,max:30,qty:0},{label:"31~60일",min:31,max:60,qty:0},{label:"61일 이상",min:61,max:99999,qty:0}],total=0,recon=stockReconciliation();
+      S.inventory.forEach(function(r,index){if(recon.excluded[index])return;var age=dateDays(stockDate(r.receivedDate||r.date)),q=Math.max(0,num(r.qty)||0);if(age===null)return;total+=q;var b=buckets.find(function(x){return age>=x.min&&age<=x.max});if(b)b.qty+=q});
       buckets.forEach(function(b){b.pct=total?b.qty/total*100:0});return buckets
     }
     function latest(id){var a=S.snaps[id]||[];return a.length?a[a.length-1]:null}
@@ -664,8 +694,44 @@
       var label=S.stockFiles[type]||"업로드 대기";
       return'<div class="stock-upload"><div class="upload-icon">'+icon+'</div><h3>'+esc(titleText)+'</h3><p>'+esc(description)+'</p><button class="btn primary stock-upload-btn" data-stock-pick="'+type+'">엑셀 선택</button><input type="file" data-stock-file="'+type+'" accept=".xlsx,.xls,.csv" hidden><div class="stock-upload-status"><span>'+esc(label)+'</span><b>'+count+'행</b></div></div>'
     }
+    function stockWonText(v){var n=Number(v);return Number.isFinite(n)?Math.round(n).toLocaleString("ko-KR")+"원":"-"}
+    function salesLedgerHtml(){
+      var rows=salesPeriodRows(),summary=salesLedgerSummary(rows),recon=stockReconciliation();
+      var tableRows=rows.map(function(row){
+        var purchase=stockMoney(row.purchaseCost),sale=stockMoney(row.unitPrice),profit=num(row.profit);if(profit===null)profit=sale-purchase;
+        var margin=num(row.marginRate);if(margin===null)margin=purchase?profit/purchase*100:0;
+        var matched=!!recon.saleMatched[row._saleIndex],hasId=!!recon.saleHasId[row._saleIndex];
+        var matchLabel=matched?"재고 자동 제외":hasId?"현재고 미포함":"식별번호 없음";
+        var search=[rowModelSearch(row),row.grade,row.purchaseVendor,row.saleVendor,row.pgNo,row.imei,row.serial].map(rawKey).join(" ");
+        return'<tr class="sales-ledger-row" data-sales-search="'+esc(search)+'">'+
+          '<td>'+esc(stockDate(row.date)||"-")+'</td>'+
+          '<td class="left bold">'+modelNameHtml(row)+'</td>'+
+          '<td>'+esc(stockGrade(row.grade))+'</td>'+
+          '<td class="id-cell">'+(row.pgNo?'<b>P/G</b> '+esc(row.pgNo):"-")+(row.imei?'<br><b>IMEI</b> '+esc(row.imei):"")+'</td>'+
+          '<td>'+esc(stockDate(row.purchaseDate)||"-")+'</td>'+
+          '<td class="vendor-cell">'+esc(row.purchaseVendor||"-")+'</td>'+
+          '<td>'+stockWonText(purchase)+'</td>'+
+          '<td class="vendor-cell">'+esc(row.saleVendor||"-")+'</td>'+
+          '<td>'+stockWonText(sale)+'</td>'+
+          '<td class="sales-profit '+(profit<0?"negative":"")+'">'+stockWonText(profit)+'</td>'+
+          '<td class="'+(profit<0?"down":"up")+'">'+shortNumber(margin)+'%</td>'+
+          '<td><span class="match-badge '+(matched?"":"unmatched")+'">'+matchLabel+'</span></td>'+
+        '</tr>'
+      }).join("");
+      if(!tableRows)tableRows='<tr><td colspan="12" class="sales-ledger-empty">선택 기간에 판매 자료가 없습니다.</td></tr>';
+      return'<div class="section"><div class="section-head"><div><h3>판매 거래 상세 · 손익 장부</h3><div class="muted">어느 등급을 언제 어디서 얼마에 사서, 어느 거래처에 얼마에 팔았는지 한 줄로 확인합니다.</div></div><b id="salesLedgerCount">'+rows.length+'대</b></div>'+
+        '<div class="sales-summary">'+
+          '<div class="stock-kpi"><span>판매 대수</span><b>'+Math.round(summary.qty).toLocaleString("ko-KR")+'대</b><small>최근 '+S.stockPeriod+'일</small></div>'+
+          '<div class="stock-kpi"><span>총 실매입가</span><b>'+stockWonText(summary.purchase)+'</b><small>판매 기기 매입원가</small></div>'+
+          '<div class="stock-kpi"><span>총 실판매가</span><b>'+stockWonText(summary.sales)+'</b><small>판매 거래액</small></div>'+
+          '<div class="stock-kpi"><span>총 손익</span><b class="sales-profit '+(summary.profit<0?"negative":"")+'">'+stockWonText(summary.profit)+'</b><small>실판매가 - 실매입가</small></div>'+
+          '<div class="stock-kpi"><span>평균 수익률</span><b class="'+(summary.profit<0?"down":"up")+'">'+shortNumber(summary.margin)+'%</b><small>총 손익 ÷ 총 실매입가</small></div>'+
+        '</div>'+
+        '<div class="stock-toolbar"><div class="sales-search-wrap"><input id="salesLedgerSearch" class="stock-search" value="'+esc(S.salesSearch)+'" placeholder="펫네임·모델명·P/G No·IMEI·매입처·판매처 검색"></div><span class="muted">금액은 원 단위</span></div>'+
+        '<div class="tablewrap"><table class="stock-table sales-ledger-table"><thead><tr><th>판매일</th><th class="left">펫네임 / 모델명</th><th>등급</th><th>P/G No · IMEI</th><th>매입일</th><th>매입처</th><th>실매입가</th><th>판매처</th><th>실판매가</th><th>손익</th><th>수익률</th><th>재고 반영</th></tr></thead><tbody>'+tableRows+'</tbody></table></div></div>'
+    }
     function stockSalesPage(){
-      var rows=stockAnalysis(),summary=stockSummary(rows),statusRows=S.stockStatus==="all"?rows:rows.filter(function(r){return r.status.key===S.stockStatus});
+      var rows=stockAnalysis(),summary=stockSummary(rows),recon=stockReconciliation(),statusRows=S.stockStatus==="all"?rows:rows.filter(function(r){return r.status.key===S.stockStatus});
       var incoming=rows.filter(function(r){return r.inboundQty>0}).slice().sort(function(a,b){return b.inboundQty-a.inboundQty});
       var selling=rows.filter(function(r){return r.salesQty>0}).slice().sort(function(a,b){return b.salesQty-a.salesQty});
       var slow=rows.filter(function(r){return["dead","excess","slow"].indexOf(r.status.key)>=0}).slice().sort(function(a,b){return(b.noSaleDays||9999)-(a.noSaleDays||9999)||b.qty-a.qty});
@@ -676,14 +742,14 @@
         stockUploadCard("inventory","📦","현재 재고 · 선택","별도 재고 엑셀이 있을 때만 올리세요. 매입내역에서도 현재 재고를 자동 추출합니다.",S.inventory.length)+
         stockUploadCard("inbound","↘","매입 내역","다원 매입내역 엑셀을 올리면 입고 이력과 현재 재고를 함께 불러옵니다.",S.inbound.length)+
         stockUploadCard("sales","↗","판매 내역","다원 판매내역 엑셀의 판매일·펫네임·실판매가를 자동으로 읽습니다.",S.sales.length)+
-        '</div><div class="stock-guide" style="margin-top:9px"><div class="stock-guide-item"><b>현재 재고 · 선택사항</b><span>별도 파일이 없다면 매입내역의 현상태=재고를 사용합니다.</span></div><div class="stock-guide-item"><b>7월28일 매입내역 형식</b><span>매입일 · 펫네임 · 차감내역 · 실매입가 · 현상태</span></div><div class="stock-guide-item"><b>7월28일 판매내역 형식</b><span>판매일 · 펫네임 · 실판매가 · 매입차감항목 · 1행=1대</span></div></div></div>';
-      var kpis='<div class="section"><div class="stock-kpis"><div class="stock-kpi"><span>현재 총 재고</span><b>'+Math.round(summary.qty).toLocaleString("ko-KR")+'대</b><small>창고 보유 수량</small></div><div class="stock-kpi"><span>현재 재고금액</span><b>'+shortNumber(summary.value/10000)+'만</b><small>수량 × 매입단가</small></div><div class="stock-kpi"><span>최근 '+S.stockPeriod+'일 판매</span><b>'+Math.round(summary.sales).toLocaleString("ko-KR")+'대</b><small>판매내역 합계</small></div><div class="stock-kpi"><span>전체 소진 예상</span><b>'+(summary.sellout===null?"판매자료 없음":shortNumber(summary.sellout)+"일")+'</b><small>현재 판매속도 유지 시</small></div><div class="stock-kpi"><span>관리 필요 재고</span><b style="color:#c0392b">'+Math.round(summary.risk).toLocaleString("ko-KR")+'대</b><small>둔화·과다·장기 재고</small></div></div></div>';
+        '</div><div class="stock-guide" style="margin-top:9px"><div class="stock-guide-item"><b>현재 재고 · 선택사항</b><span>별도 파일이 없다면 매입내역의 현상태=재고를 사용합니다.</span></div><div class="stock-guide-item"><b>7월28일 매입내역 형식</b><span>매입일 · 매입처 · P/G No · IMEI · 펫네임 · 차감내역 · 실매입가 · 현상태</span></div><div class="stock-guide-item"><b>7월28일 판매내역 형식</b><span>매입정보 · 판매일 · 판매처 · P/G No · IMEI · 실판매가 · 손익 · 수익률</span></div></div><div class="reconcile-note"><span>✓</span><div><b>판매 재고 반영 원칙</b><br>현재 재고에 판매된 기기의 P/G No 또는 IMEI가 남아 있으면 정확히 일치하는 기기만 자동 제외합니다. 매입내역의 ‘현상태=재고’는 이미 판매 완료 기기를 제외한 현재 상태이므로 중복 차감하지 않습니다. 식별번호가 없는 묶음 재고는 안전을 위해 임의 차감하지 않습니다.</div></div></div>';
+      var kpis='<div class="section"><div class="stock-kpis"><div class="stock-kpi"><span>현재 총 재고</span><b>'+Math.round(summary.qty).toLocaleString("ko-KR")+'대</b><small>판매 자동 제외 후</small></div><div class="stock-kpi"><span>현재 재고금액</span><b>'+shortNumber(summary.value/10000)+'만</b><small>수량 × 매입단가</small></div><div class="stock-kpi"><span>최근 '+S.stockPeriod+'일 판매</span><b>'+Math.round(summary.sales).toLocaleString("ko-KR")+'대</b><small>판매내역 합계</small></div><div class="stock-kpi"><span>자동 제외</span><b style="color:#08775d">'+Math.round(recon.matchedInventoryQty).toLocaleString("ko-KR")+'대</b><small>P/G No·IMEI 정확 일치</small></div><div class="stock-kpi"><span>전체 소진 예상</span><b>'+(summary.sellout===null?"판매자료 없음":shortNumber(summary.sellout)+"일")+'</b><small>현재 판매속도 유지 시</small></div><div class="stock-kpi"><span>관리 필요 재고</span><b style="color:#c0392b">'+Math.round(summary.risk).toLocaleString("ko-KR")+'대</b><small>둔화·과다·장기 재고</small></div></div></div>';
       var signals='<div class="section"><div class="section-head"><div><h3>오늘 바로 볼 흐름</h3><div class="muted">입고가 몰리는 모델, 잘 팔리는 모델, 판매가 멈춘 모델을 나눠 봅니다.</div></div></div><div class="stock-signal-grid"><div class="stock-signal"><h3>📥 많이 들어온 모델</h3><p>최근 '+S.stockPeriod+'일 입고수량 순</p>'+stockRank(incoming,function(r){return r.inboundQty+"대"},function(r){return"현재 "+r.qty+"대"})+'</div><div class="stock-signal"><h3>⚡ 빠르게 판매된 모델</h3><p>최근 '+S.stockPeriod+'일 판매수량 순</p>'+stockRank(selling,function(r){return r.salesQty+"대"},function(r){return r.selloutDays===null?"소진예상 없음":"소진 "+shortNumber(r.selloutDays)+"일"})+'</div><div class="stock-signal"><h3>🚨 먼저 줄여야 할 재고</h3><p>미판매 기간과 현재 수량 기준</p>'+stockRank(slow,function(r){return r.qty+"대"},function(r){return r.noSaleDays===null?"판매 기록 없음":r.noSaleDays+"일 미판매"})+'</div></div></div>';
       var age='<div class="section"><div class="section-head"><div><h3>재고 체류 구간</h3><div class="muted">입고일 기준으로 창고에 머문 기간을 나눕니다.</div></div></div><div class="stock-age">'+ages.map(function(b){return'<div class="stock-age-item"><span>'+b.label+'</span><b>'+b.qty+'대</b><div class="stock-age-bar"><i style="width:'+(b.qty/maxAge*100)+'%"></i></div></div>'}).join("")+'</div></div>';
       var toolbar='<div class="stock-toolbar"><input id="stockSearch" class="stock-search" value="'+esc(S.stockSearch)+'" placeholder="모델명 또는 모델코드 검색 · 예: S23, S911"><div class="stock-filters">'+filters.map(function(f){return'<button class="stock-filter '+(S.stockStatus===f[0]?"on":"")+'" data-stock-status="'+f[0]+'">'+f[1]+'</button>'}).join("")+'</div><select id="stockPeriod" class="field"><option value="7" '+(S.stockPeriod===7?"selected":"")+'>최근 7일</option><option value="30" '+(S.stockPeriod===30?"selected":"")+'>최근 30일</option><option value="60" '+(S.stockPeriod===60?"selected":"")+'>최근 60일</option><option value="90" '+(S.stockPeriod===90?"selected":"")+'>최근 90일</option></select></div>';
       var detailRows=statusRows.map(function(r){return'<tr class="stock-detail-row" data-stock-search="'+esc(stockModelKey(r)+" "+rowModelSearch(r)+" "+rawKey(r.grade))+'"><td class="left bold">'+modelNameHtml(r)+'</td><td>'+esc(r.grade)+'</td><td><b>'+r.qty+'대</b></td><td>'+shortNumber(r.value/10000)+'만</td><td>'+r.inboundQty+'대</td><td>'+r.salesQty+'대</td><td>'+shortNumber(r.sellThrough)+'%</td><td>'+shortNumber(r.dailySales)+'대</td><td>'+(r.selloutDays===null?"-":shortNumber(r.selloutDays)+"일")+'</td><td>'+(r.lastSale||"-")+'</td><td>'+(r.noSaleDays===null?"-":r.noSaleDays+"일")+'</td><td><span class="stock-status '+r.status.key+'">'+r.status.label+'</span></td><td class="left stock-rec">'+r.status.recommend+'</td></tr>'}).join("");
       var detail='<div class="section"><div class="section-head"><div><h3>모델별 재고·판매 상세</h3><div class="muted">펫네임을 크게 표시하고 모델명(코드)은 아래에 함께 보관합니다.</div></div><b id="stockResultCount">'+statusRows.length+'개 항목</b></div>'+toolbar+'<div class="tablewrap"><table class="stock-table"><thead><tr><th class="left">펫네임 / 모델명</th><th>등급</th><th>현재재고</th><th>재고금액</th><th>'+S.stockPeriod+'일 입고</th><th>'+S.stockPeriod+'일 판매</th><th>판매율</th><th>일평균</th><th>소진예상</th><th>마지막판매</th><th>미판매</th><th>상태</th><th class="left">운영 제안</th></tr></thead><tbody>'+detailRows+'</tbody></table></div></div>';
-      return title("INVENTORY & SALES","재고·판매","재고가 들어와 팔릴 때까지의 흐름을 한 화면에서 관리합니다.")+hero+uploads+kpis+signals+age+detail
+      return title("INVENTORY & SALES","재고·판매","재고가 들어와 팔릴 때까지의 흐름과 실제 손익을 한 화면에서 관리합니다.")+hero+uploads+kpis+signals+age+detail+salesLedgerHtml()
     }
     function vendorsPage(){
       return title("SETTINGS","거래처 설정","거래처 이름과 사용하는 등급 항목을 관리합니다.")+
@@ -692,7 +758,7 @@
     }
     function render(){
       var v=vendor(),show=S.tab!=="all"&&S.tab!=="compare"&&S.tab!=="stock";
-      app.innerHTML='<header><div><small>DAWON TRADE · SMART PRICE HUB</small><h1>다원 단가 인사이트 <span style="font-size:11px;color:#c7ccff">v21 · 모델명·펫네임 이중 관리</span></h1></div><div class="tabs">'+
+      app.innerHTML='<header><div><small>DAWON TRADE · SMART PRICE HUB</small><h1>다원 단가 인사이트 <span style="font-size:11px;color:#c7ccff">v22 · 판매 자동 차감·손익 장부</span></h1></div><div class="tabs">'+
       [["all","전체 현황"],["compare","다원 기준 비교"],["vendor","업체별 흐름"],["input","단가 등록"],["stock","재고·판매"],["report","월간 리포트"],["vendors","거래처 설정"]].map(function(x){return'<button class="tab '+(S.tab===x[0]?"on":"")+'" data-tab="'+x[0]+'">'+x[1]+'</button>'}).join("")+'<button id="backupBtn" class="tab">백업</button><button id="restoreBtn" class="tab">복원</button><input id="restoreFile" type="file" accept=".json" hidden></div></header>'+
       (show?'<div class="vendorbar"><span class="muted">거래처</span>'+S.vendors.map(function(x){return'<button class="chip '+(x.id===S.active?"on":"")+'" data-v="'+x.id+'">'+esc(x.name)+'</button>'}).join("")+'</div>':"")+
       '<main>'+(S.tab==="all"?allDashboard():S.tab==="compare"?dawonComparePage():S.tab==="vendor"?vendorDashboard(v):S.tab==="input"?inputPage(v):S.tab==="stock"?stockSalesPage():S.tab==="report"?reportPage(v):vendorsPage())+'</main>';
@@ -715,7 +781,7 @@
       var totals=type==="sales"?["판매금액","출고금액","합계금액","총금액","AMOUNT","TOTAL"]:["매입금액","재고금액","합계금액","총금액","AMOUNT","TOTAL"];
       for(var i=0;i<Math.min(matrix.length,20);i++){
         var row=matrix[i],pi=stockFindColumn(row,petNames),mi=stockFindColumn(row,models);
-        if(pi>=0||mi>=0){head=i;cols={pet:pi,model:mi,grade:stockFindColumn(row,grades),gradeNote:stockFindColumn(row,gradeNotes),qty:stockFindColumn(row,quantities),date:stockFindColumn(row,dates),unit:stockFindColumn(row,unit),total:stockFindColumn(row,totals),status:stockFindColumn(row,["현상태","현재상태","재고상태","STATUS"])};break}
+        if(pi>=0||mi>=0){head=i;cols={pet:pi,model:mi,grade:stockFindColumn(row,grades),gradeNote:stockFindColumn(row,gradeNotes),qty:stockFindColumn(row,quantities),date:stockFindColumn(row,dates),unit:stockFindColumn(row,unit),total:stockFindColumn(row,totals),status:stockFindColumn(row,["현상태","현재상태","재고상태","STATUS"]),pgNo:stockFindColumn(row,["P/G No","P/GNO","PGNO","관리번호"]),serial:stockFindColumn(row,["일련번호","시리얼","SERIAL","SERIALNO"]),imei:stockFindColumn(row,["IMEI","IMEI1"]),imei2:stockFindColumn(row,["IMEI2"]),purchaseDate:stockFindColumn(row,["매입일","구매일","PURCHASEDATE"]),purchaseVendor:stockFindColumn(row,["매입처","구매처","매입거래처","PURCHASEVENDOR"]),saleVendor:stockFindColumn(row,["판매처","출고처","판매거래처","SALEVENDOR"]),purchaseCost:stockFindColumn(row,["실매입가","매입원가","매입단가","매입가","PURCHASECOST"]),profit:stockFindColumn(row,["손익","이익","수익금","PROFIT"]),margin:stockFindColumn(row,["수익율","수익률","마진율","MARGIN","MARGINRATE"])};break}
       }
       if(head<0)return[];
       var out=[];for(var r=head+1;r<matrix.length;r++){
@@ -724,10 +790,10 @@
         if(!model||!qty||/^(구성품|기타|배송비)$/.test(modelClean))continue;
         if(type==="inventoryPurchase"){var status=cols.status>=0?String(source[cols.status]||"").replace(/\s+/g,""):"";if(status.indexOf("재고")<0)continue}
         var unitValue=cols.unit>=0?stockMoney(source[cols.unit]):0,totalValue=cols.total>=0?stockMoney(source[cols.total]):0;if(!unitValue&&totalValue)unitValue=totalValue/qty;
-        var base={grade:stockGradeFromText(cols.gradeNote>=0?source[cols.gradeNote]:"",cols.grade>=0?source[cols.grade]:"미분류"),qty:qty};if(cols.model>=0&&cols.pet>=0)setRowNames(base,code,pet,model);else setRowSingleName(base,model);
-        if(type==="inventory"||type==="inventoryPurchase"){base.unitCost=unitValue;base.receivedDate=stockDate(cols.date>=0?source[cols.date]:today())||today()}
-        else if(type==="inbound"){base.unitCost=unitValue;base.date=stockDate(cols.date>=0?source[cols.date]:today())||today()}
-        else{base.unitPrice=unitValue;base.date=stockDate(cols.date>=0?source[cols.date]:today())||today()}
+        var base={grade:stockGradeFromText(cols.gradeNote>=0?source[cols.gradeNote]:"",cols.grade>=0?source[cols.grade]:"미분류"),qty:qty,pgNo:cols.pgNo>=0?String(source[cols.pgNo]||"").trim():"",serial:cols.serial>=0?String(source[cols.serial]||"").trim():"",imei:cols.imei>=0?String(source[cols.imei]||"").trim():"",imei2:cols.imei2>=0?String(source[cols.imei2]||"").trim():""};if(cols.model>=0&&cols.pet>=0)setRowNames(base,code,pet,model);else setRowSingleName(base,model);
+        if(type==="inventory"||type==="inventoryPurchase"){base.unitCost=unitValue;base.receivedDate=stockDate(cols.date>=0?source[cols.date]:today())||today();base.purchaseVendor=cols.purchaseVendor>=0?String(source[cols.purchaseVendor]||"").trim():""}
+        else if(type==="inbound"){base.unitCost=unitValue;base.date=stockDate(cols.date>=0?source[cols.date]:today())||today();base.purchaseVendor=cols.purchaseVendor>=0?String(source[cols.purchaseVendor]||"").trim():""}
+        else{base.unitPrice=unitValue;base.date=stockDate(cols.date>=0?source[cols.date]:today())||today();base.purchaseDate=stockDate(cols.purchaseDate>=0?source[cols.purchaseDate]:"");base.purchaseVendor=cols.purchaseVendor>=0?String(source[cols.purchaseVendor]||"").trim():"";base.saleVendor=cols.saleVendor>=0?String(source[cols.saleVendor]||"").trim():"";base.purchaseCost=cols.purchaseCost>=0?stockMoney(source[cols.purchaseCost]):0;base.profit=cols.profit>=0?num(source[cols.profit]):null;base.marginRate=cols.margin>=0?num(source[cols.margin]):null}
         out.push(base)
       }
       return out
@@ -851,6 +917,11 @@
           var q=stockModelKey(S.stockSearch),count=0;document.querySelectorAll(".stock-detail-row").forEach(function(row){var show=!q||String(row.dataset.stockSearch||"").indexOf(q)>=0;row.style.display=show?"":"none";if(show)count++});if(stockCount)stockCount.textContent=count+"개 항목"
         }
         if(stockSearch){stockSearch.oninput=function(){S.stockSearch=stockSearch.value;applyStockSearch()};applyStockSearch()}
+        var salesLedgerSearch=document.getElementById("salesLedgerSearch"),salesLedgerCount=document.getElementById("salesLedgerCount");
+        function applySalesLedgerSearch(){
+          var q=rawKey(S.salesSearch),count=0;document.querySelectorAll(".sales-ledger-row").forEach(function(row){var show=!q||String(row.dataset.salesSearch||"").indexOf(q)>=0;row.style.display=show?"":"none";if(show)count++});if(salesLedgerCount)salesLedgerCount.textContent=count+"대"
+        }
+        if(salesLedgerSearch){salesLedgerSearch.oninput=function(){S.salesSearch=salesLedgerSearch.value;applySalesLedgerSearch()};applySalesLedgerSearch()}
         var stockExample=document.getElementById("stockExample");if(stockExample)stockExample.onclick=function(){if((S.inventory.length||S.inbound.length||S.sales.length)&&!confirm("현재 재고·입고·판매 자료를 예시 데이터로 바꿀까요?"))return;S.inventory=exampleInventory();S.inbound=exampleInbound();S.sales=exampleSales();S.stockFiles={inventory:"예시 데이터",inbound:"예시 데이터",sales:"예시 데이터"};write();toast("예시 데이터를 다시 채웠습니다.");render()};
         var stockClear=document.getElementById("stockClear");if(stockClear)stockClear.onclick=function(){if(!confirm("재고·입고·판매 자료를 모두 지울까요? 단가 자료는 지워지지 않습니다."))return;S.inventory=[];S.inbound=[];S.sales=[];S.stockFiles={};write();toast("재고·판매 자료를 초기화했습니다.");render()}
       }
